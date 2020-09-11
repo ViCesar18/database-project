@@ -2,18 +2,18 @@ CREATE SCHEMA rede_musical;
 
 CREATE TABLE rede_musical.usuario (
 	username VARCHAR(12),
-	email VARCHAR(50) UNIQUE,
-	senha TEXT,
-	pnome VARCHAR(30),
-	snome VARCHAR(30),
+	email VARCHAR(50) UNIQUE NOT NULL,
+	senha TEXT NOT NULL,
+	pnome VARCHAR(30) NOT NULL,
+	snome VARCHAR(30) NOT NULL,
 	dt_nascimento DATE,
 	cidade VARCHAR(50),
 	estado VARCHAR(50),
-	pais VARCHAR(50),
-	banda_favorita VARCHAR(20),
-	musica_favorita VARCHAR(20),
-	genero_favorito VARCHAR(20),
-	instrumento_favorito VARCHAR(20),
+	pais VARCHAR(50) NOT NULL,
+	banda_favorita VARCHAR(20) NOT NULL,
+	musica_favorita VARCHAR(20) NOT NULL,
+	genero_favorito VARCHAR(20) NOT NULL,
+	instrumento_favorito VARCHAR(20) NOT NULL,
 	CONSTRAINT pk_usuario PRIMARY KEY(username)
 );
 
@@ -37,12 +37,12 @@ CREATE TABLE rede_musical.usuario_segue_usuario (
 
 CREATE TABLE rede_musical.post (
 	id SERIAL,
-	texto_post TEXT,
+	texto_post TEXT NOT NULL,
 	imagem TEXT,
-	dt_publicacao TIMESTAMP,
-	n_likes INT,
-	n_comentarios INT,
-	n_compartilhamentos INT,
+	dt_publicacao TIMESTAMP NOT NULL,
+	n_likes INT NOT NULL,
+	n_comentarios INT NOT NULL,
+	n_compartilhamentos INT NOT NULL,
 	usuario_username VARCHAR(12) NOT NULL,
 	CONSTRAINT pk_post PRIMARY KEY(id),
 	CONSTRAINT fk_criador_post FOREIGN KEY(usuario_username)
@@ -71,8 +71,8 @@ CREATE TABLE rede_musical.usuario_compartilha_post (
 
 CREATE TABLE rede_musical.comentario (
 	id SERIAL,
-	dt_publicacao TIMESTAMP,
-	texto_comentario TEXT,
+	dt_publicacao TIMESTAMP NOT NULL,
+	texto_comentario TEXT NOT NULL,
 	CONSTRAINT pk_comentario PRIMARY KEY(id)
 );
 
@@ -108,9 +108,9 @@ CREATE TABLE rede_musical.feed_possui_posts (
 
 CREATE TABLE rede_musical.banda  (
 	sigla VARCHAR(5),
-	nome VARCHAR(30),
+	nome VARCHAR(30) NOT NULL,
 	imagem TEXT,
-	genero_musical VARCHAR(20),
+	genero_musical VARCHAR(20) NOT NULL,
 	usuario_username VARCHAR(12) NOT NULL,
 	CONSTRAINT pk_banda PRIMARY KEY(sigla),
 	CONSTRAINT fk_usuario_criador_banda FOREIGN KEY(usuario_username)
@@ -150,11 +150,11 @@ CREATE TABLE rede_musical.post_banda (
 
 CREATE TABLE rede_musical.evento (
 	id SERIAL,
-	data TIMESTAMP,
-	nome VARCHAR(30),
-	descricao TEXT,
-	numero_participantes INT,
-	categoria VARCHAR(20),
+	data TIMESTAMP NOT NULL,
+	nome VARCHAR(30) NOT NULL,
+	descricao TEXT NOT NULL,
+	numero_participantes INT NOT NULL,
+	categoria VARCHAR(20) NOT NULL,
 	usuario_username VARCHAR(12) NOT NULL,
 	CONSTRAINT pk_evento PRIMARY KEY(id),
 	CONSTRAINT fk_usuario_criador_evento FOREIGN KEY(usuario_username)
