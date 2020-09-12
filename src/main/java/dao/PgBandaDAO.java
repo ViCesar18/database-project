@@ -34,13 +34,9 @@ public class PgBandaDAO implements BandaDAO {
             "WHERE id = ?;";
 
     private static final String ALL_QUERY =
-            "SELECT id, nome" +
+            "SELECT id, nome, sigla" +
             "FROM rede_musical.banda" +
             "ORDER BY id;";
-
-    public PgBandaDAO(Connection connection) {
-        this.connection = connection;
-    }
 
     @Override
     public void create(Banda banda) throws SQLException {
@@ -171,5 +167,9 @@ public class PgBandaDAO implements BandaDAO {
 
         return bandas;
 
+    }
+
+    public PgBandaDAO(Connection connection) {
+        this.connection = connection;
     }
 }
