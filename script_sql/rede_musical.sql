@@ -1,9 +1,10 @@
 CREATE SCHEMA rede_musical;
 
 CREATE TABLE rede_musical.usuario (
-	username VARCHAR(12),
+    id SERIAL,
+	username VARCHAR(12) UNIQUE NOT NULL,
 	email VARCHAR(50) UNIQUE NOT NULL,
-	senha TEXT NOT NULL,
+	senha VARCHAR(100) NOT NULL,
 	pnome VARCHAR(30) NOT NULL,
 	snome VARCHAR(30) NOT NULL,
 	dt_nascimento DATE,
@@ -14,7 +15,9 @@ CREATE TABLE rede_musical.usuario (
 	musica_favorita VARCHAR(20) NOT NULL,
 	genero_favorito VARCHAR(20) NOT NULL,
 	instrumento_favorito VARCHAR(20) NOT NULL,
-	CONSTRAINT pk_usuario PRIMARY KEY(username)
+	CONSTRAINT pk_usuario PRIMARY KEY(id),
+	CONSTRAINT uq_usuario_username UNIQUE(username),
+	CONSTRAINT uq_usuario_email UNIQUE(email)
 );
 
 CREATE TABLE rede_musical.usuario_instrumentos (

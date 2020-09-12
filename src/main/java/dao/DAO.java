@@ -7,7 +7,7 @@ public interface DAO<T> {
 
     void create(T t) throws SQLException;
 
-    T read() throws SQLException;
+    T read(Integer id) throws SQLException;
 
     void update(T t) throws SQLException;
 
