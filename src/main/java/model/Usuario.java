@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 public class Usuario {
     private Integer id;
@@ -9,7 +9,8 @@ public class Usuario {
     private String senha;
     private String pNome;
     private String sNome;
-    private Timestamp dtNascimento;
+    private Date dtNascimento;
+    private String imagem;
     private String bandaFavorita;
     private String musicaFavorita;
     private String generoFavorito;
@@ -66,13 +67,17 @@ public class Usuario {
         this.sNome = sNome;
     }
 
-    public Timestamp getDtNascimento() {
+    public Date getDtNascimento() {
         return dtNascimento;
     }
 
-    public void setDtNascimento(Timestamp dtNascimento) {
+    public void setDtNascimento(Date dtNascimento) {
         this.dtNascimento = dtNascimento;
     }
+
+    public String getImagem() { return imagem; }
+
+    public void setImagem(String imagem) { this.imagem = imagem; }
 
     public String getBandaFavorita() {
         return bandaFavorita;

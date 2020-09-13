@@ -8,6 +8,7 @@ CREATE TABLE rede_musical.usuario (
 	pnome VARCHAR(30) NOT NULL,
 	snome VARCHAR(30) NOT NULL,
 	dt_nascimento DATE,
+	imagem TEXT,
 	cidade VARCHAR(50),
 	estado VARCHAR(50),
 	pais VARCHAR(50) NOT NULL,
@@ -110,12 +111,14 @@ CREATE TABLE rede_musical.feed_possui_posts (
 );
 
 CREATE TABLE rede_musical.banda  (
-	sigla VARCHAR(5),
+    id SERIAL,
+	sigla VARCHAR(5) NOT NULL,
 	nome VARCHAR(30) NOT NULL,
 	imagem TEXT,
 	genero_musical VARCHAR(20) NOT NULL,
 	usuario_username VARCHAR(12) NOT NULL,
-	CONSTRAINT pk_banda PRIMARY KEY(sigla),
+	CONSTRAINT pk_banda PRIMARY KEY(id),
+	CONSTRAINT uq_banda_sigla UNIQUE(sigla),
 	CONSTRAINT fk_usuario_criador_banda FOREIGN KEY(usuario_username)
 		REFERENCES rede_musical.usuario(username)
 );

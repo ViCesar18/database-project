@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public abstract class ConnectionFactory {
     private static ConnectionFactory instance = null;
-    protected static String propertiesPath = "../../../resources/conf/datasource.properties";
+    protected static String propertiesPath = "datasource.properties";
     private static String dbServer;
 
     protected ConnectionFactory() {
@@ -18,7 +18,7 @@ public abstract class ConnectionFactory {
         if(instance == null) {
             Properties properties = new Properties();
 
-            try {
+             try {
                 InputStream input = ConnectionFactory.class.getClassLoader().getResourceAsStream(propertiesPath);
                 properties.load(input);
 

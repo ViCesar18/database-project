@@ -14,7 +14,7 @@ public class PgConnectionFactory extends ConnectionFactory {
     private String dbUser;
     private String dbPassword;
 
-    public void readPriperties() throws IOException {
+    public void readProperties() throws IOException {
         Properties properties = new Properties();
 
         try {
@@ -40,7 +40,7 @@ public class PgConnectionFactory extends ConnectionFactory {
         try {
             Class.forName("org.postgresql.Driver");
 
-            readPriperties();
+            readProperties();
 
             String url = "jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName;
 
