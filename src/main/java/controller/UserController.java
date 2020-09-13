@@ -3,6 +3,10 @@ package controller;
 import dao.DAO;
 import dao.DAOFactory;
 import model.Usuario;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +21,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +34,15 @@ import java.util.logging.Logger;
         }
 )
 public class UserController extends HttpServlet {
+    private static final int MAX_FILE_SIZE = 1024 * 1024 * 4;
+
+    /**
+     * Pasta para salvar os arquivos que foram 'upados'. Os arquivos vão ser
+     * salvos na pasta de build do servidor. Ao limpar o projeto (clean),
+     * pode-se perder estes arquivos. Façam backup antes de limpar.
+     */
+    private static String SAVE_DIR = "img";
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAO<Usuario> dao;
         Usuario usuario = new Usuario();
@@ -37,45 +52,113 @@ public class UserController extends HttpServlet {
 
         switch (servletPath) {
             case "/usuario/create": {
+                // Se fosse um forms simples
+                // String username = request.getParameter("usuario");
+
+                // Como existe upload de arquivos (imagem), deve-se usar enctype="multipart/form-data"
+
+                // Cria a factory para itens de arquivos disk-based
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+
+                //  as restrições da factory
+                factory.setSizeThreshold(MAX_FILE_SIZE);
+
+                // Seta o diretório usado para armazenar arquivos temporários que são maiores que o tamanho máximo configurado
+                factory.setRepository(new File("/temp"));
+
+                // Cria um novo manipulador de upload de arquivos
+                ServletFileUpload upload = new ServletFileUpload(factory);
+
+                // Seta a restrição geral do tamanho da requisição
+                upload.setSizeMax(MAX_FILE_SIZE);
+
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    String username = request.getParameter("usuario");
-                    String email = request.getParameter("email");
-                    String senha = request.getParameter("senha");
-                    String pNome = request.getParameter("nome");
-                    String sNome = request.getParameter("sobrenome");
-                    String dtNascimentoString = request.getParameter("nascimento");
-                    String nomeImagem = request.getParameter("imagem");
-                    String cidade = request.getParameter("cidade");
-                    String estado = request.getParameter("estado");
-                    String pais = request.getParameter("pais");
-                    String banda = request.getParameter("banda");
-                    String musica = request.getParameter("musica");
-                    String genero = request.getParameter("genero");
-                    String instrumento = request.getParameter("instrumento");
+                    // Análise de requisição
+                    List<FileItem> items = upload.parseRequest(request);
 
-                    usuario.setUsername(username);
-                    usuario.setEmail(email);
-                    usuario.setSenha(senha);
-                    usuario.setpNome(pNome);
-                    usuario.setsNome(sNome);
+                    // Processa os items upados
+                    Iterator<FileItem> iterator = items.iterator();
+                    while(iterator.hasNext()) {
+                        FileItem item = iterator.next();
 
-                    java.util.Date dtNascimento = new SimpleDateFormat("yyyy-mm-dd").parse(dtNascimentoString);
-                    usuario.setDtNascimento(new Date(dtNascimento.getTime()));
+                        // Processa os campos regulares do formulário
+                        if(item.isFormField()) {
+                            String fieldName = item.getFieldName();
+                            String fieldValue = item.getString();
 
-                    // Pega o caminho absoluto da aplicação
-                    String appPath = request.getServletContext().getRealPath("");
-                    // Grava o arquivo na pasta img no caminho absoluto
-                    String savePath = appPath + File.separator + "img" + File.separator + nomeImagem;
-                    File uploadedFile = new File(savePath);
-                    usuario.setImagem(nomeImagem);
+                            switch(fieldName) {
+                                case "usuario":
+                                    usuario.setUsername(fieldValue);
+                                    break;
 
-                    usuario.setCidade(cidade);
-                    usuario.setEstado(estado);
-                    usuario.setPais(pais);
-                    usuario.setBandaFavorita(banda);
-                    usuario.setMusicaFavorita(musica);
-                    usuario.setGeneroFavorito(genero);
-                    usuario.setInstrumentoFavorito(instrumento);
+                                case "email":
+                                    usuario.setEmail(fieldValue);
+                                    break;
+
+                                case "senha":
+                                    usuario.setSenha(fieldValue);
+                                    break;
+
+                                case "nome":
+                                    usuario.setpNome(fieldValue);
+                                    break;
+
+                                case "sobrenome":
+                                    usuario.setsNome(fieldValue);
+                                    break;
+
+                                case "nascimento":
+                                    java.util.Date dtNascimento = new SimpleDateFormat("yyyy-mm-dd").parse(fieldValue);
+                                    usuario.setDtNascimento(new Date(dtNascimento.getTime()));
+                                    break;
+
+                                case "cidade":
+                                    usuario.setCidade(fieldValue);
+                                    break;
+
+                                case "estado":
+                                    usuario.setEstado(fieldValue);
+                                    break;
+
+                                case "pais":
+                                    usuario.setPais(fieldValue);
+                                    break;
+
+                                case "banda":
+                                    usuario.setBandaFavorita(fieldValue);
+                                    break;
+
+                                case "musica":
+                                    usuario.setMusicaFavorita(fieldValue);
+                                    break;
+
+                                case "genero":
+                                    usuario.setGeneroFavorito(fieldValue);
+                                    break;
+
+                                case "instrumento":
+                                    usuario.setInstrumentoFavorito(fieldValue);
+                                    break;
+                            }
+                        }
+                        else {
+                            // Processa os arquivos upados
+                            String fieldName = item.getFieldName();
+                            String fileName = item.getName();
+
+                            if(fieldName.equals("imagem") && !fileName.isBlank()) {
+                                // Pega o caminho absoluto da aplicação
+                                String appPath = request.getServletContext().getRealPath("");
+
+                                // Grava o arquivo upado na pasta img no caminho absoluto
+                                String savePath = appPath + File.separator + SAVE_DIR + File.separator + fileName;
+                                File uploadedFile = new File(savePath);
+                                item.write(uploadedFile);
+
+                                usuario.setImagem(fileName);
+                            }
+                        }
+                    }
 
                     dao = daoFactory.getUsuarioDAO();
 
@@ -88,19 +171,27 @@ public class UserController extends HttpServlet {
                     session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
 
                     response.sendRedirect(request.getContextPath() + servletPath);
-                } catch (ClassNotFoundException | IOException | SQLException ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", ex);
+                } catch (FileUploadException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
-                    session.setAttribute("error", ex.getMessage());
+                    session.setAttribute("error", "Erro ao fazer upload do arquivo.");
 
                     response.sendRedirect(request.getContextPath() + servletPath);
-                } catch (Exception ex) {
-                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", ex);
+                }catch (SQLException | IOException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + servletPath);
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
 
                     response.sendRedirect(request.getContextPath() + servletPath);
                 }
+
+                break;
             }
         }
     }

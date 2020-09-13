@@ -17,6 +17,7 @@
             <form
                 action="${pageContext.servletContext.contextPath}/usuario/create"
                 method="post"
+                enctype="multipart/form-data"
             >
                 <div class="form-group">
                     <label for="inputUsername">Usuário</label>
