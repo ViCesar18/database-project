@@ -15,15 +15,17 @@
         <div class="container">
             <h1>Seja Bem Vindo!</h1>
             <h2>Entre ou Cadastre-se.</h2>
-            <form>
+            <form
+                action="${pageContext.servletContext.contextPath}/login"
+                method="post"
+            >
                 <div class="form-group">
-                    <label for="exampleInputEmail1">E-mail</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                    <label for="inputUser">Usuário</label>
+                    <input type="text" class="form-control" id="inputUser" name="usuario">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Senha</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
+                    <label for="inputSenha">Senha</label>
+                    <input type="password" class="form-control" id="inputSenha" name="senha">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Entrar</button>

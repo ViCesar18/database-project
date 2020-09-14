@@ -17,13 +17,13 @@ public class PgUsuarioDAO implements UsuarioDAO {
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.usuario" +
             "(username, email, senha, pnome, snome, dt_nascimento, imagem, cidade, estado, pais, " +
-            "banda_favorita, musica_favorita, genero_favorito, instrumento_favorito)" +
+            "banda_favorita, musica_favorita, genero_favorito, instrumento_favorito) " +
             "VALUES(?, ?, md5(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     private static final String READ_QUERY =
             "SELECT username, email, pnome, snome, dt_nascimento, imagem, cidade, " +
-            "estado, pais, banda_favorita, musica_favorita, genero_favorito, instrumento_favorito" +
-            "FROM rede_musical.usuario" +
+            "estado, pais, banda_favorita, musica_favorita, genero_favorito, instrumento_favorito " +
+            "FROM rede_musical.usuario " +
             "WHERE id = ?;";
 
     private static final String UPDATE_PERSONAL_DATA_QUERY =
@@ -47,17 +47,17 @@ public class PgUsuarioDAO implements UsuarioDAO {
             "WHERE id = ?;";
 
     private static final String DELETE_QUERY =
-            "DELETE rede_musical.usuario" +
+            "DELETE FROM rede_musical.usuario " +
             "WHERE id = ?;";
 
     private static final String ALL_QUERY =
-            "SELECT id, username " +
+            "SELECT id " +
             "FROM rede_musical.usuario " +
             "ORDER BY id;";
 
     private static final String AUTHENTICATE_QUERY =
-            "SELECT id" +
-            "FROM rede_musical.usuario" +
+            "SELECT id " +
+            "FROM rede_musical.usuario " +
             "WHERE username = ? AND senha = md5(?);";
 
     public PgUsuarioDAO(Connection connection) {

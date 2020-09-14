@@ -41,7 +41,7 @@ public class UserController extends HttpServlet {
      * salvos na pasta de build do servidor. Ao limpar o projeto (clean),
      * pode-se perder estes arquivos. Façam backup antes de limpar.
      */
-    private static String SAVE_DIR = "img";
+    private static String SAVE_DIR = "assets/img";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAO<Usuario> dao;
@@ -164,7 +164,7 @@ public class UserController extends HttpServlet {
 
                     dao.create(usuario);
 
-                    response.sendRedirect(request.getContextPath() + "/usuario");
+                    response.sendRedirect(request.getContextPath() + "/");
                 } catch (ParseException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 

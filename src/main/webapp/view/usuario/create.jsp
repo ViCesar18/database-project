@@ -15,6 +15,7 @@
         <div class="container">
             <h1>Crie sua conta!</h1>
             <form
+                class="form"
                 action="${pageContext.servletContext.contextPath}/usuario/create"
                 method="post"
                 enctype="multipart/form-data"
@@ -30,12 +31,13 @@
 
                 <div class="form-group">
                     <label for="inputSenha">Senha</label>
-                    <input type="password" required class="form-control" id="inputSenha" name="senha">
+                    <input type="password" required class="form-control password-input" id="inputSenha" name="senha">
                 </div>
 
                 <div class="form-group">
                     <label for="inputConfirmacaoSenha">Confimação de Senha</label>
-                    <input type="password" class="form-control" id="inputConfirmacaoSenha" name="confirmacaoSenha">
+                    <input type="password" required class="form-control password-confirm" id="inputConfirmacaoSenha" name="confirmacaoSenha">
+                    <p class="help-block" style="color: red"></p>
                 </div>
 
                 <div class="form-group">
