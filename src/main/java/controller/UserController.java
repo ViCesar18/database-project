@@ -33,6 +33,7 @@ import java.util.logging.Logger;
                 "/usuario/create",
                 "/usuario/perfil",
                 "/usuario/perfil/update",
+                "/usuario/perfil/update-musical",
                 "/usuario/perfil/update-foto",
                 "/usuario/perfil/update-senha",
         }
@@ -238,6 +239,39 @@ public class UserController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
                 }
             }
+            case "/usuario/perfil/update-musical": {
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    usuario.setId(Integer.parseInt(request.getParameter("id")));
+                    usuario.setBandaFavorita(request.getParameter("banda"));
+                    usuario.setMusicaFavorita(request.getParameter("musica"));
+                    usuario.setGeneroFavorito(request.getParameter("genero"));
+                    usuario.setInstrumentoFavorito(request.getParameter("instrumento"));
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.update(usuario);
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                } catch (ParseException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                } catch (SQLException | IOException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                }
+            }
         }
     }
 
@@ -321,6 +355,39 @@ public class UserController extends HttpServlet {
                 else {
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+                break;
+            }
+            case "/usuario/perfil/update-musical": {
+                if(session.getAttribute("usuario") != null) {
+                    Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
+
+                    try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                        dao = daoFactory.getUsuarioDAO();
+
+                        usuario = dao.read(usuarioLogin.getId());
+
+                        request.setAttribute("usuario", usuario);
+
+                        dispatcher = request.getRequestDispatcher("/view/usuario/update-perfil-musical.jsp");
+                        dispatcher.forward(request, response);
+                    } catch (SQLException | ClassNotFoundException e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    } catch (Exception e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    }
+                }
+                else {
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
                 break;
             }
             case "/usuario/perfil/update-foto": {

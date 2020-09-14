@@ -58,6 +58,8 @@
             <div>
                 <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil/update">Editar Perfil</a>
 
+                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-musical">Editar Perfil Musical</a>
+
                 <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-foto">Alterar Foto de Perfil</a>
 
                 <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-senha">Alterar Senha</a>

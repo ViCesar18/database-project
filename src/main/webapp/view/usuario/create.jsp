@@ -157,7 +157,7 @@
                         <option>Marchas/Hinos</option>
                         <option>Mariachi</option>
                         <option>Merengue</option>
-                        <option>Música andina</option>
+                        <option>Música Andina</option>
                         <option>New Age</option>
                         <option>New Wave</option>
                         <option>Pagode</option>
