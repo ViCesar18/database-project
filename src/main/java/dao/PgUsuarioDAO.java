@@ -117,10 +117,13 @@ public class PgUsuarioDAO implements UsuarioDAO {
                     usuario.setsNome(result.getString("snome"));
                     usuario.setDtNascimento(result.getDate("dt_nascimento"));
                     usuario.setImagem(result.getString("imagem"));
+                    usuario.setCidade(result.getString("cidade"));
+                    usuario.setEstado(result.getString("estado"));
+                    usuario.setPais(result.getString("pais"));
                     usuario.setBandaFavorita(result.getString("banda_favorita"));
                     usuario.setMusicaFavorita(result.getString("musica_favorita"));
-                    usuario.setGeneroFavorito(result.getString("genero-favorito"));
-                    usuario.setInstrumentoFavorito(result.getString("instrumento-favorito"));
+                    usuario.setGeneroFavorito(result.getString("genero_favorito"));
+                    usuario.setInstrumentoFavorito(result.getString("instrumento_favorito"));
                 }
                 else {
                     throw new SQLException("Erro ao visualizar: usuário não encontrado.");

@@ -115,11 +115,87 @@
 
                 <div class="form-group">
                     <label for="inputGenero">Gênero Favorito</label>
-                    <input type="text" required class="form-control" id="inputGenero" name="genero">
+                    <select class="form-control" required id="inputGenero" name="genero">
+                        <option>Alternativo</option>
+                        <option>Axé</option>
+                        <option>Blues</option>
+                        <option>Bolero</option>
+                        <option>Bossa Nova</option>
+                        <option>Brega</option>
+                        <option>Clássico</option>
+                        <option>Country</option>
+                        <option>Cuarteto</option>
+                        <option>Cumbia</option>
+                        <option>Dance</option>
+                        <option>Disco</option>
+                        <option>Eletrônica</option>
+                        <option>Emocore</option>
+                        <option>Fado</option>
+                        <option>Folk</option>
+                        <option>Forró</option>
+                        <option>Funk</option>
+                        <option>Funk Internacional</option>
+                        <option>Gospel/Religioso</option>
+                        <option>Grunge</option>
+                        <option>Guarânia</option>
+                        <option>Gótico</option>
+                        <option>Hard Rock</option>
+                        <option>Hardcore</option>
+                        <option>Heavy Metal</option>
+                        <option>Hip Hop/Rap</option>
+                        <option>House</option>
+                        <option>Indie</option>
+                        <option>Industrial</option>
+                        <option>Infantil</option>
+                        <option>Instrumental</option>
+                        <option>J-Pop/J-Rock</option>
+                        <option>Jazz</option>
+                        <option>Jovem Guarda</option>
+                        <option>K-Pop/K-Rock</option>
+                        <option>MPB</option>
+                        <option>Mambo</option>
+                        <option>Marchas/Hinos</option>
+                        <option>Mariachi</option>
+                        <option>Merengue</option>
+                        <option>Música andina</option>
+                        <option>New Age</option>
+                        <option>New Wave</option>
+                        <option>Pagode</option>
+                        <option>Pop</option>
+                        <option>Pop Rock</option>
+                        <option>Post-Rock</option>
+                        <option>Power-Pop</option>
+                        <option>Psicodelia</option>
+                        <option>Punk Rock</option>
+                        <option>R&B</option>
+                        <option>Ranchera</option>
+                        <option>Reggae</option>
+                        <option>Reggaeton</option>
+                        <option>Regional</option>
+                        <option>Rock</option>
+                        <option>Rock Progressivo</option>
+                        <option>Rockabilly</option>
+                        <option>Romântico</option>
+                        <option>Salsa</option>
+                        <option>Samba</option>
+                        <option>Samba Enredo</option>
+                        <option>Sertanejo</option>
+                        <option>Ska</option>
+                        <option>Soft Rock</option>
+                        <option>Soul</option>
+                        <option>Surf Music</option>
+                        <option>Tango</option>
+                        <option>Tecnopop</option>
+                        <option>Trova</option>
+                        <option>Velha Guarda</option>
+                        <option>World Music</option>
+                        <option>Zamba</option>
+                        <option>Zouk</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="inputInstrumento">Instrumento Favorita</label>
+                    <label for="inputInstrumento">Instrumento Favorito</label>
                     <input type="text" required class="form-control" id="inputInstrumento" name="instrumento">
                 </div>
 

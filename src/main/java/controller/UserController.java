@@ -30,7 +30,8 @@ import java.util.logging.Logger;
         name = "UserController",
         urlPatterns = {
                 "/usuario",
-                "/usuario/create"
+                "/usuario/create",
+                "/usuario/perfil"
         }
 )
 public class UserController extends HttpServlet {
@@ -171,25 +172,25 @@ public class UserController extends HttpServlet {
 
                     session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
 
-                    response.sendRedirect(request.getContextPath() + servletPath);
+                    response.sendRedirect(request.getContextPath() + "/");
                 } catch (FileUploadException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao fazer upload do arquivo.");
 
-                    response.sendRedirect(request.getContextPath() + servletPath);
+                    response.sendRedirect(request.getContextPath() + "/");
                 }catch (SQLException | IOException | ClassNotFoundException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + servletPath);
+                    response.sendRedirect(request.getContextPath() + "/");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
 
-                    response.sendRedirect(request.getContextPath() + servletPath);
+                    response.sendRedirect(request.getContextPath() + "/");
                 }
 
                 break;
@@ -201,15 +202,50 @@ public class UserController extends HttpServlet {
         DAO<Usuario> dao;
         Usuario usuario;
         RequestDispatcher dispatcher;
+        HttpSession session = request.getSession();
+        String servletPath = request.getServletPath();
 
         switch (request.getServletPath()) {
             case "/usuario": {
                 dispatcher = request.getRequestDispatcher("/index.jsp");
                 dispatcher.forward(request, response);
+                break;
             }
             case "/usuario/create": {
                 dispatcher = request.getRequestDispatcher("/view/usuario/create.jsp");
                 dispatcher.forward(request, response);
+                break;
+            }
+            case "/usuario/perfil": {
+                if(session.getAttribute("usuario") != null) {
+                    usuario = (Usuario) session.getAttribute("usuario");
+
+                    try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                        dao = daoFactory.getUsuarioDAO();
+
+                        usuario = dao.read(usuario.getId());
+
+                        request.setAttribute("usuario", usuario);
+
+                        dispatcher = request.getRequestDispatcher("/view/usuario/perfil.jsp");
+                        dispatcher.forward(request, response);
+                    } catch (SQLException | ClassNotFoundException e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/");
+                    } catch (Exception e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/");
+                    }
+                }
+                else {
+                    response.sendRedirect( request.getContextPath()+ "/");
+                }
                 break;
             }
         }

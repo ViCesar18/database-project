@@ -71,21 +71,29 @@ public class Usuario {
         return dtNascimento;
     }
 
-    public void setDtNascimento(Date dtNascimento) {
-        this.dtNascimento = dtNascimento;
-    }
+    public void setDtNascimento(Date dtNascimento) { this.dtNascimento = dtNascimento; }
 
     public String getImagem() { return imagem; }
 
     public void setImagem(String imagem) { this.imagem = imagem; }
 
+    public String getCidade() { return cidade; }
+
+    public void setCidade(String cidade) { this.cidade = cidade; }
+
+    public String getEstado() { return estado; }
+
+    public void setEstado(String estado) { this.estado = estado; }
+
+    public String getPais() { return pais; }
+
+    public void setPais(String pais) { this.pais = pais; }
+
     public String getBandaFavorita() {
         return bandaFavorita;
     }
 
-    public void setBandaFavorita(String bandaFavorita) {
-        this.bandaFavorita = bandaFavorita;
-    }
+    public void setBandaFavorita(String bandaFavorita) { this.bandaFavorita = bandaFavorita; }
 
     public String getMusicaFavorita() {
         return musicaFavorita;
@@ -109,29 +117,5 @@ public class Usuario {
 
     public void setInstrumentoFavorito(String instrumentoFavorito) {
         this.instrumentoFavorito = instrumentoFavorito;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
     }
 }
