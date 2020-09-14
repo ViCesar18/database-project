@@ -22,21 +22,21 @@ CREATE TABLE rede_musical.usuario (
 );
 
 CREATE TABLE rede_musical.usuario_instrumentos (
-	usuario_username VARCHAR(12),
+	usuario_id INT,
 	instrumento VARCHAR(20),
-	CONSTRAINT pk_usuario_instrumentos PRIMARY KEY(usuario_username, instrumento),
-	CONSTRAINT fk_usuario_instrumentos FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username)
+	CONSTRAINT pk_usuario_instrumentos PRIMARY KEY(usuario_id, instrumento),
+	CONSTRAINT fk_usuario_instrumentos FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id)
 );
 
 CREATE TABLE rede_musical.usuario_segue_usuario (
-	usuario_username VARCHAR(12),
-	usuario_username_seguido VARCHAR(12),
-	CONSTRAINT pk_usuario_segue_usuario PRIMARY KEY(usuario_username, usuario_username_seguido),
-	CONSTRAINT fk_usuario_seguindo FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
-	CONSTRAINT fk_usuario_seguido FOREIGN KEY(usuario_username_seguido)
-		REFERENCES rede_musical.usuario(username)
+	usuario_id INT,
+	usuario_id_seguido INT,
+	CONSTRAINT pk_usuario_segue_usuario PRIMARY KEY(usuario_id, usuario_id_seguido),
+	CONSTRAINT fk_usuario_seguindo FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
+	CONSTRAINT fk_usuario_seguido FOREIGN KEY(usuario_id_seguido)
+		REFERENCES rede_musical.usuario(id)
 );
 
 CREATE TABLE rede_musical.post (
@@ -47,28 +47,28 @@ CREATE TABLE rede_musical.post (
 	n_likes INT NOT NULL,
 	n_comentarios INT NOT NULL,
 	n_compartilhamentos INT NOT NULL,
-	usuario_username VARCHAR(12) NOT NULL,
+	usuario_id INT NOT NULL,
 	CONSTRAINT pk_post PRIMARY KEY(id),
-	CONSTRAINT fk_criador_post FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username)
+	CONSTRAINT fk_criador_post FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id)
 );
 
 CREATE TABLE rede_musical.usuario_da_like_em_post (
-	usuario_username VARCHAR(12),
+	usuario_id INT,
 	post_id INT,
-	CONSTRAINT pk_usuario_da_like_em_post PRIMARY KEY(usuario_username, post_id),
-	CONSTRAINT fk_usuario_like_post FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
+	CONSTRAINT pk_usuario_da_like_em_post PRIMARY KEY(usuario_id, post_id),
+	CONSTRAINT fk_usuario_like_post FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
 	CONSTRAINT fk_post_liked_usuario FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
 );
 
 CREATE TABLE rede_musical.usuario_compartilha_post (
-	usuario_username VARCHAR(12),
+	usuario_id INT,
 	post_id INT,
-	CONSTRAINT pk_usuario_compartilha_post PRIMARY KEY(usuario_username, post_id),
-	CONSTRAINT fk_usuario_compartilhou FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
+	CONSTRAINT pk_usuario_compartilha_post PRIMARY KEY(usuario_id, post_id),
+	CONSTRAINT fk_usuario_compartilhou FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
 	CONSTRAINT fk_post_compartilhado FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
 );
@@ -81,12 +81,12 @@ CREATE TABLE rede_musical.comentario (
 );
 
 CREATE TABLE rede_musical.usuario_comenta_post (
-	usuario_username VARCHAR(12) NOT NULL,
+	usuario_id INT NOT NULL,
 	post_id INT,
 	comentario_id INT,
-	CONSTRAINT pk_usuario_comenta_post PRIMARY KEY(usuario_username),
-	CONSTRAINT fk_usuario_autor FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
+	CONSTRAINT pk_usuario_comenta_post PRIMARY KEY(usuario_id),
+	CONSTRAINT fk_usuario_autor FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
 	CONSTRAINT fk_post_comentado FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id),
 	CONSTRAINT fk_comentario_feito FOREIGN KEY(comentario_id)
@@ -94,18 +94,18 @@ CREATE TABLE rede_musical.usuario_comenta_post (
 );
 
 CREATE TABLE rede_musical.feed (
-	usuario_username VARCHAR(12),
-	CONSTRAINT pk_feed PRIMARY KEY(usuario_username),
-	CONSTRAINT fk_feed_usuario FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username)
+	usuario_id INT,
+	CONSTRAINT pk_feed PRIMARY KEY(usuario_id),
+	CONSTRAINT fk_feed_usuario FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id)
 );
 
 CREATE TABLE rede_musical.feed_possui_posts (
-	feed_username VARCHAR(12),
+	feed_id INT,
 	post_id INT,
-	CONSTRAINT pk_feed_possui_posts PRIMARY KEY(feed_username, post_id),
-	CONSTRAINT fk_feed_post FOREIGN KEY(feed_username)
-		REFERENCES rede_musical.feed(usuario_username),
+	CONSTRAINT pk_feed_possui_posts PRIMARY KEY(feed_id, post_id),
+	CONSTRAINT fk_feed_post FOREIGN KEY(feed_id)
+		REFERENCES rede_musical.feed(usuario_id),
 	CONSTRAINT fk_post_feed FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
 );
@@ -116,42 +116,42 @@ CREATE TABLE rede_musical.banda  (
 	nome VARCHAR(30) NOT NULL,
 	imagem TEXT,
 	genero_musical VARCHAR(20) NOT NULL,
-	usuario_username VARCHAR(12) NOT NULL,
+	usuario_id INT NOT NULL,
 	CONSTRAINT pk_banda PRIMARY KEY(id),
 	CONSTRAINT uq_banda_sigla UNIQUE(sigla),
-	CONSTRAINT fk_usuario_criador_banda FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username)
+	CONSTRAINT fk_usuario_criador_banda FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id)
 );
 
 CREATE TABLE rede_musical.usuario_segue_banda (
-	usuario_username VARCHAR(12),
-	banda_sigla VARCHAR(5),
-	CONSTRAINT pk_usuario_segue_banda PRIMARY KEY(usuario_username, banda_sigla),
-	CONSTRAINT fk_usuario_segue_banda FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
-	CONSTRAINT fk_banda_seguida_usuario FOREIGN KEY(banda_sigla)
-		REFERENCES rede_musical.banda(sigla)
+	usuario_id INT,
+	banda_id INT,
+	CONSTRAINT pk_usuario_segue_banda PRIMARY KEY(usuario_id, banda_id),
+	CONSTRAINT fk_usuario_segue_banda FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
+	CONSTRAINT fk_banda_seguida_usuario FOREIGN KEY(banda_id)
+		REFERENCES rede_musical.banda(id)
 );
 
 CREATE TABLE rede_musical.usuario_participa_de_banda (
-	usuario_username VARCHAR(12),
-	banda_sigla VARCHAR(5),
+	usuario_id INT,
+	banda_id INT,
 	instrumento VARCHAR(20),
-	CONSTRAINT pk_usuario_participa_banda PRIMARY KEY(usuario_username, banda_sigla),
-	CONSTRAINT fk_usuario_participa_banda FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
-	CONSTRAINT fk_banda_participada_usuario FOREIGN KEY(banda_sigla)
-		REFERENCES rede_musical.banda(sigla)
+	CONSTRAINT pk_usuario_participa_banda PRIMARY KEY(usuario_id, banda_id),
+	CONSTRAINT fk_usuario_participa_banda FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
+	CONSTRAINT fk_banda_participada_usuario FOREIGN KEY(banda_id)
+		REFERENCES rede_musical.banda(id)
 );
 
 CREATE TABLE rede_musical.post_banda (
 	post_id INT,
-	banda_sigla VARCHAR(5) NOT NULL,
+	banda_id INT NOT NULL,
 	CONSTRAINT pk_post_banda PRIMARY KEY(post_id),
 	CONSTRAINT fk_post_banda FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id),
-	CONSTRAINT fk_banda_post FOREIGN KEY(banda_sigla)
-		REFERENCES rede_musical.banda(sigla)
+	CONSTRAINT fk_banda_post FOREIGN KEY(banda_id)
+		REFERENCES rede_musical.banda(id)
 );
 
 CREATE TABLE rede_musical.evento (
@@ -162,18 +162,18 @@ CREATE TABLE rede_musical.evento (
 	descricao TEXT NOT NULL,
 	numero_participantes INT NOT NULL,
 	categoria VARCHAR(20) NOT NULL,
-	usuario_username VARCHAR(12) NOT NULL,
+	usuario_id INT NOT NULL,
 	CONSTRAINT pk_evento PRIMARY KEY(id),
-	CONSTRAINT fk_usuario_criador_evento FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username)
+	CONSTRAINT fk_usuario_criador_evento FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id)
 );
 
 CREATE TABLE rede_musical.usuario_comparece_em_evento (
-	usuario_username VARCHAR(12),
+	usuario_id INT,
 	evento_id INT,
-	CONSTRAINT pk_usuario_comparece_evento PRIMARY KEY(usuario_username, evento_id),
-	CONSTRAINT fk_usuario_comparece_evento FOREIGN KEY(usuario_username)
-		REFERENCES rede_musical.usuario(username),
+	CONSTRAINT pk_usuario_comparece_evento PRIMARY KEY(usuario_id, evento_id),
+	CONSTRAINT fk_usuario_comparece_evento FOREIGN KEY(usuario_id)
+		REFERENCES rede_musical.usuario(id),
 	CONSTRAINT fk_evento_comparecido_usuario FOREIGN KEY(evento_id)
 		REFERENCES rede_musical.evento(id)
 );
