@@ -9,10 +9,39 @@
 <html>
     <head>
         <%@include file="../include/head.jsp"%>
-        <title>Title</title>
+        <title>Rede Musical: Editar Senha</title>
     </head>
     <body>
-        <h1>Atualizar Perfil!</h1>
+        <div class="container">
+            <h1>Edite sua senha.</h1>
+
+            <form
+                    action="${pageContext.servletContext.contextPath}/usuario/perfil/update-senha"
+                    method="post"
+                    class="form"
+            >
+                <input type="hidden" name="id" value="${usuario.getId()}">
+
+                <div class="form-group">
+                    <label for="inputSenha">Senha Atual</label>
+                    <input type="password" required class="form-control" id="inputSenha" name="senha">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputNovaSenha">Nova Senha</label>
+                    <input type="password" required class="form-control password-input" id="inputNovaSenha" name="novaSenha">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputConfirmacaoNovaSenha">Nome</label>
+                    <input type="password" required class="form-control password-confirm" id="inputConfirmacaoNovaSenha" name="confirmacaoNovaSenha">
+                    <p class="help-block" style="color: red"></p>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Atualizar Senha</button>
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
+            </form>
+        </div>
 
         <%@include file="../include/scripts.jsp"%>
     </body>

@@ -11,11 +11,11 @@
 <html>
     <head>
         <%@include file="../include/head.jsp"%>
-        <title>Rede Musical: Editar Perfil</title>
+        <title>Rede Musical: Editar Perfil Musical</title>
     </head>
     <body>
         <div class="container">
-            <h1>Edite seus dados.</h1>
+            <h1>Edite seus dados musicais.</h1>
 
             <form
                 action="${pageContext.servletContext.contextPath}/usuario/perfil/update-musical"

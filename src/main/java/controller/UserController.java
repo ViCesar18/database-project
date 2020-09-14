@@ -257,19 +257,50 @@ public class UserController extends HttpServlet {
 
                     session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
                 } catch (SQLException | IOException | ClassNotFoundException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
+                }
+            }
+            case "/usuario/perfil/update-senha": {
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    usuario.setId(Integer.parseInt(request.getParameter("id")));
+                    usuario.setUsername(request.getParameter("senha"));             // Gambiarra para atualizar a senha (senha antiga)
+                    usuario.setSenha(request.getParameter("novaSenha"));   // Nova senha
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.update(usuario);
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                } catch (ParseException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
+                } catch (SQLException | IOException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
                 }
             }
         }

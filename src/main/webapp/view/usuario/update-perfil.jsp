@@ -91,7 +91,7 @@
                     <input type="text" required readonly class="form-control" id="inputPais" name="pais" value="${usuario.getPais()}">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Atualizar Dados</button>
+                <button type="submit" class="btn btn-primary">Atualizar Dados Musicais</button>
                 <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
             </form>
         </div>

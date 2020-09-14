@@ -39,7 +39,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
     private static final String UPDATE_PASSWORD_QUERY =
             "UPDATE rede_musical.usuario " +
             "SET senha = md5(?) " +
-            "WHERE id = ?;";
+            "WHERE id = ? AND senha = md5(?);";
 
     private static final String UPDATE_IMAGE_QUERY =
             "UPDATE rede_musical.usuario " +
@@ -48,7 +48,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
     private static final String DELETE_QUERY =
             "DELETE FROM rede_musical.usuario " +
-            "WHERE id = ?;";
+            "WHERE id = ?";
 
     private static final String ALL_QUERY =
             "SELECT id " +
@@ -169,8 +169,9 @@ public class PgUsuarioDAO implements UsuarioDAO {
                 statement.setInt(5, usuario.getId());
             }
             else if(usuario.getSenha() != null && !usuario.getSenha().isBlank()) {
-                statement.setString(1, usuario.getSenha());
+                statement.setString(1, usuario.getSenha());    // Nova senha
                 statement.setInt(2, usuario.getId());
+                statement.setString(3, usuario.getUsername()); // Gambiarra para atualizar a senha (senha antiga)
             }
             else if(usuario.getImagem() != null && !usuario.getImagem().isBlank()) {
                 statement.setString(1, usuario.getImagem());
