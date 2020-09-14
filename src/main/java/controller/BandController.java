@@ -99,7 +99,9 @@ public class BandController extends HttpServlet {
 
                     dao = daoFactory.getBandaDAO();
 
-                    banda.setUsername_usuario("admin"); //Falta implementar
+                    Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+                    banda.setUsername_usuario(usuario.getUsername()); //Falta implementar
 
                     dao.create(banda);
 
