@@ -25,3 +25,6 @@ hs_err_pid*
 # IntelliJ
 target
 .idea
+
+# Informações do banco
+src/main/resources/datasource.properties

@@ -16,17 +16,17 @@ public class PgBandaDAO implements BandaDAO {
 
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.banda" +
-            "(sigla, nome, genero_musical, imagem)" +
-            "VALUES(?, ?, ?, ?);";
+            "(sigla, nome, genero_musical, imagem, usuario_username)" +
+            "VALUES(?, ?, ?, ?, ?);";
 
     private static final String READ_QUERY =
-            "SELECT sigla, nome, genero_musical, imagem" +
+            "SELECT sigla, nome, genero_musical, imagem, usuario_username" +
             "FROM rede_musical.banda" +
             "WHERE id = ?;";
 
     private static final String UPDATE_BANDA_DATA_QUERY =
             "UPDATE rede_musical.banda" +
-            "SET sigla = ?, nome = ?, genero_musical = ?, imagem = ?" +
+            "SET sigla = ?, nome = ?, genero_musical = ?, imagem = ?, usuario_username = ?" +
             "WHERE id = ?;";
 
     private static final String DELETE_QUERY =
@@ -45,6 +45,7 @@ public class PgBandaDAO implements BandaDAO {
             statement.setString(2, banda.getNome());
             statement.setString(3, banda.getGenero());
             statement.setString(4, banda.getImagem());
+            statement.setString(5, banda.getUsername_usuario());
 
             statement.executeUpdate();
         } catch (SQLException e){
@@ -76,6 +77,7 @@ public class PgBandaDAO implements BandaDAO {
                     banda.setNome(result.getString("nome"));
                     banda.setGenero(result.getString("genero_musical"));
                     banda.setImagem(result.getString("imagem"));
+                    banda.setUsername_usuario(result.getString("username_usuario"));
                 }
                 else {
                     throw new SQLException("Erro ao vizualizar: banda não encontrada");
@@ -99,9 +101,10 @@ public class PgBandaDAO implements BandaDAO {
     public void update(Banda banda) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_BANDA_DATA_QUERY)) {
             statement.setString(1, banda.getSigla());
-            statement.setString(1, banda.getNome());
-            statement.setString(1, banda.getGenero());
-            statement.setString(1, banda.getImagem());
+            statement.setString(2, banda.getNome());
+            statement.setString(3, banda.getGenero());
+            statement.setString(4, banda.getImagem());
+            statement.setString(5, banda.getUsername_usuario());
 
             if (statement.executeUpdate() < 1){
                 throw new SQLException("Erro ao editar: banda não encontrada.");

@@ -15,7 +15,7 @@
         <div style="margin: 10px">
             <a type="button" class="btn btn-primary">Seu Perfil</a>
 
-            <a type="button" class="btn btn-success">Criar Banda</a>
+            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
 
             <a type="button" class="btn btn-warning">Criar Evento</a>
 

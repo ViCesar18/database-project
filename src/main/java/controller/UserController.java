@@ -34,6 +34,7 @@ import java.util.logging.Logger;
         }
 )
 public class UserController extends HttpServlet {
+    public static String USER_LOGADO;
     private static final int MAX_FILE_SIZE = 1024 * 1024 * 4;
 
     /**
@@ -41,7 +42,7 @@ public class UserController extends HttpServlet {
      * salvos na pasta de build do servidor. Ao limpar o projeto (clean),
      * pode-se perder estes arquivos. Façam backup antes de limpar.
      */
-    private static String SAVE_DIR = "assets/img";
+    private static String SAVE_DIR = "assets/img/usuario";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DAO<Usuario> dao;

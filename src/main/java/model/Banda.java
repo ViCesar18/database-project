@@ -7,6 +7,16 @@ public class Banda {
     private String genero;
     private String imagem;
 
+    public String getUsername_usuario() {
+        return username_usuario;
+    }
+
+    public void setUsername_usuario(String username_usuario) {
+        this.username_usuario = username_usuario;
+    }
+
+    private String username_usuario;
+
     public String getSigla() {
         return sigla;
     }
