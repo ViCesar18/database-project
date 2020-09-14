@@ -87,7 +87,7 @@
                         <option>PE</option>
                         <option>PI</option>
                         <option>RJ</option>
-                        <option>RJ</option>
+                        <option>RN</option>
                         <option>RS</option>
                         <option>RO</option>
                         <option>RR</option>
@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputPais">Pais</label>
+                    <label for="inputPais">País</label>
                     <input type="text" required readonly class="form-control" id="inputPais" value="Brasil" name="pais">
                 </div>
 
@@ -200,6 +200,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Criar Conta</button>
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/">Voltar</a>
             </form>
         </div>
 

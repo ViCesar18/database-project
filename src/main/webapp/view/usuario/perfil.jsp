@@ -56,11 +56,11 @@
             </div>
 
             <div>
-                <a type="button" class="btn btn-primary" href="">Editar Perfil</a>
+                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil/update">Editar Perfil</a>
 
-                <a type="button" class="btn btn-warning">Alterar Foto de Perfil</a>
+                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-foto">Alterar Foto de Perfil</a>
 
-                <a type="button" class="btn btn-warning">Alterar Senha</a>
+                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-senha">Alterar Senha</a>
 
                 <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
             </div>
