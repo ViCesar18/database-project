@@ -36,7 +36,8 @@ import java.util.logging.Logger;
                 "/usuario/perfil/update-musical",
                 "/usuario/perfil/update-foto",
                 "/usuario/perfil/update-senha",
-                "/usuario/perfil/delete"
+                "/usuario/perfil/delete",
+                "/usuario/all"
         }
 )
 public class UserController extends HttpServlet {
@@ -580,6 +581,32 @@ public class UserController extends HttpServlet {
                     session.setAttribute("error", e.getMessage());
 
                     response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                }
+
+                break;
+            }
+            case "/usuario/all": {
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getUsuarioDAO();
+
+                    List<Usuario> usuarios = dao.all();
+
+                    request.setAttribute("usuarios", usuarios);
+
+                    dispatcher = request.getRequestDispatcher("/view/usuario/all.jsp");
+                    dispatcher.forward(request, response);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
                 }
 
                 break;

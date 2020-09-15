@@ -51,7 +51,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
             "WHERE id = ?";
 
     private static final String ALL_QUERY =
-            "SELECT id " +
+            "SELECT id, username, email " +
             "FROM rede_musical.usuario " +
             "ORDER BY id;";
 
@@ -244,6 +244,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
                 usuario.setId(result.getInt("id"));
                 usuario.setUsername(result.getString("username"));
+                usuario.setEmail(result.getString("email"));
 
                 usuarios.add(usuario);
             }
