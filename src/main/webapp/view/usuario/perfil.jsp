@@ -64,9 +64,11 @@
 
                 <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-senha">Alterar Senha</a>
 
-                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil/delete">Deletar Usuário</a>
-
                 <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
+            </div>
+
+            <div class="row justify-content-end">
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil/delete">Deletar Sua Conta</a>
             </div>
         </div>
 
