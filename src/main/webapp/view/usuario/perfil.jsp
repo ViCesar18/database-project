@@ -34,11 +34,11 @@
         <div class="container">
             <div class="text-center">
                 <img
-                        src="${pageContext.request.contextPath}/assets/img/usuario/${imgName}"
-                        class="rounded-circle"
-                        alt="Avatar"
-                        height="350"
-                        width="350"
+                    src="${pageContext.request.contextPath}/assets/img/usuario/${imgName}"
+                    class="rounded-circle"
+                    alt="Avatar"
+                    height="350"
+                    width="350"
                 >
 
                 <h1>${usuario.getpNome()} ${usuario.getsNome()}</h1>

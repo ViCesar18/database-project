@@ -238,6 +238,8 @@ public class UserController extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
                 }
+
+                break;
             }
             case "/usuario/perfil/update-musical": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
@@ -271,6 +273,95 @@ public class UserController extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
                 }
+
+                break;
+            }
+            case "/usuario/perfil/update-foto": {
+                // Se fosse um forms simples
+                // String username = request.getParameter("usuario");
+
+                // Como existe upload de arquivos (imagem), deve-se usar enctype="multipart/form-data"
+
+                // Cria a factory para itens de arquivos disk-based
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+
+                //  as restrições da factory
+                factory.setSizeThreshold(MAX_FILE_SIZE);
+
+                // Seta o diretório usado para armazenar arquivos temporários que são maiores que o tamanho máximo configurado
+                factory.setRepository(new File("/temp"));
+
+                // Cria um novo manipulador de upload de arquivos
+                ServletFileUpload upload = new ServletFileUpload(factory);
+
+                // Seta a restrição geral do tamanho da requisição
+                upload.setSizeMax(MAX_FILE_SIZE);
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    // Análise de requisição
+                    List<FileItem> items = upload.parseRequest(request);
+
+                    // Processa os items upados
+                    Iterator<FileItem> iterator = items.iterator();
+                    while(iterator.hasNext()) {
+                        FileItem item = iterator.next();
+
+                        // Processa os campos regulares do formulário
+                        if(item.isFormField()) {
+                            String fieldName = item.getFieldName();
+                            String fieldValue = item.getString();
+
+                            switch (fieldName) {
+                                case "id":
+                                    usuario.setId(Integer.parseInt(fieldValue));
+                                    break;
+                            }
+                        }
+                        else {
+                            // Processa os arquivos upados
+                            String fieldName = item.getFieldName();
+                            String fileName = item.getName();
+
+                            if(fieldName.equals("imagem") && !fileName.isBlank()) {
+                                // Pega o caminho absoluto da aplicação
+                                String appPath = request.getServletContext().getRealPath("");
+
+                                // Grava o arquivo upado na pasta img no caminho absoluto
+                                String savePath = appPath + File.separator + SAVE_DIR + File.separator + fileName;
+                                File uploadedFile = new File(savePath);
+                                item.write(uploadedFile);
+
+                                usuario.setImagem(fileName);
+                            }
+                        }
+                    }
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.update(usuario);
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/profile");
+                } catch (FileUploadException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao fazer upload do arquivo.");
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (SQLException | IOException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
             }
             case "/usuario/perfil/update-senha": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
@@ -303,6 +394,8 @@ public class UserController extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
                 }
             }
+
+            break;
         }
     }
 
@@ -386,6 +479,7 @@ public class UserController extends HttpServlet {
                 else {
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+
                 break;
             }
             case "/usuario/perfil/update-musical": {
@@ -423,12 +517,35 @@ public class UserController extends HttpServlet {
             }
             case "/usuario/perfil/update-foto": {
                 if(session.getAttribute("usuario") != null) {
-                    dispatcher = request.getRequestDispatcher("/view/usuario/update-perfil-foto.jsp");
-                    dispatcher.forward(request, response);
+                    Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
+
+                    try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                        dao = daoFactory.getUsuarioDAO();
+
+                        usuario = dao.read(usuarioLogin.getId());
+
+                        request.setAttribute("usuario", usuario);
+
+                        dispatcher = request.getRequestDispatcher("/view/usuario/update-perfil-foto.jsp");
+                        dispatcher.forward(request, response);
+                    } catch (SQLException | ClassNotFoundException e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    } catch (Exception e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    }
                 }
                 else {
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+
                 break;
             }
             case "/usuario/perfil/update-senha": {

@@ -43,7 +43,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
     private static final String UPDATE_IMAGE_QUERY =
             "UPDATE rede_musical.usuario " +
-            "SET image = ? " +
+            "SET imagem = ? " +
             "WHERE id = ?;";
 
     private static final String DELETE_QUERY =
