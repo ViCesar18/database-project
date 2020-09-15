@@ -32,6 +32,33 @@
         </div>
 
         <div class="form-group">
+            <label for="inputNomeLocal">Local</label>
+            <input type="text" required class="form-control" id="inputNomeLocal" name="nome_local">
+        </div>
+
+        <div class="form-group">
+            <label for="inputRua">Rua</label>
+            <input type="text" required class="form-control" id="inputRua" name="rua">
+        </div>
+
+        <div class="form-group">
+            <label for="inputNumero">Número</label>
+            <input type="text" required class="form-control" id="inputNumero" name="numero">
+        </div>
+
+        <div class="form-group">
+            <label for="inputBairro">Bairro</label>
+            <input type="text" required class="form-control" id="inputBairro" name="bairro">
+        </div>
+
+        <div class="form-group">
+            <label for="inputCep">CEP</label>
+            <input type="text" required class="form-control" id="inputCep" name="cep">
+        </div>
+
+
+
+        <div class="form-group">
             <label for="inputDtInicio">Data de Ínicio</label>
             <input type="datetime-local" required class="form-control" id="inputDtInicio" name="data_inicio">
         </div>

@@ -156,6 +156,11 @@ CREATE TABLE rede_musical.post_banda (
 
 CREATE TABLE rede_musical.evento (
 	id SERIAL,
+	nome_local VARCHAR(50) NOT NULL,
+	rua VARCHAR(50) NOT NULL,
+	numero VARCHAR(50) NOT NULL,
+	bairro VARCHAR(50) NOT NULL,
+	cep VARCHAR(50) NOT NULL,
 	data_inicio TIMESTAMP NOT NULL,
 	data_termino TIMESTAMP NOT NULL,
 	nome VARCHAR(30) NOT NULL,

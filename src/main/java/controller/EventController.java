@@ -52,6 +52,16 @@ public class EventController extends HttpServlet {
                                         Timestamp timeTermino = new Timestamp(dateTerminoEvento.getTime());
                                         evento.setData_termino(timeTermino);
 
+                                        evento.setNome_local(request.getParameter("nome_local"));
+
+                                        evento.setRua(request.getParameter("rua"));
+
+                                        evento.setNumero(request.getParameter("numero"));
+
+                                        evento.setBairro(request.getParameter("bairro"));
+
+                                        evento.setCep(request.getParameter("cep"));
+
                                         evento.setnParticipantes(0);
 
                                         Usuario usuario = (Usuario) session.getAttribute("usuario");
