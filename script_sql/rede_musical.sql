@@ -27,6 +27,7 @@ CREATE TABLE rede_musical.usuario_instrumentos (
 	CONSTRAINT pk_usuario_instrumentos PRIMARY KEY(usuario_id, instrumento),
 	CONSTRAINT fk_usuario_instrumentos FOREIGN KEY(usuario_id)
 		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.usuario_segue_usuario (
@@ -34,9 +35,11 @@ CREATE TABLE rede_musical.usuario_segue_usuario (
 	usuario_id_seguido INT,
 	CONSTRAINT pk_usuario_segue_usuario PRIMARY KEY(usuario_id, usuario_id_seguido),
 	CONSTRAINT fk_usuario_seguindo FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_usuario_seguido FOREIGN KEY(usuario_id_seguido)
 		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.post (
@@ -51,6 +54,7 @@ CREATE TABLE rede_musical.post (
 	CONSTRAINT pk_post PRIMARY KEY(id),
 	CONSTRAINT fk_criador_post FOREIGN KEY(usuario_id)
 		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.usuario_da_like_em_post (
@@ -58,9 +62,11 @@ CREATE TABLE rede_musical.usuario_da_like_em_post (
 	post_id INT,
 	CONSTRAINT pk_usuario_da_like_em_post PRIMARY KEY(usuario_id, post_id),
 	CONSTRAINT fk_usuario_like_post FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_post_liked_usuario FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.usuario_compartilha_post (
@@ -68,9 +74,11 @@ CREATE TABLE rede_musical.usuario_compartilha_post (
 	post_id INT,
 	CONSTRAINT pk_usuario_compartilha_post PRIMARY KEY(usuario_id, post_id),
 	CONSTRAINT fk_usuario_compartilhou FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_post_compartilhado FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.comentario (
@@ -86,11 +94,14 @@ CREATE TABLE rede_musical.usuario_comenta_post (
 	comentario_id INT,
 	CONSTRAINT pk_usuario_comenta_post PRIMARY KEY(usuario_id),
 	CONSTRAINT fk_usuario_autor FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_post_comentado FOREIGN KEY(post_id)
-		REFERENCES rede_musical.post(id),
+		REFERENCES rede_musical.post(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_comentario_feito FOREIGN KEY(comentario_id)
 		REFERENCES rede_musical.comentario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.feed (
@@ -98,6 +109,7 @@ CREATE TABLE rede_musical.feed (
 	CONSTRAINT pk_feed PRIMARY KEY(usuario_id),
 	CONSTRAINT fk_feed_usuario FOREIGN KEY(usuario_id)
 		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.feed_possui_posts (
@@ -105,9 +117,11 @@ CREATE TABLE rede_musical.feed_possui_posts (
 	post_id INT,
 	CONSTRAINT pk_feed_possui_posts PRIMARY KEY(feed_id, post_id),
 	CONSTRAINT fk_feed_post FOREIGN KEY(feed_id)
-		REFERENCES rede_musical.feed(usuario_id),
+		REFERENCES rede_musical.feed(usuario_id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_post_feed FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.banda  (
@@ -121,6 +135,7 @@ CREATE TABLE rede_musical.banda  (
 	CONSTRAINT uq_banda_sigla UNIQUE(sigla),
 	CONSTRAINT fk_usuario_criador_banda FOREIGN KEY(usuario_id)
 		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.usuario_segue_banda (
@@ -128,9 +143,11 @@ CREATE TABLE rede_musical.usuario_segue_banda (
 	banda_id INT,
 	CONSTRAINT pk_usuario_segue_banda PRIMARY KEY(usuario_id, banda_id),
 	CONSTRAINT fk_usuario_segue_banda FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_banda_seguida_usuario FOREIGN KEY(banda_id)
 		REFERENCES rede_musical.banda(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.usuario_participa_de_banda (
@@ -139,9 +156,11 @@ CREATE TABLE rede_musical.usuario_participa_de_banda (
 	instrumento VARCHAR(20),
 	CONSTRAINT pk_usuario_participa_banda PRIMARY KEY(usuario_id, banda_id),
 	CONSTRAINT fk_usuario_participa_banda FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_banda_participada_usuario FOREIGN KEY(banda_id)
 		REFERENCES rede_musical.banda(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.post_banda (
@@ -149,9 +168,11 @@ CREATE TABLE rede_musical.post_banda (
 	banda_id INT NOT NULL,
 	CONSTRAINT pk_post_banda PRIMARY KEY(post_id),
 	CONSTRAINT fk_post_banda FOREIGN KEY(post_id)
-		REFERENCES rede_musical.post(id),
+		REFERENCES rede_musical.post(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_banda_post FOREIGN KEY(banda_id)
 		REFERENCES rede_musical.banda(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.evento (
@@ -171,6 +192,7 @@ CREATE TABLE rede_musical.evento (
 	CONSTRAINT pk_evento PRIMARY KEY(id),
 	CONSTRAINT fk_usuario_criador_evento FOREIGN KEY(usuario_id)
 		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.usuario_comparece_em_evento (
@@ -178,7 +200,9 @@ CREATE TABLE rede_musical.usuario_comparece_em_evento (
 	evento_id INT,
 	CONSTRAINT pk_usuario_comparece_evento PRIMARY KEY(usuario_id, evento_id),
 	CONSTRAINT fk_usuario_comparece_evento FOREIGN KEY(usuario_id)
-		REFERENCES rede_musical.usuario(id),
+		REFERENCES rede_musical.usuario(id)
+		ON DELETE CASCADE,
 	CONSTRAINT fk_evento_comparecido_usuario FOREIGN KEY(evento_id)
 		REFERENCES rede_musical.evento(id)
+		ON DELETE CASCADE
 );
