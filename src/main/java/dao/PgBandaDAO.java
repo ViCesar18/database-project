@@ -34,7 +34,7 @@ public class PgBandaDAO implements BandaDAO {
             " WHERE id = ?;";
 
     private static final String ALL_QUERY =
-            "SELECT id, nome, sigla" +
+            "SELECT id, nome, sigla, genero_musical, usuario_id" +
             " FROM rede_musical.banda" +
             " ORDER BY id;";
 
@@ -159,6 +159,8 @@ public class PgBandaDAO implements BandaDAO {
                 banda.setId(result.getInt("id"));
                 banda.setSigla(result.getString("sigla"));
                 banda.setNome(result.getString("nome"));
+                banda.setGenero(result.getString("genero_musical"));
+                banda.setUsername_id(result.getInt("usuario_id"));
 
                 bandas.add (banda);
             }

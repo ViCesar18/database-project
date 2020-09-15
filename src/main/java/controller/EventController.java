@@ -2,6 +2,7 @@ package controller;
 
 import dao.DAO;
 import dao.DAOFactory;
+import model.Banda;
 import model.Evento;
 import model.Usuario;
 
@@ -18,6 +19,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +27,8 @@ import java.util.logging.Logger;
         name = "EventController",
         urlPatterns = {
                 "/evento",
-                "/evento/create"
+                "/evento/create",
+                "/evento/all"
         }
 )
 
@@ -113,6 +116,22 @@ public class EventController extends HttpServlet {
                         case "/evento/create": {
                                 dispatcher = request.getRequestDispatcher("/view/evento/create.jsp");
                                 dispatcher.forward(request, response);
+                        }
+                        case "/evento/all": {
+                                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                                        dao = daoFactory.getEventoDAO();
+
+                                        List<Evento> eventos = dao.all();
+
+                                        request.setAttribute("eventos", eventos);
+
+                                        dispatcher = request.getRequestDispatcher("/view/evento/all.jsp");
+                                        dispatcher.forward(request, response);
+                                } catch (Exception e){
+                                        System.out.println(e);
+                                }
+
+                                break;
                         }
                 }
         }

@@ -32,7 +32,7 @@ import java.util.logging.Logger;
         urlPatterns = {
                 "/banda",
                 "/banda/create",
-                "/banda/listar"
+                "/banda/all"
         }
 )
 
@@ -134,21 +134,6 @@ public class BandController extends HttpServlet {
                 break;
 
             }
-            case "/banda/listar":{
-                try (DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    dao = daoFactory.getBandaDAO();
-
-                    List<Banda> bandList = dao.all();
-                    request.setAttribute("bandList", bandList);
-                } catch (ClassNotFoundException | IOException | SQLException ex) {
-                    request.getSession().setAttribute("error", ex.getMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                break;
-
-            }
         }
     }
 
@@ -166,9 +151,21 @@ public class BandController extends HttpServlet {
                dispatcher = request.getRequestDispatcher("/view/banda/create.jsp");
                dispatcher.forward(request, response);
            }
-           case "/banda/listar": {
-               dispatcher = request.getRequestDispatcher("/view/banda/listar.jsp");
-               dispatcher.forward(request, response);
+           case "/banda/all": {
+               try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                   dao = daoFactory.getBandaDAO();
+
+                   List<Banda> bandas = dao.all();
+
+                   request.setAttribute("bandas", bandas);
+
+                   dispatcher = request.getRequestDispatcher("/view/banda/all.jsp");
+                   dispatcher.forward(request, response);
+               } catch (Exception e){
+                   System.out.println(e);
+               }
+
+               break;
            }
        }
     }

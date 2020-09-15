@@ -34,7 +34,7 @@ public class PgEventoDAO implements EventoDAO {
             " WHERE id = ?;";
 
     private static final String ALL_QUERY =
-            "SELECT id, nome" +
+            "SELECT id, nome, descricao, categoria, data_inicio, data_termino, numero_participantes, nome_local, rua, numero, bairro, cep, usuario_id" +
             " FROM rede_musical.evento" +
             " ORDER BY id;";
 
@@ -179,6 +179,19 @@ public class PgEventoDAO implements EventoDAO {
 
                 evento.setId(result.getInt("id"));
                 evento.setNome(result.getString("nome"));
+                evento.setDescricao(result.getString("descricao"));
+                evento.setCategoria(result.getString("categoria"));
+                evento.setData_inicio(result.getTimestamp("data_inicio"));
+                evento.setData_termino(result.getTimestamp("data_termino"));
+                evento.setNome_local(result.getString("nome_local"));
+                evento.setRua(result.getString("rua"));
+                evento.setNumero(result.getString("numero"));
+                evento.setBairro(result.getString("bairro"));
+                evento.setCep(result.getString("cep"));
+                evento.setnParticipantes(result.getInt("numero_participantes"));
+                evento.setUsername_id(result.getInt("usuario_id"));
+
+
 
                 eventos.add (evento);
             }
