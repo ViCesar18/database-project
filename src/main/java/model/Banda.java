@@ -6,16 +6,15 @@ public class Banda {
     private String nome;
     private String genero;
     private String imagem;
+    private int username_id;
 
-    public String getUsername_usuario() {
-        return username_usuario;
+    public int getUsername_id() {
+        return username_id;
     }
 
-    public void setUsername_usuario(String username_usuario) {
-        this.username_usuario = username_usuario;
+    public void setUsername_id(int username_id) {
+        this.username_id = username_id;
     }
-
-    private String username_usuario;
 
     public String getSigla() {
         return sigla;

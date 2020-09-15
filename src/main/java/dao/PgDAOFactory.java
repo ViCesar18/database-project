@@ -13,4 +13,5 @@ public class PgDAOFactory extends DAOFactory{
         return new PgUsuarioDAO(this.connection);
     }
     public BandaDAO getBandaDAO(){ return new PgBandaDAO(this.connection);}
+    public EventoDAO getEventoDAO(){ return new PgEventoDAO(this.connection);}
 }

@@ -16,36 +16,38 @@ public class PgEventoDAO implements EventoDAO {
 
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.evento" +
-                    "(nome, descricao, data, numero_participantes, categoria)" +
-                    "VALUES(?, ?, ?, ?, ?, ?);";
+            "(nome, descricao, data_inicio, data_termino, numero_participantes, categoria, usuario_id)" +
+            "VALUES(?, ?, ?, ?, ?, ?, ?);";
 
     private static final String READ_QUERY =
-            "SELECT nome, descricao, data, numero_participantes, categoria" +
-                    "FROM rede_musical.evento" +
-                    "WHERE id = ?;";
+            "SELECT nome, descricao, data_inicio, data_termino, numero_participantes, categoria, usuario_id" +
+            " FROM rede_musical.evento" +
+            " WHERE id = ?;";
 
     private static final String UPDATE_EVENTO_DATA_QUERY =
             "UPDATE rede_musical.evento" +
-                    "SET nome = ?, descricao = ?, data = ?, numero_participantes = ?, categoria = ?" +
-                    "WHERE id = ?;";
+            " SET nome = ?, descricao = ?, data_inicio = ?, data_termino = ?, numero_participantes = ?, categoria = ?, usuario_id = ?" +
+            " WHERE id = ?;";
 
     private static final String DELETE_QUERY =
-            "DELETE rede_musical.evento" +
-                    "WHERE id = ?;";
+            "DELETE FROM rede_musical.evento" +
+            " WHERE id = ?;";
 
     private static final String ALL_QUERY =
             "SELECT id, nome" +
-                    "FROM rede_musical.evento" +
-                    "ORDER BY id;";
+            " FROM rede_musical.evento" +
+            " ORDER BY id;";
 
     @Override
     public void create(Evento evento) throws SQLException {
         try (PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY)) {
             statement.setString(1, evento.getNome());
             statement.setString(2, evento.getDescricao());
-            statement.setTimestamp(3, evento.getData());
-            statement.setInt(4, evento.getnParticipantes());
-            statement.setString(5, evento.getCategoria());
+            statement.setTimestamp(3, evento.getData_inicio());
+            statement.setTimestamp(4, evento.getData_termino());
+            statement.setInt(5, evento.getnParticipantes());
+            statement.setString(6, evento.getCategoria());
+            statement.setInt(7, evento.getUsername_id());
 
             statement.executeUpdate();
         } catch (SQLException e){
@@ -75,9 +77,11 @@ public class PgEventoDAO implements EventoDAO {
                     evento.setId(id);
                     evento.setNome(result.getString("nome"));
                     evento.setDescricao(result.getString("descricao"));
-                    evento.setData(result.getTimestamp("data"));
+                    evento.setData_inicio(result.getTimestamp("data_inicio"));
+                    evento.setData_termino(result.getTimestamp("data_termino"));
                     evento.setnParticipantes(result.getInt("numero_participantes"));
                     evento.setCategoria(result.getString("categoria"));
+                    evento.setUsername_id(result.getInt("usuario_id"));
                 }
                 else {
                     throw new SQLException("Erro ao vizualizar: evento não encontrado");
@@ -102,9 +106,10 @@ public class PgEventoDAO implements EventoDAO {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_EVENTO_DATA_QUERY)) {
             statement.setString(1, evento.getNome());
             statement.setString(2, evento.getDescricao());
-            statement.setTimestamp(3, evento.getData());
-            statement.setInt(4, evento.getnParticipantes());
-            statement.setString(5, evento.getCategoria());
+            statement.setTimestamp(3, evento.getData_inicio());
+            statement.setTimestamp(4, evento.getData_termino());
+            statement.setInt(5, evento.getnParticipantes());
+            statement.setString(6, evento.getCategoria());
 
             if (statement.executeUpdate() < 1){
                 throw new SQLException("Erro ao editar: evento não encontrado.");

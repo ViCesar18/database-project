@@ -31,7 +31,8 @@ import java.util.logging.Logger;
         name = "BandController",
         urlPatterns = {
                 "/banda",
-                "/banda/create"
+                "/banda/create",
+                "/banda/listar"
         }
 )
 
@@ -101,7 +102,7 @@ public class BandController extends HttpServlet {
 
                     Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-                    banda.setUsername_usuario(usuario.getUsername()); //Falta implementar
+                    banda.setUsername_id(usuario.getId()); //Falta implementar
 
                     dao.create(banda);
 
@@ -133,6 +134,21 @@ public class BandController extends HttpServlet {
                 break;
 
             }
+            case "/banda/listar":{
+                try (DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getBandaDAO();
+
+                    List<Banda> bandList = dao.all();
+                    request.setAttribute("bandList", bandList);
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
+            }
         }
     }
 
@@ -148,6 +164,10 @@ public class BandController extends HttpServlet {
            }
            case "/banda/create": {
                dispatcher = request.getRequestDispatcher("/view/banda/create.jsp");
+               dispatcher.forward(request, response);
+           }
+           case "/banda/listar": {
+               dispatcher = request.getRequestDispatcher("/view/banda/listar.jsp");
                dispatcher.forward(request, response);
            }
        }

@@ -16,27 +16,27 @@ public class PgBandaDAO implements BandaDAO {
 
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.banda" +
-            "(sigla, nome, genero_musical, imagem, usuario_username)" +
+            "(sigla, nome, genero_musical, imagem, usuario_id)" +
             "VALUES(?, ?, ?, ?, ?);";
 
     private static final String READ_QUERY =
-            "SELECT sigla, nome, genero_musical, imagem, usuario_username" +
-            "FROM rede_musical.banda" +
-            "WHERE id = ?;";
+            "SELECT sigla, nome, genero_musical, imagem, usuario_id" +
+            " FROM rede_musical.banda" +
+            " WHERE id = ?;";
 
     private static final String UPDATE_BANDA_DATA_QUERY =
             "UPDATE rede_musical.banda" +
-            "SET sigla = ?, nome = ?, genero_musical = ?, imagem = ?, usuario_username = ?" +
-            "WHERE id = ?;";
+            " SET sigla = ?, nome = ?, genero_musical = ?, imagem = ?, usuario_id = ?" +
+            " WHERE id = ?;";
 
     private static final String DELETE_QUERY =
-            "DELETE rede_musical.banda" +
-            "WHERE id = ?;";
+            "DELETE FROM rede_musical.banda" +
+            " WHERE id = ?;";
 
     private static final String ALL_QUERY =
             "SELECT id, nome, sigla" +
-            "FROM rede_musical.banda" +
-            "ORDER BY id;";
+            " FROM rede_musical.banda" +
+            " ORDER BY id;";
 
     @Override
     public void create(Banda banda) throws SQLException {
@@ -45,7 +45,7 @@ public class PgBandaDAO implements BandaDAO {
             statement.setString(2, banda.getNome());
             statement.setString(3, banda.getGenero());
             statement.setString(4, banda.getImagem());
-            statement.setString(5, banda.getUsername_usuario());
+            statement.setInt(5, banda.getUsername_id());
 
             statement.executeUpdate();
         } catch (SQLException e){
@@ -77,7 +77,7 @@ public class PgBandaDAO implements BandaDAO {
                     banda.setNome(result.getString("nome"));
                     banda.setGenero(result.getString("genero_musical"));
                     banda.setImagem(result.getString("imagem"));
-                    banda.setUsername_usuario(result.getString("username_usuario"));
+                    banda.setUsername_id(result.getInt("username_id"));
                 }
                 else {
                     throw new SQLException("Erro ao vizualizar: banda não encontrada");
@@ -104,7 +104,7 @@ public class PgBandaDAO implements BandaDAO {
             statement.setString(2, banda.getNome());
             statement.setString(3, banda.getGenero());
             statement.setString(4, banda.getImagem());
-            statement.setString(5, banda.getUsername_usuario());
+            statement.setInt(5, banda.getUsername_id());
 
             if (statement.executeUpdate() < 1){
                 throw new SQLException("Erro ao editar: banda não encontrada.");
