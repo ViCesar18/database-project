@@ -36,6 +36,7 @@ import java.util.logging.Logger;
                 "/usuario/perfil/update-musical",
                 "/usuario/perfil/update-foto",
                 "/usuario/perfil/update-senha",
+                "/usuario/perfil/delete"
         }
 )
 public class UserController extends HttpServlet {
@@ -340,7 +341,7 @@ public class UserController extends HttpServlet {
 
                     dao.update(usuario);
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/profile");
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
                 } catch (FileUploadException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
@@ -366,7 +367,7 @@ public class UserController extends HttpServlet {
             case "/usuario/perfil/update-senha": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                     usuario.setId(Integer.parseInt(request.getParameter("id")));
-                    usuario.setUsername(request.getParameter("senha"));             // Gambiarra para atualizar a senha (senha antiga)
+                    usuario.setUsername(request.getParameter("senha"));    // Gambiarra para atualizar a senha (senha antiga)
                     usuario.setSenha(request.getParameter("novaSenha"));   // Nova senha
 
                     dao = daoFactory.getUsuarioDAO();
@@ -556,6 +557,31 @@ public class UserController extends HttpServlet {
                 else {
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+                break;
+            }
+            case "/usuario/perfil/delete": {
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    usuario = (Usuario) session.getAttribute("usuario");
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.delete(usuario.getId());
+
+                    response.sendRedirect(request.getContextPath() + "/logout");
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                }
+
                 break;
             }
         }
