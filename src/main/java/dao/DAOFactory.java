@@ -34,8 +34,12 @@ public abstract class DAOFactory implements AutoCloseable{
     }
 
     public abstract UsuarioDAO getUsuarioDAO();
+
     public abstract BandaDAO getBandaDAO();
+
     public abstract EventoDAO getEventoDAO();
+
+    public abstract PesquisaDAO getPesquisaDAO();
 
     @Override
     public void close() throws Exception {
