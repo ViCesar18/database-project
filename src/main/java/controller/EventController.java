@@ -28,8 +28,7 @@ import java.util.logging.Logger;
         urlPatterns = {
                 "/evento",
                 "/evento/create",
-                "/evento/all",
-                "/evento/perfil"
+                "/evento/all"
         }
 )
 
@@ -117,22 +116,6 @@ public class EventController extends HttpServlet {
                         case "/evento/create": {
                                 dispatcher = request.getRequestDispatcher("/view/evento/create.jsp");
                                 dispatcher.forward(request, response);
-                        }
-                        case "/evento/perfil": {
-                                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
-                                        dao = daoFactory.getEventoDAO();
-                                        int idEvento = Integer.parseInt(request.getParameter("id"));
-                                        Evento e = dao.read(idEvento);
-
-                                        request.setAttribute("evento", e);
-
-                                        dispatcher = request.getRequestDispatcher("/view/evento/perfil.jsp");
-                                        dispatcher.forward(request, response);
-                                } catch (Exception e){
-                                        System.out.println(e);
-                                }
-
-                                break;
                         }
                         case "/evento/all": {
                                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {

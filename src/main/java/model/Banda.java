@@ -8,7 +8,6 @@ public class Banda {
     private String imagem;
     private int username_id;
 
-
     public int getUsername_id() {
         return username_id;
     }
