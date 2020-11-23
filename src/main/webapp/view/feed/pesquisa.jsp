@@ -77,7 +77,7 @@
                             <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Seguir</a>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil">Perfil da Banda</a>
+                            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil?id=${pesquisa.idBanda}">Perfil da Banda</a>
                         </td>
                     </tr>
                 </c:if>
@@ -107,7 +107,7 @@
                             <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Participar</a>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil">Perfil do Evento</a>
+                            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/evento/perfil?id=${pesquisa.idEvento}">Perfil do Evento</a>
                         </td>
                     </tr>
                 </c:if>

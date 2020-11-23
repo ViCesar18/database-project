@@ -1,5 +1,6 @@
 package controller;
 
+import dao.BandaDAO;
 import dao.DAO;
 import dao.DAOFactory;
 import model.Banda;
@@ -32,7 +33,8 @@ import java.util.logging.Logger;
         urlPatterns = {
                 "/banda",
                 "/banda/create",
-                "/banda/all"
+                "/banda/all",
+                "/banda/perfil"
         }
 )
 
@@ -141,6 +143,8 @@ public class BandController extends HttpServlet {
        DAO<Banda> dao;
        Banda banda;
        RequestDispatcher dispatcher;
+       HttpSession session = request.getSession();
+       String servletPath = request.getServletPath();
 
        switch (request.getServletPath()){
            case "/banda": {
@@ -151,8 +155,25 @@ public class BandController extends HttpServlet {
                dispatcher = request.getRequestDispatcher("/view/banda/create.jsp");
                dispatcher.forward(request, response);
            }
-           case "/banda/all": {
+           case "/banda/perfil": {
+               System.out.println(getInitParameter("id"));
                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                   dao = daoFactory.getBandaDAO();
+                   int idBanda = Integer.parseInt(request.getParameter("id"));
+                   Banda b = dao.read(idBanda);
+
+                   request.setAttribute("banda", b);
+
+                   dispatcher = request.getRequestDispatcher("/view/banda/perfil.jsp");
+                   dispatcher.forward(request, response);
+               } catch (Exception e){
+                   System.out.println(e);
+               }
+
+               break;
+           }
+           case "/banda/all": {
+               try (DAOFactory daoFactory = DAOFactory.getInstance()) {
                    dao = daoFactory.getBandaDAO();
 
                    List<Banda> bandas = dao.all();
@@ -161,7 +182,7 @@ public class BandController extends HttpServlet {
 
                    dispatcher = request.getRequestDispatcher("/view/banda/all.jsp");
                    dispatcher.forward(request, response);
-               } catch (Exception e){
+               } catch (Exception e) {
                    System.out.println(e);
                }
 

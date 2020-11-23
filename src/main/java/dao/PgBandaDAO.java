@@ -38,6 +38,7 @@ public class PgBandaDAO implements BandaDAO {
             " FROM rede_musical.banda" +
             " ORDER BY id;";
 
+
     @Override
     public void create(Banda banda) throws SQLException {
         try (PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY)) {
@@ -77,10 +78,10 @@ public class PgBandaDAO implements BandaDAO {
                     banda.setNome(result.getString("nome"));
                     banda.setGenero(result.getString("genero_musical"));
                     banda.setImagem(result.getString("imagem"));
-                    banda.setUsername_id(result.getInt("username_id"));
+                    banda.setUsername_id(result.getInt("usuario_id"));
                 }
                 else {
-                    throw new SQLException("Erro ao vizualizar: banda não encontrada");
+                    throw new SQLException("Erro ao visualizar: banda não encontrada");
                 }
             }
         } catch(SQLException e){
