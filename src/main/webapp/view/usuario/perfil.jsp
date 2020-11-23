@@ -9,6 +9,8 @@
 <%@ page import="java.sql.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
@@ -53,6 +55,27 @@
                 <p><strong>Música Favorita:</strong> ${usuario.getMusicaFavorita()}</p>
                 <p><strong>Gênero Favorito:</strong> ${usuario.getGeneroFavorito()}</p>
                 <p><strong>Instrumento Favorito:</strong> ${usuario.getInstrumentoFavorito()}</p>
+                <p>
+                    <strong>Instrumentos que Toca:</strong>
+                    <c:forEach var="instrumento" items="${requestScope.instrumentos}">
+                        <p>${instrumento}</p>
+                    </c:forEach>
+                </p>
+
+                <br>
+
+                <form
+                        class="form"
+                        action="${pageContext.servletContext.contextPath}/usuario/instrumentos"
+                        method="post"
+                >
+                    <div class="form-group">
+                        <label for="inputInstrumentoQueToca">Adicionar Novo Instrumento:</label>
+                        <input type="text" required class="form-control" id="inputInstrumentoQueToca" name="instrumentoQueToca">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Adicionar Instrumento</button>
+                </form>
             </div>
 
             <div>

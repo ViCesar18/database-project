@@ -60,6 +60,17 @@ public class PgUsuarioDAO implements UsuarioDAO {
             "FROM rede_musical.usuario " +
             "WHERE username = ? AND senha = md5(?);";
 
+    private static final String INSERT_INSTRUMENTO =
+            "INSERT INTO rede_musical.usuario_instrumentos" +
+            "(usuario_id, instrumento) " +
+            "VALUES(?, ?);";
+
+    private static final String READ_INSTRUMENTOS =
+            "SELECT id, instrumento " +
+            "FROM rede_musical.usuario_instrumentos " +
+            "JOIN rede_musical.usuario ON id = usuario_id " +
+            "WHERE id = ?;";
+
     public PgUsuarioDAO(Connection connection) {
         this.connection = connection;
     }
@@ -276,5 +287,42 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
             throw new SQLException("Erro ao autenticar usuário.");
         }
+    }
+
+    @Override
+    public void insertInstrumento(Integer id, String instrumento) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(INSERT_INSTRUMENTO)) {
+            statement.setInt(1, id);
+            statement.setString(2, instrumento);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao inserir instrumento.");
+        }
+    }
+
+    @Override
+    public List<String> readInstrumentos(Integer id) throws SQLException {
+        List<String> instrumentos = new ArrayList<>();
+
+        try(PreparedStatement statement = connection.prepareStatement(READ_INSTRUMENTOS)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                while(result.next()) {
+                    String instrumento = result.getString("instrumento");
+
+                    instrumentos.add(instrumento);
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao visualizar instrumentos.");
+        }
+
+        return instrumentos;
     }
 }

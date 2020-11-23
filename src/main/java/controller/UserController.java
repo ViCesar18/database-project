@@ -2,6 +2,7 @@ package controller;
 
 import dao.DAO;
 import dao.DAOFactory;
+import dao.UsuarioDAO;
 import model.Usuario;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -37,7 +38,8 @@ import java.util.logging.Logger;
                 "/usuario/perfil/update-foto",
                 "/usuario/perfil/update-senha",
                 "/usuario/perfil/delete",
-                "/usuario/all"
+                "/usuario/all",
+                "/usuario/instrumentos"
         }
 )
 public class UserController extends HttpServlet {
@@ -51,8 +53,8 @@ public class UserController extends HttpServlet {
      */
     private static String SAVE_DIR = "assets/img/usuario";
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAO<Usuario> dao;
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UsuarioDAO dao;
         Usuario usuario = new Usuario();
         String servletPath = request.getServletPath();
 
@@ -395,14 +397,39 @@ public class UserController extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
                 }
-            }
 
-            break;
+                break;
+            }
+            case "/usuario/instrumentos": {
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    usuario = (Usuario) session.getAttribute("usuario");
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.insertInstrumento(usuario.getId(), request.getParameter("instrumentoQueToca"));
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                }
+
+                break;
+            }
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAO<Usuario> dao;
+        UsuarioDAO dao;
         Usuario usuario;
         RequestDispatcher dispatcher;
         HttpSession session = request.getSession();
@@ -428,7 +455,10 @@ public class UserController extends HttpServlet {
 
                         usuario = dao.read(usuarioLogin.getId());
 
+                        List<String> instrumentos = dao.readInstrumentos(usuarioLogin.getId());
+
                         request.setAttribute("usuario", usuario);
+                        request.setAttribute("instrumentos", instrumentos);
 
                         dispatcher = request.getRequestDispatcher("/view/usuario/perfil.jsp");
                         dispatcher.forward(request, response);
