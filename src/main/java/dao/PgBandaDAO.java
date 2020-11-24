@@ -26,8 +26,13 @@ public class PgBandaDAO implements BandaDAO {
 
     private static final String UPDATE_BANDA_DATA_QUERY =
             "UPDATE rede_musical.banda" +
-            " SET sigla = ?, nome = ?, genero_musical = ?, imagem = ?, usuario_id = ?" +
+            " SET sigla = ?, nome = ?, genero_musical = ?" +
             " WHERE id = ?;";
+
+    private static final String UPDATE_BANDA_IMAGEM =
+            " UPDATE rede_musical.banda" +
+                    " SET imagem = ?" +
+                    " WHERE id = ?;";
 
     private static final String DELETE_QUERY =
             "DELETE FROM rede_musical.banda" +
@@ -100,12 +105,19 @@ public class PgBandaDAO implements BandaDAO {
 
     @Override
     public void update(Banda banda) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_BANDA_DATA_QUERY)) {
+        String query;
+        if(banda.getImagem() != null && !banda.getImagem().isBlank()) {
+            query = UPDATE_BANDA_IMAGEM;
+        }
+        else{
+            query = UPDATE_BANDA_DATA_QUERY;
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, banda.getSigla());
             statement.setString(2, banda.getNome());
             statement.setString(3, banda.getGenero());
             statement.setString(4, banda.getImagem());
-            statement.setInt(5, banda.getUsername_id());
 
             if (statement.executeUpdate() < 1){
                 throw new SQLException("Erro ao editar: banda não encontrada.");

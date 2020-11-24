@@ -29,7 +29,8 @@ import java.util.logging.Logger;
                 "/evento",
                 "/evento/create",
                 "/evento/all",
-                "/evento/perfil"
+                "/evento/perfil",
+                "/evento/perfil/delete"
         }
 )
 
@@ -108,6 +109,7 @@ public class EventController extends HttpServlet {
                 DAO<Evento> dao;
                 Evento evento;
                 RequestDispatcher dispatcher;
+                HttpSession session = request.getSession();
 
                 switch (request.getServletPath()){
                         case "/evento": {
@@ -148,6 +150,30 @@ public class EventController extends HttpServlet {
                                         System.out.println(e);
                                 }
 
+                                break;
+                        }
+                        case "/evento/perfil/delete": {
+                                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                                        dao = daoFactory.getEventoDAO();
+                                        int idEvento = Integer.parseInt(request.getParameter("id"));
+                                        System.out.println(idEvento);
+
+                                        dao.delete(idEvento);
+
+                                        response.sendRedirect(request.getContextPath());
+                                } catch (SQLException | ClassNotFoundException e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/evento/perfil");
+                                } catch (Exception e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/evento/perfil");
+                                }
                                 break;
                         }
                 }

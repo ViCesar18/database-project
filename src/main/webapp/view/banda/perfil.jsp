@@ -6,8 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="model.Banda" %>
+<%@ page import="model.Usuario" %>
 <%@ page import="java.sql.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -18,11 +20,21 @@
 <body>
 <%
     Banda banda = (Banda)request.getAttribute("banda");
-    System.out.println(banda.getNome());
+    Usuario usuarioLogado = (Usuario)session.getAttribute("usuario");
+    System.out.println("hey" + usuarioLogado.getId() + "|" + banda.getUsername_id());
+    //System.out.println(banda.getNome());
     String imgName = banda.getImagem();
 
     if(imgName == null || imgName.isBlank()) {
         imgName = "img/banda/default_avatar.png";
+    }
+
+    boolean criador;
+    if (usuarioLogado.getId() == banda.getUsername_id()){
+        request.setAttribute("criador", true);
+    }
+    else{
+        request.setAttribute("criador", false);
     }
 
     request.setAttribute("imgName", imgName);
@@ -43,7 +55,11 @@
     <div>
         <p><strong>Gênero:</strong> ${banda.getGenero()}</p>
     </div>
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
+    <c:if test="${requestScope.criador}">
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Deletar banda</a>
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Editar banda</a>
+    </c:if>
+    <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
     </div>
 </div>
 

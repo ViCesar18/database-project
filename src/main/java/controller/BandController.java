@@ -34,7 +34,9 @@ import java.util.logging.Logger;
                 "/banda",
                 "/banda/create",
                 "/banda/all",
-                "/banda/perfil"
+                "/banda/perfil",
+                "/banda/perfil/delete",
+                "/banda/perfil/update"
         }
 )
 
@@ -104,7 +106,9 @@ public class BandController extends HttpServlet {
 
                     Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-                    banda.setUsername_id(usuario.getId()); //Falta implementar
+                    System.out.println("hey" + "kaka" + usuario.getId());
+
+                    banda.setUsername_id(usuario.getId());
 
                     dao.create(banda);
 
@@ -135,6 +139,28 @@ public class BandController extends HttpServlet {
 
                 break;
 
+            }
+            case "/banda/perfil/update": {
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getBandaDAO();
+                    Banda aux = dao.read(Integer.parseInt(request.getParameter("id")));
+                    banda.setId(Integer.parseInt(request.getParameter("id")));
+                    banda.setNome(request.getParameter("nome"));
+                    banda.setSigla(request.getParameter("sigla"));
+                    banda.setGenero(request.getParameter("genero"));
+
+                    dao.update(banda);
+
+                    response.sendRedirect(request.getContextPath() + "/banda/perfil?id=${Integer.parseInt(request.getParameter(\"id\")}");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
+
+                    response.sendRedirect(request.getContextPath() + "/banda/perfil/update");
+                }
+
+                break;
             }
         }
     }
@@ -184,6 +210,56 @@ public class BandController extends HttpServlet {
                    dispatcher.forward(request, response);
                } catch (Exception e) {
                    System.out.println(e);
+               }
+
+               break;
+           }
+           case "/banda/perfil/delete": {
+               try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                   dao = daoFactory.getBandaDAO();
+                   int idBanda = Integer.parseInt(request.getParameter("id"));
+
+                   dao.delete(idBanda);
+
+                   response.sendRedirect(request.getContextPath());
+               } catch (SQLException | ClassNotFoundException e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", e.getMessage());
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               } catch (Exception e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", e.getMessage());
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               }
+               break;
+           }
+           case "/banda/perfil/update": {
+               try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                   dao = daoFactory.getBandaDAO();
+                   int idBanda = Integer.parseInt(request.getParameter("id"));
+
+                   banda = dao.read(idBanda);
+
+                   request.setAttribute("banda", banda);
+
+                   dispatcher = request.getRequestDispatcher("/view/banda/update-perfil.jsp");
+                   dispatcher.forward(request, response);
+               } catch (SQLException | ClassNotFoundException e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", e.getMessage());
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               } catch (Exception e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", e.getMessage());
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
                }
 
                break;
