@@ -56,10 +56,8 @@
             <input type="text" required class="form-control" id="inputCep" name="cep">
         </div>
 
-
-
         <div class="form-group">
-            <label for="inputDtInicio">Data de Ínicio</label>
+            <label for="inputDtInicio">Data de Início</label>
             <input type="datetime-local" required class="form-control" id="inputDtInicio" name="data_inicio">
         </div>
 

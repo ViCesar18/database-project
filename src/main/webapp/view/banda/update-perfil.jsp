@@ -115,8 +115,8 @@
         </div>
 
 
-        <button type="submit" class="btn btn-primary">Atualizar Dados Musicais</button>
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
+        <button type="submit" class="btn btn-primary">Atualizar Banda</button>
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil">Voltar</a>
     </form>
 </div>
 
