@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,7 +35,7 @@ import java.util.logging.Logger;
                 "/banda/perfil",
                 "/banda/perfil/delete",
                 "/banda/perfil/update",
-                "/usuario/perfil/update-foto"
+                "/banda/perfil/update-foto"
         }
 )
 
@@ -161,7 +159,7 @@ public class BandController extends HttpServlet {
 
                 break;
             }
-            case "/usuario/perfil/update-foto": {
+            case "/banda/perfil/update-foto": {
                 // Se fosse um forms simples
                 // String username = request.getParameter("usuario");
 
@@ -350,7 +348,7 @@ public class BandController extends HttpServlet {
 
                break;
            }
-           case "/usuario/perfil/update-foto": {
+           case "/banda/perfil/update-foto": {
                Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
 
                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
@@ -369,13 +367,13 @@ public class BandController extends HttpServlet {
 
                    session.setAttribute("error", e.getMessage());
 
-                   response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
                } catch (Exception e) {
                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                    session.setAttribute("error", e.getMessage());
 
-                   response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
                }
 
                break;
