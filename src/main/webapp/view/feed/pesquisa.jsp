@@ -40,7 +40,24 @@
                             <c:out value="${pesquisa.nomeUsuario}"/>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Seguir</a>
+                            <c:if test="${!pesquisa.usuarioLogadoSegueUsuario}">
+                                <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        onclick="seguirUsuario(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idUsuario})"
+                                >
+                                    Seguir
+                                </button>
+                            </c:if>
+                            <c:if test="${pesquisa.usuarioLogadoSegueUsuario}">
+                                <button
+                                        type="button"
+                                        class="btn btn-danger"
+                                        onclick="pararSeguirUsuario(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idUsuario})"
+                                >
+                                    Deixar de Seguir
+                                </button>
+                            </c:if>
                         </td>
                         <td>
                             <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil?idUsuario=${pesquisa.idUsuario}">Perfil</a>
@@ -118,7 +135,6 @@
 
     <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
 </div>
-
 <%@include file="../include/scripts.jsp"%>
 </body>
 </html>

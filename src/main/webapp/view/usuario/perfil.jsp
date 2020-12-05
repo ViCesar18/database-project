@@ -47,6 +47,7 @@
             </div>
 
             <div>
+                <p><strong>Seguidores:</strong> ${seguidores}     <strong>Seguindo:</strong> ${seguindo}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
                 <p><strong>Data de Nascimento:</strong> ${date}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
@@ -90,7 +91,24 @@
                     <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update-senha">Alterar Senha</a>
                 </c:if>
                 <c:if test="${sessionScope.usuario.id != requestScope.usuario.id}">
-                    <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Seguir</a>
+                    <c:if test="${!requestScope.segue}">
+                        <button
+                                type="button"
+                                class="btn btn-success"
+                                onclick="seguirUsuario(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.usuario.id})"
+                        >
+                            Seguir
+                        </button>
+                    </c:if>
+                    <c:if test="${requestScope.segue}">
+                        <button
+                                type="button"
+                                class="btn btn-danger"
+                                onclick="pararSeguirUsuario(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.usuario.id})"
+                        >
+                            Deixar de Seguir
+                        </button>
+                    </c:if>
                 </c:if>
                 <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
             </div>

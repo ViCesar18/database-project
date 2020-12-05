@@ -1,6 +1,5 @@
 package controller;
 
-import dao.DAO;
 import dao.DAOFactory;
 import dao.UsuarioDAO;
 import model.Usuario;
@@ -40,7 +39,9 @@ import java.util.logging.Logger;
                 "/usuario/meu-perfil/delete",
                 "/usuario/all",
                 "/usuario/instrumentos",
-                "/usuario/perfil"
+                "/usuario/perfil",
+                "/seguir-usuario",
+                "/parar-seguir-usuario"
         }
 )
 public class UserController extends HttpServlet {
@@ -426,6 +427,56 @@ public class UserController extends HttpServlet {
 
                 break;
             }
+            case "/seguir-usuario": {
+                Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
+                Integer idUsuarioSeguido = Integer.parseInt(request.getParameter("idUsuario"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.insertUsuarioSegueUsuario(idUsuarioLogado, idUsuarioSeguido);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
+            }
+            case "/parar-seguir-usuario": {
+                Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
+                Integer idUsuarioSeguido = Integer.parseInt(request.getParameter("idUsuario"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getUsuarioDAO();
+
+                    dao.deleteUsuarioSegueUsuario(idUsuarioLogado, idUsuarioSeguido);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
+            }
         }
     }
 
@@ -457,7 +508,11 @@ public class UserController extends HttpServlet {
                         usuario = dao.read(usuarioLogin.getId());
 
                         List<String> instrumentos = dao.readInstrumentos(usuarioLogin.getId());
+                        Integer seguidores = dao.readNumeroSeguidores(usuarioLogin.getId());
+                        Integer seguindo = dao.readNumeroSeguindo(usuarioLogin.getId());
 
+                        request.setAttribute("seguidores", seguidores);
+                        request.setAttribute("seguindo", seguindo);
                         request.setAttribute("usuario", usuario);
                         request.setAttribute("instrumentos", instrumentos);
 
@@ -644,6 +699,7 @@ public class UserController extends HttpServlet {
             }
             case "/usuario/perfil": {
                 if(session.getAttribute("usuario") != null) {
+                    Integer idUsuarioLogado = ((Usuario) session.getAttribute("usuario")).getId();
                     Integer idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
 
                     try(DAOFactory daoFactory = DAOFactory.getInstance()) {
@@ -652,7 +708,13 @@ public class UserController extends HttpServlet {
                         usuario = dao.read(idUsuario);
 
                         List<String> instrumentos = dao.readInstrumentos(idUsuario);
+                        Boolean segue = dao.readUsuarioSegueUsuario(idUsuarioLogado, idUsuario);
+                        Integer seguidores = dao.readNumeroSeguidores(idUsuario);
+                        Integer seguindo = dao.readNumeroSeguindo(idUsuario);
 
+                        request.setAttribute("segue", segue);
+                        request.setAttribute("seguidores", seguidores);
+                        request.setAttribute("seguindo", seguindo);
                         request.setAttribute("usuario", usuario);
                         request.setAttribute("instrumentos", instrumentos);
 
@@ -674,6 +736,8 @@ public class UserController extends HttpServlet {
                 } else {
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+
+                break;
             }
         }
     }

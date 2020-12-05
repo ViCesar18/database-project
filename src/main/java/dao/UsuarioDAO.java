@@ -11,5 +11,15 @@ public interface UsuarioDAO extends DAO<Usuario> {
 
     void insertInstrumento(Integer id, String instrumento) throws SQLException;
 
-    public List<String> readInstrumentos(Integer id) throws SQLException;
+    List<String> readInstrumentos(Integer id) throws SQLException;
+
+    void insertUsuarioSegueUsuario(Integer id, Integer idSeguido) throws SQLException;
+
+    void deleteUsuarioSegueUsuario(Integer id, Integer idSeguido) throws SQLException;
+
+    Boolean readUsuarioSegueUsuario(Integer id, Integer idSeguido) throws SQLException;
+
+    Integer readNumeroSeguidores(Integer id) throws SQLException;
+
+    Integer readNumeroSeguindo(Integer id) throws SQLException;
 }

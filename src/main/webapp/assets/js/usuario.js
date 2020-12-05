@@ -20,3 +20,29 @@ $(document).on('focusout', '.password-input, .password-confirm', function (e) {
         $form.find("button, input[type='submit']").prop('disabled', false);
     }
 });
+
+function seguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido){
+    var url = 'http://www.localhost:8080' + context + '/seguir-usuario?idUsuario=' + idUsuarioSeguido
+
+    var oReq = new XMLHttpRequest();
+    oReq.open('post', url, true);
+    oReq.send(idUsuarioLogado);
+
+    botao.classList.remove('btn-success')
+    botao.classList.add('btn-danger')
+    botao.onclick = function() { pararSeguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido) }
+    botao.textContent = 'Deixar de Seguir'
+}
+
+function pararSeguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido) {
+    var url = 'http://www.localhost:8080' + context + '/parar-seguir-usuario?idUsuario=' + idUsuarioSeguido
+
+    var oReq = new XMLHttpRequest();
+    oReq.open('post', url, true);
+    oReq.send(idUsuarioLogado);
+
+    botao.classList.remove('btn-danger')
+    botao.classList.add('btn-success')
+    botao.onclick = function() { seguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido) }
+    botao.textContent = 'Seguir'
+}

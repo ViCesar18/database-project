@@ -71,6 +71,30 @@ public class PgUsuarioDAO implements UsuarioDAO {
             "JOIN rede_musical.usuario ON id = usuario_id " +
             "WHERE id = ?;";
 
+    private static final String INSERT_USUARIO_SEGUE_USUARIO =
+            "INSERT INTO rede_musical.usuario_segue_usuario " +
+            "(usuario_id, usuario_id_seguido) " +
+            "VALUES(?, ?);";
+
+    private static final String DELETE_USUARIO_SEGUE_USUARIO =
+            "DELETE FROM rede_musical.usuario_segue_usuario " +
+            "WHERE usuario_id = ? AND usuario_id_seguido = ?;";
+
+    private static final String READ_USUARIO_SEGUE_USUARIO =
+            "SELECT COUNT(*) > 0 AS segue " +
+            "FROM rede_musical.usuario_segue_usuario " +
+            "WHERE usuario_id = ? AND usuario_id_seguido = ?;";
+
+    private static final String NUMERO_DE_SEGUIDORES =
+            "SELECT COUNT(*) AS seguidores " +
+            "FROM rede_musical.usuario_segue_usuario " +
+            "WHERE usuario_id_seguido = ?;";
+
+    private static final String NUMERO_SEGUINDO =
+            "SELECT COUNT(*) AS seguindo " +
+            "FROM rede_musical.usuario_segue_usuario " +
+            "WHERE usuario_id = ?;";
+
     public PgUsuarioDAO(Connection connection) {
         this.connection = connection;
     }
@@ -324,5 +348,99 @@ public class PgUsuarioDAO implements UsuarioDAO {
         }
 
         return instrumentos;
+    }
+
+    @Override
+    public void insertUsuarioSegueUsuario(Integer id, Integer idSeguido) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(INSERT_USUARIO_SEGUE_USUARIO)) {
+            statement.setInt(1, id);
+            statement.setInt(2, idSeguido);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao seguir usuario.");
+        }
+    }
+
+    @Override
+    public void deleteUsuarioSegueUsuario(Integer id, Integer idSeguido) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(DELETE_USUARIO_SEGUE_USUARIO)) {
+            statement.setInt(1, id);
+            statement.setInt(2, idSeguido);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao deixar de seguir usuario.");
+        }
+    }
+
+    @Override
+    public Boolean readUsuarioSegueUsuario(Integer id, Integer idSeguido) throws SQLException {
+        Boolean segue = false;
+
+        try(PreparedStatement statement = connection.prepareStatement(READ_USUARIO_SEGUE_USUARIO)) {
+            statement.setInt(1, id);
+            statement.setInt(2, idSeguido);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    String segueStr = result.getString("segue");
+
+                    segue = segueStr.equals("t") ? true : false;
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar se usuario segue usuario.");
+        }
+
+        return segue;
+    }
+
+    @Override
+    public Integer readNumeroSeguidores(Integer id) throws SQLException {
+        Integer seguidores = null;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMERO_DE_SEGUIDORES)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    seguidores = Integer.parseInt(result.getString("seguidores"));
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar numero de seguidores.");
+        }
+
+        return seguidores;
+    }
+
+    @Override
+    public Integer readNumeroSeguindo(Integer id) throws SQLException {
+        Integer seguidores = null;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMERO_SEGUINDO)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    seguidores = Integer.parseInt(result.getString("seguindo"));
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar numero de seguindo.");
+        }
+
+        return seguidores;
     }
 }

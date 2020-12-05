@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputConfirmacaoSenha">Confimação de Senha</label>
+                    <label for="inputConfirmacaoSenha">Confirmação de Senha</label>
                     <input type="password" required class="form-control password-confirm" id="inputConfirmacaoSenha" name="confirmacaoSenha">
                     <p class="help-block" style="color: red"></p>
                 </div>

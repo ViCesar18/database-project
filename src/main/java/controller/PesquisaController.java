@@ -1,8 +1,8 @@
 package controller;
 
-import dao.DAO;
 import dao.DAOFactory;
 import dao.PesquisaDAO;
+import dao.UsuarioDAO;
 import model.Pesquisa;
 import model.Usuario;
 
@@ -27,16 +27,21 @@ import java.util.logging.Logger;
 )
 public class PesquisaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PesquisaDAO dao;
+        PesquisaDAO pesquisaDAO;
+        UsuarioDAO usuarioDAO;
         RequestDispatcher dispatcher;
         HttpSession session = request.getSession();
 
         switch(request.getServletPath()) {
             case "/pesquisa": {
                 if(session.getAttribute("usuario") != null) {
+                    Integer idUsuarioLogado = ((Usuario) session.getAttribute("usuario")).getId();
+
+                    String pesquisaStr = request.getParameter("pesquisa");
                     String filtroUsuario = request.getParameter("filtroUsuario");
                     String filtroBanda = request.getParameter("filtroBanda");
                     String filtroEvento = request.getParameter("filtroEvento");
+
 
                     if(filtroUsuario == null && filtroBanda == null && filtroEvento == null) {
                         request.setAttribute("erroPesquisa", true);
@@ -48,7 +53,7 @@ public class PesquisaController extends HttpServlet {
                     try (DAOFactory daoFactory = DAOFactory.getInstance()) {
                         Pesquisa pesquisa = new Pesquisa();
 
-                        pesquisa.setPesquisa(request.getParameter("pesquisa"));
+                        pesquisa.setPesquisa(pesquisaStr);
                         if (filtroUsuario != null) {
                             pesquisa.setFiltroUsuario(true);
                         } else {
@@ -65,9 +70,16 @@ public class PesquisaController extends HttpServlet {
                             pesquisa.setFiltroEvento(false);
                         }
 
-                        dao = daoFactory.getPesquisaDAO();
+                        pesquisaDAO = daoFactory.getPesquisaDAO();
 
-                        List<Pesquisa> pesquisas = dao.pesquisar(pesquisa);
+                        List<Pesquisa> pesquisas = pesquisaDAO.pesquisar(pesquisa);
+
+                        usuarioDAO = daoFactory.getUsuarioDAO();
+
+                        for (Pesquisa p:pesquisas) {
+                            p.setUsuarioLogadoSegueUsuario(
+                                    usuarioDAO.readUsuarioSegueUsuario(idUsuarioLogado, p.getIdUsuario()));
+                        }
 
                         request.setAttribute("pesquisas", pesquisas);
                         request.setAttribute("pesquisa", pesquisa);

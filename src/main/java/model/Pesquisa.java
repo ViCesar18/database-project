@@ -9,6 +9,7 @@ public class Pesquisa {
     private Integer idUsuario;
     private String usernameUsuario;
     private String nomeUsuario;
+    private Boolean usuarioLogadoSegueUsuario;
 
     private Integer idBanda;
     private String siglaBanda;
@@ -64,6 +65,10 @@ public class Pesquisa {
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
     }
+
+    public Boolean getUsuarioLogadoSegueUsuario() { return usuarioLogadoSegueUsuario; }
+
+    public void setUsuarioLogadoSegueUsuario(Boolean usuarioLogadoSegueUsuario) { this.usuarioLogadoSegueUsuario = usuarioLogadoSegueUsuario; }
 
     public String getSiglaBanda() {
         return siglaBanda;
