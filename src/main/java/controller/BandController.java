@@ -220,7 +220,6 @@ public class BandController extends HttpServlet {
                     }
 
                     dao = daoFactory.getBandaDAO();
-
                     dao.update(banda);
 
                     response.sendRedirect(request.getContextPath() + "/banda/perfil?id=" + banda.getId());
@@ -360,7 +359,7 @@ public class BandController extends HttpServlet {
 
                    request.setAttribute("banda", b);
 
-                   dispatcher = request.getRequestDispatcher("/view/banda/update-perfil-foto.jsp");
+                   dispatcher = request.getRequestDispatcher("/view/banda/update-perfil-imagem.jsp");
                    dispatcher.forward(request, response);
                } catch (SQLException | ClassNotFoundException e) {
                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);

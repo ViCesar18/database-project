@@ -9,6 +9,9 @@
 <%@ page import="model.Usuario" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 <html>
 <head>
     <%@include file="../include/head.jsp"%>
@@ -36,10 +39,10 @@
         <p><strong>Categoria:</strong> ${evento.getCategoria()}</p>
         <p><strong>Início:</strong> ${evento.getData_inicio().toString()}</p>
         <p><strong>Término:</strong> ${evento.getData_termino().toString()}</p>
-        <p><strong>Local:</strong> Rua ${evento.getRua()} ${evento.getNumero()}, ${evento.getBairro()} - ${evento.getCep()}</p>
+        <p><strong>Local:</strong> ${evento.getNome_local()} | Rua ${evento.getRua()} ${evento.getNumero()}, ${evento.getBairro()} - ${evento.getCep()}</p>
         <c:if test="${requestScope.criador}">
             <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/evento/perfil/delete?id=${evento.getId()}">Deletar evento</a>
-            <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${evento.getId()}">Editar evento</a>
+            <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/evento/perfil/update?id=${evento.getId()}">Editar evento</a>
         </c:if>
     <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
 </div>

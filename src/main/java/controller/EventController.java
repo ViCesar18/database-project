@@ -30,7 +30,8 @@ import java.util.logging.Logger;
                 "/evento/create",
                 "/evento/all",
                 "/evento/perfil",
-                "/evento/perfil/delete"
+                "/evento/perfil/delete",
+                "/evento/perfil/update"
         }
 )
 
@@ -101,6 +102,37 @@ public class EventController extends HttpServlet {
 
                                 break;
 
+                        }
+                        case "/evento/perfil/update": {
+                                try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                                        int idEvento = Integer.parseInt(request.getParameter("id"));
+                                        dao = daoFactory.getEventoDAO();
+                                        evento.setId(idEvento);
+                                        evento.setNome(request.getParameter("nome"));
+                                        evento.setDescricao(request.getParameter("descricao"));
+                                        evento.setNome_local(request.getParameter("nome_local"));
+                                        evento.setRua(request.getParameter("rua"));
+                                        evento.setNumero(request.getParameter("numero"));
+                                        evento.setBairro(request.getParameter("bairro"));
+                                        evento.setCep(request.getParameter("cep"));
+                                        Date dateInicioEvento = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(request.getParameter("data_inicio"));
+                                        Timestamp timeInicio = new Timestamp(dateInicioEvento.getTime());
+                                        evento.setData_inicio(timeInicio);
+                                        Date dateTerminoEvento = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(request.getParameter("data_termino"));
+                                        Timestamp timeTermino = new Timestamp(dateTerminoEvento.getTime());
+                                        evento.setData_termino(timeTermino);
+                                        evento.setCategoria(request.getParameter("categoria"));
+
+                                        dao.update(evento);
+
+                                        response.sendRedirect(request.getContextPath() + "/evento/perfil?id=" + evento.getId());
+
+                                } catch(Exception e){
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+                                        session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
+                                        response.sendRedirect(request.getContextPath() + "/evento/perfil/update");
+                                }
+                                break;
                         }
                 }
         }
@@ -176,6 +208,36 @@ public class EventController extends HttpServlet {
                                 }
                                 break;
                         }
+                        case "/evento/perfil/update": {
+                                try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                                        dao = daoFactory.getEventoDAO();
+                                        int idEvento = Integer.parseInt(request.getParameter("id"));
+                                        System.out.println(idEvento);
+                                        Evento e;
+
+                                        e = dao.read(idEvento);
+
+
+
+                                        request.setAttribute("evento", e);
+
+                                        dispatcher = request.getRequestDispatcher("/view/evento/update-perfil.jsp");
+                                        dispatcher.forward(request, response);
+                                }catch (SQLException | ClassNotFoundException e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/evento/perfil");
+                                } catch (Exception e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/evento/perfil");
+                                }
+                        }
+                        break;
                 }
         }
 

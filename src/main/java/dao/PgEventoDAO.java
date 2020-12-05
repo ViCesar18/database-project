@@ -26,7 +26,7 @@ public class PgEventoDAO implements EventoDAO {
 
     private static final String UPDATE_EVENTO_DATA_QUERY =
             "UPDATE rede_musical.evento" +
-            " SET nome = ?, descricao = ?, data_inicio = ?, data_termino = ?, numero_participantes = ?, categoria = ?, usuario_id = ?, nome_local = ?, rua = ?, numero = ?, bairro = ?, cep = ?" +
+            " SET nome = ?, descricao = ?, data_inicio = ?, data_termino = ?, numero_participantes = ?, categoria = ?, nome_local = ?, rua = ?, numero = ?, bairro = ?, cep = ?" +
             " WHERE id = ?;";
 
     private static final String DELETE_QUERY =
@@ -120,12 +120,12 @@ public class PgEventoDAO implements EventoDAO {
             statement.setTimestamp(4, evento.getData_termino());
             statement.setInt(5, evento.getnParticipantes());
             statement.setString(6, evento.getCategoria());
-            statement.setInt(7, evento.getUsername_id());
-            statement.setString(8, evento.getNome_local());
-            statement.setString(9, evento.getRua());
-            statement.setString(10, evento.getNumero());
-            statement.setString(11, evento.getBairro());
-            statement.setString(12, evento.getCep());
+            statement.setString(7, evento.getNome_local());
+            statement.setString(8, evento.getRua());
+            statement.setString(9, evento.getNumero());
+            statement.setString(10, evento.getBairro());
+            statement.setString(11, evento.getCep());
+            statement.setInt(12, evento.getId());
 
             if (statement.executeUpdate() < 1){
                 throw new SQLException("Erro ao editar: evento não encontrado.");

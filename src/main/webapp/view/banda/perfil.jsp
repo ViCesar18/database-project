@@ -60,6 +60,10 @@
         <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Editar banda</a>
         <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update-foto?id=${banda.getId()}">Alterar imagem</a>
     </c:if>
+    <c:if test="${!requestScope.criador}">
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Seguir banda</a>
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Participar da banda</a>
+    </c:if>
     <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
     </div>
 </div>

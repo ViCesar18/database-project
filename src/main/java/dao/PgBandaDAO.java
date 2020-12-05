@@ -108,6 +108,7 @@ public class PgBandaDAO implements BandaDAO {
         String query;
         if(banda.getImagem() != null && !banda.getImagem().isBlank()) {
             query = UPDATE_BANDA_IMAGEM;
+            System.out.println(1);
         }
         else{
             query = UPDATE_BANDA_DATA_QUERY;
@@ -115,8 +116,9 @@ public class PgBandaDAO implements BandaDAO {
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             if(banda.getImagem() != null && !banda.getImagem().isBlank()) {
-                statement.setInt(1, banda.getId());
-                statement.setString(2, banda.getImagem());
+                System.out.println(2);
+                statement.setString(1, banda.getImagem());
+                statement.setInt(2, banda.getId());
             }
             else{
                 statement.setString(1, banda.getSigla());

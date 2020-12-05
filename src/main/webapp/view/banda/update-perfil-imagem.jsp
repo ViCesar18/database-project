@@ -15,8 +15,8 @@
 </head>
 <body>
 <%
-    Banda b = (Banda)request.getAttribute("banda");
-    String imgName = b.getImagem();
+    Banda banda = (Banda)request.getAttribute("banda");
+    String imgName = banda.getImagem();
 
     if(imgName == null || imgName.isBlank()) {
         imgName = "default_avatar.png";
@@ -29,7 +29,7 @@
         <h1>Edite sua foto.</h1>
 
         <img
-                src="${pageContext.request.contextPath}/assets/img/usuario/${imgName}"
+                src="${pageContext.request.contextPath}/assets/img/banda/${imgName}"
                 class="rounded-circle"
                 alt="Avatar"
                 height="350"
@@ -38,11 +38,13 @@
     </div>
 
     <form
-            action="${pageContext.request.contextPath}/usuario/perfil/update-foto"
+            action="${pageContext.request.contextPath}/banda/perfil/update-foto"
             method="post"
             enctype="multipart/form-data"
     >
-        <input type="hidden" name="id" value="${usuario.getId()}">
+        <input type="hidden" name="id" value="${banda.getId()}">
+        <input type="hidden" name="sigla" value="${banda.getSigla()}">
+        <input type="hidden" name="nome" value="${banda.getNome()}">
 
         <div class="form-group">
             <label for="inputImagem">Foto de Perfil</label>
@@ -50,7 +52,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Atualizar Foto</button>
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil">Voltar</a>
     </form>
 </div>
 
