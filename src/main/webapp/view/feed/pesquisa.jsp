@@ -43,7 +43,7 @@
                             <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Seguir</a>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil">Perfil</a>
+                            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil?idUsuario=${pesquisa.idUsuario}">Perfil</a>
                         </td>
                     </tr>
                 </c:if>

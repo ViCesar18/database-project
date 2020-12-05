@@ -15,7 +15,7 @@
     </head>
     <body>
         <div style="margin: 10px">
-            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil">Seu Perfil</a>
+            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
 
             <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
 

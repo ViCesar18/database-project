@@ -32,14 +32,15 @@ import java.util.logging.Logger;
         urlPatterns = {
                 "/usuario",
                 "/usuario/create",
-                "/usuario/perfil",
-                "/usuario/perfil/update",
-                "/usuario/perfil/update-musical",
-                "/usuario/perfil/update-foto",
-                "/usuario/perfil/update-senha",
-                "/usuario/perfil/delete",
+                "/usuario/meu-perfil",
+                "/usuario/meu-perfil/update",
+                "/usuario/meu-perfil/update-musical",
+                "/usuario/meu-perfil/update-foto",
+                "/usuario/meu-perfil/update-senha",
+                "/usuario/meu-perfil/delete",
                 "/usuario/all",
-                "/usuario/instrumentos"
+                "/usuario/instrumentos",
+                "/usuario/perfil"
         }
 )
 public class UserController extends HttpServlet {
@@ -203,7 +204,7 @@ public class UserController extends HttpServlet {
 
                 break;
             }
-            case "/usuario/perfil/update": {
+            case "/usuario/meu-perfil/update": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                     usuario.setId(Integer.parseInt(request.getParameter("id")));
                     usuario.setUsername(request.getParameter("username"));
@@ -222,30 +223,30 @@ public class UserController extends HttpServlet {
 
                     dao.update(usuario);
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (ParseException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update");
                 } catch (SQLException | IOException | ClassNotFoundException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update");
                 }
 
                 break;
             }
-            case "/usuario/perfil/update-musical": {
+            case "/usuario/meu-perfil/update-musical": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                     usuario.setId(Integer.parseInt(request.getParameter("id")));
                     usuario.setBandaFavorita(request.getParameter("banda"));
@@ -257,30 +258,30 @@ public class UserController extends HttpServlet {
 
                     dao.update(usuario);
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (ParseException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update-musical");
                 } catch (SQLException | IOException | ClassNotFoundException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update-musical");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-musical");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update-musical");
                 }
 
                 break;
             }
-            case "/usuario/perfil/update-foto": {
+            case "/usuario/meu-perfil/update-foto": {
                 // Se fosse um forms simples
                 // String username = request.getParameter("usuario");
 
@@ -344,7 +345,7 @@ public class UserController extends HttpServlet {
 
                     dao.update(usuario);
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (FileUploadException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
@@ -367,7 +368,7 @@ public class UserController extends HttpServlet {
 
                 break;
             }
-            case "/usuario/perfil/update-senha": {
+            case "/usuario/meu-perfil/update-senha": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                     usuario.setId(Integer.parseInt(request.getParameter("id")));
                     usuario.setUsername(request.getParameter("senha"));    // Gambiarra para atualizar a senha (senha antiga)
@@ -377,25 +378,25 @@ public class UserController extends HttpServlet {
 
                     dao.update(usuario);
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (ParseException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "O formato de data não é válido. Por favor entre data no formato dd/mm/aaaa.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update-senha");
                 } catch (SQLException | IOException | ClassNotFoundException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update-senha");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", "Erro ao gravar arquivo no servidor.");
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil/update-senha");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil/update-senha");
                 }
 
                 break;
@@ -408,19 +409,19 @@ public class UserController extends HttpServlet {
 
                     dao.insertInstrumento(usuario.getId(), request.getParameter("instrumentoQueToca"));
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (SQLException | ClassNotFoundException e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 }
 
                 break;
@@ -446,7 +447,7 @@ public class UserController extends HttpServlet {
                 dispatcher.forward(request, response);
                 break;
             }
-            case "/usuario/perfil": {
+            case "/usuario/meu-perfil": {
                 if(session.getAttribute("usuario") != null) {
                     Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
 
@@ -481,7 +482,7 @@ public class UserController extends HttpServlet {
                 }
                 break;
             }
-            case "/usuario/perfil/update": {
+            case "/usuario/meu-perfil/update": {
                 if(session.getAttribute("usuario") != null) {
                     Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
 
@@ -499,13 +500,13 @@ public class UserController extends HttpServlet {
 
                         session.setAttribute("error", e.getMessage());
 
-                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                        response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                     } catch (Exception e) {
                         Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                         session.setAttribute("error", e.getMessage());
 
-                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                        response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                     }
                 }
                 else {
@@ -514,7 +515,7 @@ public class UserController extends HttpServlet {
 
                 break;
             }
-            case "/usuario/perfil/update-musical": {
+            case "/usuario/meu-perfil/update-musical": {
                 if(session.getAttribute("usuario") != null) {
                     Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
 
@@ -532,13 +533,13 @@ public class UserController extends HttpServlet {
 
                         session.setAttribute("error", e.getMessage());
 
-                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                        response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                     } catch (Exception e) {
                         Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                         session.setAttribute("error", e.getMessage());
 
-                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                        response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                     }
                 }
                 else {
@@ -547,7 +548,7 @@ public class UserController extends HttpServlet {
 
                 break;
             }
-            case "/usuario/perfil/update-foto": {
+            case "/usuario/meu-perfil/update-foto": {
                 if(session.getAttribute("usuario") != null) {
                     Usuario usuarioLogin = (Usuario) session.getAttribute("usuario");
 
@@ -565,13 +566,13 @@ public class UserController extends HttpServlet {
 
                         session.setAttribute("error", e.getMessage());
 
-                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                        response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                     } catch (Exception e) {
                         Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                         session.setAttribute("error", e.getMessage());
 
-                        response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                        response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                     }
                 }
                 else {
@@ -580,7 +581,7 @@ public class UserController extends HttpServlet {
 
                 break;
             }
-            case "/usuario/perfil/update-senha": {
+            case "/usuario/meu-perfil/update-senha": {
                 if(session.getAttribute("usuario") != null) {
                     dispatcher = request.getRequestDispatcher("/view/usuario/update-perfil-senha.jsp");
                     dispatcher.forward(request, response);
@@ -590,7 +591,7 @@ public class UserController extends HttpServlet {
                 }
                 break;
             }
-            case "/usuario/perfil/delete": {
+            case "/usuario/meu-perfil/delete": {
                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                     usuario = (Usuario) session.getAttribute("usuario");
 
@@ -604,13 +605,13 @@ public class UserController extends HttpServlet {
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (Exception e) {
                     Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
 
                     session.setAttribute("error", e.getMessage());
 
-                    response.sendRedirect(request.getContextPath() + "/usuario/perfil");
+                    response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 }
 
                 break;
@@ -640,6 +641,39 @@ public class UserController extends HttpServlet {
                 }
 
                 break;
+            }
+            case "/usuario/perfil": {
+                if(session.getAttribute("usuario") != null) {
+                    Integer idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+
+                    try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                        dao = daoFactory.getUsuarioDAO();
+
+                        usuario = dao.read(idUsuario);
+
+                        List<String> instrumentos = dao.readInstrumentos(idUsuario);
+
+                        request.setAttribute("usuario", usuario);
+                        request.setAttribute("instrumentos", instrumentos);
+
+                        dispatcher = request.getRequestDispatcher("/view/usuario/perfil.jsp");
+                        dispatcher.forward(request, response);
+                    } catch (SQLException | ClassNotFoundException e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/");
+                    } catch (Exception e) {
+                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                        session.setAttribute("error", e.getMessage());
+
+                        response.sendRedirect(request.getContextPath() + "/");
+                    }
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
             }
         }
     }

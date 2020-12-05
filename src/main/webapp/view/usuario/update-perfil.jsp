@@ -15,10 +15,10 @@
     </head>
     <body>
         <div class="container">
-            <h1>Edite seus dados.</h1>
+            <h1>Edite seus dados pessoais.</h1>
 
             <form
-                action="${pageContext.servletContext.contextPath}/usuario/perfil/update"
+                action="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update"
                 method="post"
             >
                 <input type="hidden" name="id" value="${usuario.getId()}">
@@ -91,8 +91,8 @@
                     <input type="text" required readonly class="form-control" id="inputPais" name="pais" value="${usuario.getPais()}">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Atualizar Dados Musicais</button>
-                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
+                <button type="submit" class="btn btn-primary">Atualizar Dados Pessoais</button>
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Voltar</a>
             </form>
         </div>
 

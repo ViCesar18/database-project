@@ -63,35 +63,42 @@
                 </p>
 
                 <br>
+                <c:if test="${sessionScope.usuario.id == requestScope.usuario.id}">
+                    <form
+                            class="form"
+                            action="${pageContext.servletContext.contextPath}/usuario/instrumentos"
+                            method="post"
+                    >
+                        <div class="form-group">
+                            <label for="inputInstrumentoQueToca">Adicionar Novo Instrumento:</label>
+                            <input type="text" required class="form-control" id="inputInstrumentoQueToca" name="instrumentoQueToca">
+                        </div>
 
-                <form
-                        class="form"
-                        action="${pageContext.servletContext.contextPath}/usuario/instrumentos"
-                        method="post"
-                >
-                    <div class="form-group">
-                        <label for="inputInstrumentoQueToca">Adicionar Novo Instrumento:</label>
-                        <input type="text" required class="form-control" id="inputInstrumentoQueToca" name="instrumentoQueToca">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Adicionar Instrumento</button>
-                </form>
+                        <button type="submit" class="btn btn-primary">Adicionar Instrumento</button>
+                    </form>
+                </c:if>
             </div>
 
             <div>
-                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/perfil/update">Editar Perfil</a>
+                <c:if test="${sessionScope.usuario.id == requestScope.usuario.id}">
+                    <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update">Editar Perfil</a>
 
-                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-musical">Editar Perfil Musical</a>
+                    <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update-musical">Editar Perfil Musical</a>
 
-                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-foto">Alterar Foto de Perfil</a>
+                    <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update-foto">Alterar Foto de Perfil</a>
 
-                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/perfil/update-senha">Alterar Senha</a>
-
+                    <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update-senha">Alterar Senha</a>
+                </c:if>
+                <c:if test="${sessionScope.usuario.id != requestScope.usuario.id}">
+                    <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Seguir</a>
+                </c:if>
                 <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
             </div>
 
             <div class="row justify-content-end">
-                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil/delete">Deletar Sua Conta</a>
+                <c:if test="${sessionScope.usuario.id == requestScope.usuario.id}">
+                    <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil/delete">Deletar Sua Conta</a>
+                </c:if>
             </div>
         </div>
 

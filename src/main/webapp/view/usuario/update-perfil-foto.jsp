@@ -36,7 +36,7 @@
             </div>
 
             <form
-                action="${pageContext.request.contextPath}/usuario/perfil/update-foto"
+                action="${pageContext.request.contextPath}/usuario/meu-perfil/update-foto"
                 method="post"
                 enctype="multipart/form-data"
             >
@@ -48,7 +48,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Atualizar Foto</button>
-                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Voltar</a>
             </form>
         </div>
 

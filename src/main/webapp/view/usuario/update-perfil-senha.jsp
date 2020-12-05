@@ -16,7 +16,7 @@
             <h1>Edite sua senha.</h1>
 
             <form
-                    action="${pageContext.servletContext.contextPath}/usuario/perfil/update-senha"
+                    action="${pageContext.servletContext.contextPath}/usuario/meu-perfil/update-senha"
                     method="post"
                     class="form"
             >
@@ -33,13 +33,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputConfirmacaoNovaSenha">Nome</label>
+                    <label for="inputConfirmacaoNovaSenha">Confirmação Nova Senha</label>
                     <input type="password" required class="form-control password-confirm" id="inputConfirmacaoNovaSenha" name="confirmacaoNovaSenha">
                     <p class="help-block" style="color: red"></p>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Atualizar Senha</button>
-                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/perfil">Voltar</a>
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Voltar</a>
             </form>
         </div>
 
