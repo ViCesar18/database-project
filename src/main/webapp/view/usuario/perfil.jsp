@@ -47,7 +47,7 @@
             </div>
 
             <div>
-                <p><strong>Seguidores:</strong> ${seguidores}     <strong>Seguindo:</strong> ${seguindo}</p>
+                <p><strong>Seguidores:</strong> ${seguidores} <ta <strong>Seguindo:</strong> ${seguindo}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
                 <p><strong>Data de Nascimento:</strong> ${date}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
