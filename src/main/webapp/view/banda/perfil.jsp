@@ -21,8 +21,6 @@
 <%
     Banda banda = (Banda)request.getAttribute("banda");
     Usuario usuarioLogado = (Usuario)session.getAttribute("usuario");
-    System.out.println("hey" + usuarioLogado.getId() + "|" + banda.getUsername_id());
-    //System.out.println(banda.getNome());
     String imgName = banda.getImagem();
 
     if(imgName == null || imgName.isBlank()) {
@@ -61,8 +59,25 @@
         <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update-foto?id=${banda.getId()}">Alterar imagem</a>
     </c:if>
     <c:if test="${!requestScope.criador}">
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Seguir banda</a>
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Participar da banda</a>
+        <c:if test="${!requestScope.segue}">
+            <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="seguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.banda.id})"
+            >
+                Seguir
+            </button>
+        </c:if>
+        <c:if test="${requestScope.segue}">
+            <button
+                    type="button"
+                    class="btn btn-warning"
+                    onclick="pararSeguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.banda.id})"
+            >
+                Deixar de Seguir
+            </button>
+        </c:if>
+        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Participar da banda</a>
     </c:if>
     <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
     </div>

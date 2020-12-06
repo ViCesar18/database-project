@@ -103,7 +103,7 @@
                     <c:if test="${requestScope.segue}">
                         <button
                                 type="button"
-                                class="btn btn-danger"
+                                class="btn btn-warning"
                                 onclick="pararSeguirUsuario(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.usuario.id})"
                         >
                             Deixar de Seguir

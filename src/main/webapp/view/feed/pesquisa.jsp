@@ -52,7 +52,7 @@
                             <c:if test="${pesquisa.usuarioLogadoSegueUsuario}">
                                 <button
                                         type="button"
-                                        class="btn btn-danger"
+                                        class="btn btn-warning"
                                         onclick="pararSeguirUsuario(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idUsuario})"
                                 >
                                     Deixar de Seguir
@@ -91,7 +91,25 @@
                             <c:out value="${pesquisa.nomeBanda}"/>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Seguir</a>
+                            <c:if test="${!pesquisa.usuarioLogadoSegueBanda}">
+                                <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        onclick="seguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idBanda})"
+                                        ${sessionScope.usuario.id == pesquisa.idCriadorBanda ? 'disabled' : null}
+                                >
+                                    Seguir
+                                </button>
+                            </c:if>
+                            <c:if test="${pesquisa.usuarioLogadoSegueBanda}">
+                                <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        onclick="pararSeguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idBanda})"
+                                >
+                                    Deixar de Seguir
+                                </button>
+                            </c:if>
                         </td>
                         <td>
                             <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil?id=${pesquisa.idBanda}">Perfil da Banda</a>

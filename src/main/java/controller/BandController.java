@@ -35,7 +35,9 @@ import java.util.logging.Logger;
                 "/banda/perfil",
                 "/banda/perfil/delete",
                 "/banda/perfil/update",
-                "/banda/perfil/update-foto"
+                "/banda/perfil/update-foto",
+                "/seguir-banda",
+                "/parar-seguir-banda"
         }
 )
 
@@ -44,7 +46,7 @@ public class BandController extends HttpServlet {
     private static String SAVE_DIR = "assets/img/banda";
 
     protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DAO<Banda> dao;
+        BandaDAO dao;
         Banda banda = new Banda ();
         String servletPath = request.getServletPath();
 
@@ -245,11 +247,61 @@ public class BandController extends HttpServlet {
 
                 break;
             }
+            case "/seguir-banda": {
+                Integer idUsuario = Integer.parseInt(request.getReader().readLine());
+                Integer idBanda = Integer.parseInt(request.getParameter("idBanda"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getBandaDAO();
+
+                    dao.insertUsuarioSegueBanda(idUsuario, idBanda);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
+            }
+            case "/parar-seguir-banda": {
+                Integer idUsuario = Integer.parseInt(request.getReader().readLine());
+                Integer idBanda = Integer.parseInt(request.getParameter("idBanda"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getBandaDAO();
+
+                    dao.deleteUsuarioSegueBanda(idUsuario, idBanda);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
+            }
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       DAO<Banda> dao;
+       BandaDAO dao;
        Banda banda;
        RequestDispatcher dispatcher;
        HttpSession session = request.getSession();
@@ -265,12 +317,17 @@ public class BandController extends HttpServlet {
                dispatcher.forward(request, response);
            }
            case "/banda/perfil": {
+               Integer idUsuarioLogado = ((Usuario) session.getAttribute("usuario")).getId();
+
                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                    dao = daoFactory.getBandaDAO();
                    int idBanda = Integer.parseInt(request.getParameter("id"));
+
                    Banda b = dao.read(idBanda);
+                   Boolean segue = dao.readUsuarioSegueBanda(idUsuarioLogado, idBanda);
 
                    request.setAttribute("banda", b);
+                   request.setAttribute("segue", segue);
 
                    dispatcher = request.getRequestDispatcher("/view/banda/perfil.jsp");
                    dispatcher.forward(request, response);

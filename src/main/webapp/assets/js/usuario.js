@@ -29,7 +29,7 @@ function seguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido){
     oReq.send(idUsuarioLogado);
 
     botao.classList.remove('btn-success')
-    botao.classList.add('btn-danger')
+    botao.classList.add('btn-warning')
     botao.onclick = function() { pararSeguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido) }
     botao.textContent = 'Deixar de Seguir'
 }
@@ -41,7 +41,7 @@ function pararSeguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido) {
     oReq.open('post', url, true);
     oReq.send(idUsuarioLogado);
 
-    botao.classList.remove('btn-danger')
+    botao.classList.remove('btn-warning')
     botao.classList.add('btn-success')
     botao.onclick = function() { seguirUsuario(botao, context, idUsuarioLogado, idUsuarioSeguido) }
     botao.textContent = 'Seguir'

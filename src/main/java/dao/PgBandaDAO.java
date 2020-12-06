@@ -43,6 +43,24 @@ public class PgBandaDAO implements BandaDAO {
             " FROM rede_musical.banda" +
             " ORDER BY id;";
 
+    private static final String INSERT_USUARIO_SEGUE_BANDA =
+            "INSERT INTO rede_musical.usuario_segue_banda " +
+            "(usuario_id, banda_id) " +
+            "VALUES(?, ?);";
+
+    private static final String DELETE_USUARIO_SEGUE_BANDA =
+            "DELETE FROM rede_musical.usuario_segue_banda " +
+            "WHERE usuario_id = ? AND banda_id = ?;";
+
+    private static final String READ_USUARIO_SEGUE_BANDA =
+            "SELECT COUNT(*) > 0 AS segue " +
+            "FROM rede_musical.usuario_segue_banda " +
+            "WHERE usuario_id = ? AND banda_id = ?;";
+
+    private static final String NUMERO_DE_SEGUIDORES =
+            "SELECT COUNT(*) AS seguidores " +
+            "FROM rede_musical.usuario_segue_banda " +
+            "WHERE banda_id = ?;";
 
     @Override
     public void create(Banda banda) throws SQLException {
@@ -198,5 +216,78 @@ public class PgBandaDAO implements BandaDAO {
 
     public PgBandaDAO(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void insertUsuarioSegueBanda(Integer usuarioId, Integer bandaId) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(INSERT_USUARIO_SEGUE_BANDA)) {
+            statement.setInt(1, usuarioId);
+            statement.setInt(2, bandaId);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao seguir banda.");
+        }
+    }
+
+    @Override
+    public void deleteUsuarioSegueBanda(Integer usuarioId, Integer bandaId) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(DELETE_USUARIO_SEGUE_BANDA)) {
+            statement.setInt(1, usuarioId);
+            statement.setInt(2, bandaId);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao deixar de seguir banda.");
+        }
+    }
+
+    @Override
+    public Boolean readUsuarioSegueBanda(Integer usuarioId, Integer bandaId) throws SQLException {
+        Boolean segue = false;
+
+        try(PreparedStatement statement = connection.prepareStatement(READ_USUARIO_SEGUE_BANDA)) {
+            statement.setInt(1, usuarioId);
+            statement.setInt(2, bandaId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    String segueStr = result.getString("segue");
+
+                    segue = segueStr.equals("t") ? true : false;
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar se usuario segue banda.");
+        }
+
+        return segue;
+    }
+
+    @Override
+    public Integer readNumeroSeguidores(Integer id) throws SQLException {
+        Integer seguidores = null;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMERO_DE_SEGUIDORES)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    seguidores = Integer.parseInt(result.getString("seguidores"));
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar numero de seguidores da banda.");
+        }
+
+        return seguidores;
     }
 }

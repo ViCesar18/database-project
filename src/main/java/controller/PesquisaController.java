@@ -1,5 +1,6 @@
 package controller;
 
+import dao.BandaDAO;
 import dao.DAOFactory;
 import dao.PesquisaDAO;
 import dao.UsuarioDAO;
@@ -29,6 +30,7 @@ public class PesquisaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PesquisaDAO pesquisaDAO;
         UsuarioDAO usuarioDAO;
+        BandaDAO bandaDAO;
         RequestDispatcher dispatcher;
         HttpSession session = request.getSession();
 
@@ -74,11 +76,24 @@ public class PesquisaController extends HttpServlet {
 
                         List<Pesquisa> pesquisas = pesquisaDAO.pesquisar(pesquisa);
 
-                        usuarioDAO = daoFactory.getUsuarioDAO();
+                        if(filtroUsuario != null) {
+                            usuarioDAO = daoFactory.getUsuarioDAO();
+                            for (Pesquisa p:pesquisas) {
+                                if(p.getIdUsuario() != null) {
+                                    p.setUsuarioLogadoSegueUsuario(
+                                            usuarioDAO.readUsuarioSegueUsuario(idUsuarioLogado, p.getIdUsuario()));
+                                }
+                            }
+                        }
 
-                        for (Pesquisa p:pesquisas) {
-                            p.setUsuarioLogadoSegueUsuario(
-                                    usuarioDAO.readUsuarioSegueUsuario(idUsuarioLogado, p.getIdUsuario()));
+                        if(filtroBanda != null) {
+                            bandaDAO = daoFactory.getBandaDAO();
+                            for (Pesquisa p:pesquisas) {
+                                if(p.getIdBanda() != null) {
+                                    p.setUsuarioLogadoSegueBanda(
+                                            bandaDAO.readUsuarioSegueBanda(idUsuarioLogado, p.getIdBanda()));
+                                }
+                            }
                         }
 
                         request.setAttribute("pesquisas", pesquisas);

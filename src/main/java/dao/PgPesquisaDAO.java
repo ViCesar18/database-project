@@ -22,7 +22,7 @@ public class PgPesquisaDAO implements PesquisaDAO{
             "OR LOWER(snome) LIKE LOWER(?);";
 
     private static final String SEARCH_BAND_QUERY =
-            "SELECT id, sigla, nome " +
+            "SELECT id, sigla, nome, usuario_id " +
             "FROM rede_musical.banda " +
             "WHERE LOWER(sigla) LIKE LOWER(?) " +
             "OR LOWER(nome) LIKE LOWER(?);";
@@ -76,6 +76,7 @@ public class PgPesquisaDAO implements PesquisaDAO{
                         pesquisaBanda.setIdBanda(result.getInt("id"));
                         pesquisaBanda.setSiglaBanda(result.getString("sigla"));
                         pesquisaBanda.setNomeBanda(result.getString("nome"));
+                        pesquisaBanda.setIdCriadorBanda(result.getInt("usuario_id"));
 
                         pesquisas.add(pesquisaBanda);
                     }

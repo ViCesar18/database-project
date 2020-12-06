@@ -14,6 +14,8 @@ public class Pesquisa {
     private Integer idBanda;
     private String siglaBanda;
     private String nomeBanda;
+    private Boolean usuarioLogadoSegueBanda;
+    private Integer idCriadorBanda;
 
     private Integer idEvento;
     private String nomeEvento;
@@ -85,6 +87,14 @@ public class Pesquisa {
     public void setNomeBanda(String nomeBanda) {
         this.nomeBanda = nomeBanda;
     }
+
+    public Boolean getUsuarioLogadoSegueBanda() { return usuarioLogadoSegueBanda; }
+
+    public void setUsuarioLogadoSegueBanda(Boolean usuarioLogadoSegueBanda) { this.usuarioLogadoSegueBanda = usuarioLogadoSegueBanda; }
+
+    public Integer getIdCriadorBanda() { return idCriadorBanda; }
+
+    public void setIdCriadorBanda(Integer idCriadorBanda) { this.idCriadorBanda = idCriadorBanda; }
 
     public String getNomeEvento() {
         return nomeEvento;
