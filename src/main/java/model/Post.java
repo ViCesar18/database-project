@@ -7,10 +7,8 @@ public class Post {
     private String textoPost;
     private String imagem;
     private Timestamp dtPublicacao;
-    private Integer nLikes;
-    private Integer nComentarios;
-    private Integer nCompartilhamentos;
     private Integer usuarioId;
+    private Usuario usuario;
 
     public Integer getId() {
         return id;
@@ -44,35 +42,19 @@ public class Post {
         this.dtPublicacao = dtPublicacao;
     }
 
-    public Integer getnLikes() {
-        return nLikes;
-    }
-
-    public void setnLikes(Integer nLikes) {
-        this.nLikes = nLikes;
-    }
-
-    public Integer getnComentarios() {
-        return nComentarios;
-    }
-
-    public void setnComentarios(Integer nComentarios) {
-        this.nComentarios = nComentarios;
-    }
-
-    public Integer getnCompartilhamentos() {
-        return nCompartilhamentos;
-    }
-
-    public void setnCompartilhamentos(Integer nCompartilhamentos) {
-        this.nCompartilhamentos = nCompartilhamentos;
-    }
-
     public Integer getUsuarioId() {
         return usuarioId;
     }
 
     public void setUsuarioId(Integer usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

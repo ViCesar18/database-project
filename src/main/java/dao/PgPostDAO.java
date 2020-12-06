@@ -12,8 +12,8 @@ public class PgPostDAO implements PostDAO{
 
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.post" +
-            "(texto_post, imagem, dt_publicacao, n_likes, n_comentarios, n_compartilhamentos, usuario_id) " +
-            "VALUES(?, ?, CURRENT_TIMESTAMP, 0, 0, 0, ?);";
+            "(texto_post, imagem, dt_publicacao, usuario_id) " +
+            "VALUES(?, ?, CURRENT_TIMESTAMP, ?);";
 
     private static final String READ_QUERY =
             "SELECT * " +
@@ -28,6 +28,34 @@ public class PgPostDAO implements PostDAO{
     private static final String DELETE_QUERY =
             "DELETE FROM rede_musical.post " +
             "WHERE id = ?";
+
+    private static final String INSERT_LIKE_POST =
+            "INSERT INTO rede_musical.usuario_da_like_em_post " +
+            "(usuario_id, post_id) " +
+            "VALUES(?, ?);";
+
+    private static final String DELETE_LIKE_POST =
+            "DELETE FROM rede_musical.usuario_da_like_em_post " +
+            "WHERE post_id = ?;";
+
+    private static final String NUMBER_OF_LIKES =
+            "SELECT COUNT(*) AS likes " +
+            "FROM rede_musical.usuario_da_like_em_post udlep " +
+            "WHERE post_id = ?;";
+
+    private static final String INSERT_COMPARTILHAMENTO_POST =
+            "INSERT INTO rede_musical.usuario_compartilha_post " +
+            "(usuario_id, post_id) " +
+            "VALUES(?, ?);";
+
+    private static final String DELETE_COMPARTILHAMENTO_POST =
+            "DELETE FROM rede_musical.usuario_compartilha_post " +
+            "WHERE post_id = ?;";
+
+    private static final String NUMBER_OF_COMPARTILHAMENTOS =
+            "SELECT COUNT(*) AS compartilhamentos " +
+            "FROM rede_musical.usuario_compartilha_post " +
+            "WHERE post_id = ?;";
 
     public PgPostDAO(Connection connection) {
         this.connection = connection;
@@ -78,9 +106,6 @@ public class PgPostDAO implements PostDAO{
                     post.setTextoPost(result.getString("texto_post"));
                     post.setImagem(result.getString("imagem"));
                     post.setDtPublicacao(result.getTimestamp("dt_publicacao"));
-                    post.setnLikes(result.getInt("n_likes"));
-                    post.setnComentarios(result.getInt("n_comentarios"));
-                    post.setnCompartilhamentos(result.getInt("n_compartilhamentos"));
                     post.setUsuarioId(result.getInt("usuario_id"));
                 }
                 else {
@@ -148,5 +173,139 @@ public class PgPostDAO implements PostDAO{
     @Override
     public List<Post> all() throws SQLException {
         return null;
+    }
+
+    @Override
+    public void insertLikePost(Integer postId) throws SQLException {
+        try(PreparedStatement statement = this.connection.prepareStatement(INSERT_LIKE_POST)) {
+            statement.setInt(1, postId);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().contains("fk_usuario_like_post")) {
+                throw new SQLException("Erro ao inserir: post já está curtido.");
+            }
+            else {
+                throw new SQLException("Erro ao inserir like no post.");
+            }
+        }
+    }
+
+    @Override
+    public void deleteLikePost(Integer postId) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(DELETE_LIKE_POST)) {
+            statement.setInt(1, postId);
+
+            if (statement.executeUpdate() < 1) {
+                throw new SQLException("Erro ao deletar: like não encontrado no post.");
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().equals("Erro ao deletar: like não encontrado no post.")) {
+                throw e;
+            }
+            else {
+                throw new SQLException("Erro ao deletar like no post.");
+            }
+        }
+    }
+
+    @Override
+    public Integer numberOfLikes(Integer postId) throws SQLException {
+        Integer likes;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMBER_OF_LIKES)) {
+            statement.setInt(1, postId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    likes = result.getInt("likes");
+                }
+                else {
+                    throw new SQLException("Erro ao visualizar: post não encontrado.");
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().equals("Erro ao visualizar: post não encontrado.")) {
+                throw e;
+            }
+            else {
+                throw new SQLException("Erro ao visualizar post.");
+            }
+        }
+
+        return likes;
+    }
+
+    @Override
+    public void insertCompartilhamentoPost(Integer postId) throws SQLException {
+        try(PreparedStatement statement = this.connection.prepareStatement(INSERT_COMPARTILHAMENTO_POST)) {
+            statement.setInt(1, postId);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().contains("pk_usuario_compartilha_post")) {
+                throw new SQLException("Erro ao inserir: post já está compartilhado.");
+            }
+            else {
+                throw new SQLException("Erro ao inserir compartilhamento no post.");
+            }
+        }
+    }
+
+    @Override
+    public void deleteCompartilhamentoPost(Integer postId) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(DELETE_COMPARTILHAMENTO_POST)) {
+            statement.setInt(1, postId);
+
+            if (statement.executeUpdate() < 1) {
+                throw new SQLException("Erro ao deletar: compartilhamento não encontrado no post.");
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().equals("Erro ao deletar: compartilhamento não encontrado no post.")) {
+                throw e;
+            }
+            else {
+                throw new SQLException("Erro ao deletar compartilhamento no post.");
+            }
+        }
+    }
+
+    @Override
+    public Integer numberOfCompartilhamentos(Integer postId) throws SQLException {
+        Integer compartilhamentos;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMBER_OF_COMPARTILHAMENTOS)) {
+            statement.setInt(1, postId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    compartilhamentos = result.getInt("compartilhamentos");
+                }
+                else {
+                    throw new SQLException("Erro ao visualizar: post não encontrado.");
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().equals("Erro ao visualizar: post não encontrado.")) {
+                throw e;
+            }
+            else {
+                throw new SQLException("Erro ao visualizar post.");
+            }
+        }
+
+        return compartilhamentos;
     }
 }

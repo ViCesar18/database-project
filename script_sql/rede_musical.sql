@@ -47,9 +47,6 @@ CREATE TABLE rede_musical.post (
 	texto_post TEXT NOT NULL,
 	imagem TEXT,
 	dt_publicacao TIMESTAMP NOT NULL,
-	n_likes INT NOT NULL,
-	n_comentarios INT NOT NULL,
-	n_compartilhamentos INT NOT NULL,
 	usuario_id INT NOT NULL,
 	CONSTRAINT pk_post PRIMARY KEY(id),
 	CONSTRAINT fk_criador_post FOREIGN KEY(usuario_id)
@@ -85,22 +82,14 @@ CREATE TABLE rede_musical.comentario (
 	id SERIAL,
 	dt_publicacao TIMESTAMP NOT NULL,
 	texto_comentario TEXT NOT NULL,
-	CONSTRAINT pk_comentario PRIMARY KEY(id)
-);
-
-CREATE TABLE rede_musical.usuario_comenta_post (
 	usuario_id INT NOT NULL,
-	post_id INT,
-	comentario_id INT,
-	CONSTRAINT pk_usuario_comenta_post PRIMARY KEY(usuario_id),
-	CONSTRAINT fk_usuario_autor FOREIGN KEY(usuario_id)
+	post_id INT NOT NULL,
+	CONSTRAINT pk_comentario PRIMARY KEY(id),
+	CONSTRAINT fk_comentario_usuario FOREIGN KEY(usuario_id)
 		REFERENCES rede_musical.usuario(id)
 		ON DELETE CASCADE,
-	CONSTRAINT fk_post_comentado FOREIGN KEY(post_id)
+	CONSTRAINT fk_comentario_post FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
-		ON DELETE CASCADE,
-	CONSTRAINT fk_comentario_feito FOREIGN KEY(comentario_id)
-		REFERENCES rede_musical.comentario(id)
 		ON DELETE CASCADE
 );
 

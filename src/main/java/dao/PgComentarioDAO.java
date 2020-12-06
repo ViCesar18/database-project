@@ -1,8 +1,11 @@
 package dao;
 
 import model.Comentario;
+import model.Post;
+import model.Usuario;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,8 +15,8 @@ public class PgComentarioDAO implements ComentarioDAO {
 
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.comentario" +
-            "(dt_publicacao, texto_comentario) " +
-            "VALUES(CURRENT_TIMESTAMP, ?);";
+            "(dt_publicacao, texto_comentario, usuario_id, post_id) " +
+            "VALUES(CURRENT_TIMESTAMP, ?, ?, ?);";
 
     private static final String READ_QUERY =
             "SELECT * " +
@@ -29,6 +32,17 @@ public class PgComentarioDAO implements ComentarioDAO {
             "DELETE FROM rede_musical.comentario " +
             "WHERE id = ?";
 
+    private static final String ALL_COMMENTS_OF_POST =
+            "SELECT c.*, u.pnome, u.snome, u.imagem " +
+            "FROM rede_musical.comentario c " +
+            "JOIN rede_musical.usuario u ON c.usuario_id = u.id " +
+            "WHERE post_id = ?;";
+
+    private static final String NUMBER_OF_COMMENTS =
+            "SELECT COUNT(*) AS n_comentarios " +
+            "FROM rede_musical.comentario c " +
+            "WHERE post_id = ?;";
+
     public PgComentarioDAO(Connection connection) {
         this.connection = connection;
     }
@@ -37,6 +51,8 @@ public class PgComentarioDAO implements ComentarioDAO {
     public void create(Comentario comentario) throws SQLException {
         try(PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, comentario.getTextoComentario());
+            statement.setInt(2, comentario.getUsuarioId());
+            statement.setInt(3, comentario.getPostId());
 
             statement.executeUpdate();
 
@@ -75,6 +91,8 @@ public class PgComentarioDAO implements ComentarioDAO {
                     comentario.setId(result.getInt("id"));
                     comentario.setDtPublicacao(result.getTimestamp("dt_publicacao"));
                     comentario.setTextoComentario(result.getString("texto_comentario"));
+                    comentario.setUsuarioId(result.getInt("usuario_id"));
+                    comentario.setPostId(result.getInt("post_id"));
                 }
                 else {
                     throw new SQLException("Erro ao visualizar: comentário não encontrado.");
@@ -140,5 +158,66 @@ public class PgComentarioDAO implements ComentarioDAO {
     @Override
     public List<Comentario> all() throws SQLException {
         return null;
+    }
+
+    @Override
+    public List<Comentario> allComentsPost(Integer postId) throws SQLException {
+        List<Comentario> comentarios = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(ALL_COMMENTS_OF_POST);
+             ResultSet result = statement.executeQuery()) {
+            while(result.next()) {
+                Comentario comentario = new Comentario();
+                Usuario usuario = new Usuario();
+
+                comentario.setId(result.getInt("id"));
+                comentario.setDtPublicacao(result.getTimestamp("dt_publicacao"));
+                comentario.setTextoComentario(result.getString("texto_comentario"));
+                comentario.setPostId(result.getInt("post_id"));
+                comentario.setUsuarioId(result.getInt("usuario_id"));
+                usuario.setId(result.getInt("usuario_id"));
+                usuario.setpNome(result.getString("pnome"));
+                usuario.setsNome(result.getString("snome"));
+                usuario.setImagem(result.getString("imagem"));
+                comentario.setUsuario(usuario);
+
+                comentarios.add(comentario);
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao listar comentários.");
+        }
+
+        return comentarios;
+    }
+
+    @Override
+    public Integer numberOfComents(Integer postId) throws SQLException {
+        Integer nComentarios;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMBER_OF_COMMENTS)) {
+            statement.setInt(1, postId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    nComentarios = result.getInt("n_comentarios");
+                }
+                else {
+                    throw new SQLException("Erro ao visualizar: post não encontrado.");
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().equals("Erro ao visualizar: post não encontrado.")) {
+                throw e;
+            }
+            else {
+                throw new SQLException("Erro ao visualizar post.");
+            }
+        }
+
+        return nComentarios;
     }
 }
