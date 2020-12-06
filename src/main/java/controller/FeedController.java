@@ -27,6 +27,8 @@ public class FeedController extends HttpServlet {
         switch(request.getServletPath()) {
             case "/feed": {
                 if(session.getAttribute("usuario") != null) {
+
+
                     dispatcher = request.getRequestDispatcher("/view/feed/index.jsp");
                     dispatcher.forward(request, response);
                 }

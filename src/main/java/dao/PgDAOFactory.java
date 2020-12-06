@@ -17,4 +17,6 @@ public class PgDAOFactory extends DAOFactory{
     public EventoDAO getEventoDAO(){ return new PgEventoDAO(this.connection);}
 
     public PesquisaDAO getPesquisaDAO(){ return new PgPesquisaDAO(this.connection);}
+
+    public FeedDAO getFeedDAO() { return new PgFeedDAO(this.connection); }
 }

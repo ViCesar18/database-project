@@ -1,7 +1,9 @@
 package controller;
 
 import dao.DAOFactory;
+import dao.FeedDAO;
 import dao.UsuarioDAO;
+import model.Feed;
 import model.Usuario;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -57,6 +59,7 @@ public class UserController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsuarioDAO dao;
+        FeedDAO feedDao;
         Usuario usuario = new Usuario();
         String servletPath = request.getServletPath();
 
@@ -175,6 +178,12 @@ public class UserController extends HttpServlet {
                     dao = daoFactory.getUsuarioDAO();
 
                     dao.create(usuario);
+
+                    Feed feed = new Feed(usuario.getId());
+
+                    feedDao = daoFactory.getFeedDAO();
+
+                    feedDao.create(feed);
 
                     response.sendRedirect(request.getContextPath() + "/");
                 } catch (ParseException e) {

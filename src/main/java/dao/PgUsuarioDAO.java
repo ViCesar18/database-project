@@ -2,10 +2,7 @@ package dao;
 
 import model.Usuario;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -101,7 +98,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
     @Override
     public void create(Usuario usuario) throws SQLException {
-        try(PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY)) {
+        try(PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, usuario.getUsername());
             statement.setString(2, usuario.getEmail());
             statement.setString(3, usuario.getSenha());
@@ -118,6 +115,15 @@ public class PgUsuarioDAO implements UsuarioDAO {
             statement.setString(14, usuario.getInstrumentoFavorito());
 
             statement.executeUpdate();
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    usuario.setId(generatedKeys.getInt(1));
+                }
+                else {
+                    throw new SQLException("Erro ao inserir usuário: não obteve o ID.");
+                }
+            }
         } catch(SQLException e) {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
 
@@ -171,7 +177,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
                 throw e;
             }
             else {
-                throw new SQLException("Erro ao visualizar.");
+                throw new SQLException("Erro ao visualizar usuário.");
             }
         }
 
@@ -243,7 +249,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
                 throw new SQLException("Erro ao editar: pelo menos um campo está em branco.");
             }
             else {
-                throw new SQLException("Erro ao editar.");
+                throw new SQLException("Erro ao editar usuário.");
             }
         }
     }
@@ -263,7 +269,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
                 throw e;
             }
             else {
-                throw new SQLException("Erro ao deletar.");
+                throw new SQLException("Erro ao deletar usuario.");
             }
         }
     }

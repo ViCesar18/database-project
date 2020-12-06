@@ -41,6 +41,8 @@ public abstract class DAOFactory implements AutoCloseable{
 
     public abstract PesquisaDAO getPesquisaDAO();
 
+    public abstract FeedDAO getFeedDAO();
+
     @Override
     public void close() throws Exception {
         this.closeConnection();
