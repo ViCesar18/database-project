@@ -139,7 +139,24 @@
                             <c:out value="${pesquisa.nomeEvento}"/>
                         </td>
                         <td>
-                            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Participar</a>
+                            <c:if test="${!pesquisa.usuarioLogadoCompareceEvento}">
+                                <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        onclick="comparecerEvento(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idEvento})"
+                                >
+                                    Participar
+                                </button>
+                            </c:if>
+                            <c:if test="${pesquisa.usuarioLogadoCompareceEvento}">
+                                <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        onclick="pararComparecerEvento(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idEvento})"
+                                >
+                                    Deixar de participar
+                                </button>
+                            </c:if>
                         </td>
                         <td>
                             <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/evento/perfil?id=${pesquisa.idEvento}">Perfil do Evento</a>

@@ -62,6 +62,25 @@ public class PgBandaDAO implements BandaDAO {
             "FROM rede_musical.usuario_segue_banda " +
             "WHERE banda_id = ?;";
 
+    private static String INSERT_USUARIO_PARTICIPA_BANDA =
+            "INSERT INTO rede_musical.usuario_participa_de_banda" +
+            "(usuario_id, banda_id, instrumento)" +
+            "VALUES(?,?,?);";
+
+    private static final String DELETE_USUARIO_PARTICIPA_BANDA =
+            "DELETE FROM rede_musical.usuario_participa_de_banda" +
+            "WHERE usuario_id = ? AND banda_id = ?;";
+
+    private static final String READ_USUARIO_PARTICIPA_BANDA =
+            "SELECT COUNT(*) > 0 AS participa " +
+            "FROM rede_musical.usuario_participa_de_banda " +
+            "WHERE usuario_id = ? AND banda_id = ?;";
+
+    private static final String NUMERO_DE_PARTICIPANTES =
+            "SELECT COUNT(*) AS participantes " +
+            "FROM rede_musical.usuario_participa_de_banda " +
+            "WHERE banda_id = ?;";
+
     @Override
     public void create(Banda banda) throws SQLException {
         try (PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY)) {
@@ -126,7 +145,6 @@ public class PgBandaDAO implements BandaDAO {
         String query;
         if(banda.getImagem() != null && !banda.getImagem().isBlank()) {
             query = UPDATE_BANDA_IMAGEM;
-            System.out.println(1);
         }
         else{
             query = UPDATE_BANDA_DATA_QUERY;
@@ -134,7 +152,6 @@ public class PgBandaDAO implements BandaDAO {
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             if(banda.getImagem() != null && !banda.getImagem().isBlank()) {
-                System.out.println(2);
                 statement.setString(1, banda.getImagem());
                 statement.setInt(2, banda.getId());
             }

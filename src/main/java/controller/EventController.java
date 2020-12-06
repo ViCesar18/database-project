@@ -2,6 +2,7 @@ package controller;
 
 import dao.DAO;
 import dao.DAOFactory;
+import dao.EventoDAO;
 import model.Banda;
 import model.Evento;
 import model.Usuario;
@@ -31,13 +32,15 @@ import java.util.logging.Logger;
                 "/evento/all",
                 "/evento/perfil",
                 "/evento/perfil/delete",
-                "/evento/perfil/update"
+                "/evento/perfil/update",
+                "/comparecer-evento",
+                "/parar-comparecer-evento"
         }
 )
 
 public class EventController extends HttpServlet {
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                DAO<Evento> dao;
+                EventoDAO dao;
                 Evento evento = new Evento();
                 String servletPath = request.getServletPath();
 
@@ -134,11 +137,58 @@ public class EventController extends HttpServlet {
                                 }
                                 break;
                         }
+                        case "/comparecer-evento":{
+                                Integer idUsuario = Integer.parseInt(request.getReader().readLine());
+                                Integer idEvento = Integer.parseInt(request.getParameter("idEvento"));
+
+                                try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                                        dao = daoFactory.getEventoDAO();
+
+                                        dao.insertUsuarioCompareceEvento(idUsuario, idEvento);
+                                } catch (SQLException | ClassNotFoundException e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/");
+                                } catch (Exception e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/");
+                                }
+                                break;
+                        }
+                        case "/parar-comparecer-evento":{
+                                Integer idUsuario = Integer.parseInt(request.getReader().readLine());
+                                Integer idEvento = Integer.parseInt(request.getParameter("idEvento"));
+
+                                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                                        dao = daoFactory.getEventoDAO();
+
+                                        dao.deleteUsuarioCompareceEvento(idUsuario, idEvento);
+                                } catch (SQLException | ClassNotFoundException e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/");
+                                } catch (Exception e) {
+                                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                                        session.setAttribute("error", e.getMessage());
+
+                                        response.sendRedirect(request.getContextPath() + "/");
+                                }
+                                break;
+                        }
                 }
         }
 
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                DAO<Evento> dao;
+                EventoDAO dao;
                 Evento evento;
                 RequestDispatcher dispatcher;
                 HttpSession session = request.getSession();
@@ -154,9 +204,14 @@ public class EventController extends HttpServlet {
                         }
                         case "/evento/perfil": {
                                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                                        Integer idUsuarioLogado = ((Usuario) session.getAttribute("usuario")).getId();
                                         dao = daoFactory.getEventoDAO();
                                         int idEvento = Integer.parseInt(request.getParameter("id"));
                                         Evento e = dao.read(idEvento);
+                                        Boolean comparece = dao.readUsuarioCompareceEvento(idUsuarioLogado, idEvento);
+                                        Integer participantes = dao.readNumeroParticipantes(idEvento);
+                                        request.setAttribute("comparece", comparece);
+                                        request.setAttribute("participantes", participantes);
 
                                         request.setAttribute("evento", e);
 
@@ -188,7 +243,6 @@ public class EventController extends HttpServlet {
                                 try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                                         dao = daoFactory.getEventoDAO();
                                         int idEvento = Integer.parseInt(request.getParameter("id"));
-                                        System.out.println(idEvento);
 
                                         dao.delete(idEvento);
 
@@ -212,7 +266,6 @@ public class EventController extends HttpServlet {
                                 try(DAOFactory daoFactory = DAOFactory.getInstance()){
                                         dao = daoFactory.getEventoDAO();
                                         int idEvento = Integer.parseInt(request.getParameter("id"));
-                                        System.out.println(idEvento);
                                         Evento e;
 
                                         e = dao.read(idEvento);

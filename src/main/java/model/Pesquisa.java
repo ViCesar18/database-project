@@ -15,6 +15,16 @@ public class Pesquisa {
     private String siglaBanda;
     private String nomeBanda;
     private Boolean usuarioLogadoSegueBanda;
+
+    public Boolean getUsuarioLogadoCompareceEvento() {
+        return usuarioLogadoCompareceEvento;
+    }
+
+    public void setUsuarioLogadoCompareceEvento(Boolean usuarioLogadoCompareceEvento) {
+        this.usuarioLogadoCompareceEvento = usuarioLogadoCompareceEvento;
+    }
+
+    private Boolean usuarioLogadoCompareceEvento;
     private Integer idCriadorBanda;
 
     private Integer idEvento;

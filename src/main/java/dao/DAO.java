@@ -14,4 +14,5 @@ public interface DAO<T> {
     void delete(Integer id) throws SQLException;
 
     List<T> all() throws SQLException;
+
 }

@@ -38,6 +38,25 @@ public class PgEventoDAO implements EventoDAO {
             " FROM rede_musical.evento" +
             " ORDER BY id;";
 
+    private static String INSERT_USUARIO_COMPARECE_EVENTO =
+            "INSERT INTO rede_musical.usuario_comparece_em_evento " +
+            "(usuario_id, evento_id)" +
+            "VALUES(?,?);";
+
+    private static String DELETE_USUARIO_COMPARECE_EVENTO =
+            "DELETE FROM rede_musical.usuario_comparece_em_evento " +
+            "WHERE usuario_id = ? AND evento_id = ?;";
+
+    private static String READ_USUARIO_COMPARECE_EVENTO =
+            "SELECT COUNT(*) > 0 AS comparece " +
+            "FROM rede_musical.usuario_comparece_em_evento " +
+            "WHERE usuario_id = ? AND evento_id = ?;";
+
+    private static final String NUMERO_DE_PARTICIPANTES =
+            "SELECT COUNT(*) AS participantes " +
+            "FROM rede_musical.usuario_comparece_em_evento " +
+            "WHERE evento_id = ?;";
+
     @Override
     public void create(Evento evento) throws SQLException {
         try (PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY)) {
@@ -203,6 +222,75 @@ public class PgEventoDAO implements EventoDAO {
 
         return eventos;
 
+    }
+
+    public void insertUsuarioCompareceEvento(Integer idUsuario, Integer idEvento) throws SQLException{
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_USUARIO_COMPARECE_EVENTO)){
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idEvento);
+
+            statement.executeUpdate();
+        } catch (SQLException e){
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao comparecer em evento");
+        }
+    }
+
+    public void deleteUsuarioCompareceEvento(Integer idUsuario, Integer idEvento) throws SQLException{
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_USUARIO_COMPARECE_EVENTO)){
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idEvento);
+
+            statement.executeUpdate();
+        } catch (SQLException e){
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao deixa de comparecer em evento");
+        }
+    }
+
+    public Boolean readUsuarioCompareceEvento(Integer idUsuario, Integer idEvento) throws SQLException{
+        Boolean comparece = false;
+
+        try (PreparedStatement statement = connection.prepareStatement(READ_USUARIO_COMPARECE_EVENTO)){
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idEvento);
+
+            try (ResultSet result = statement.executeQuery()){
+                if (result.next()) {
+                    String compareceStr = result.getString("comparece");
+
+                    comparece = compareceStr.equals("t") ? true : false;
+                }
+            } catch (SQLException e){
+                Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+                throw new SQLException("Erro ao verificar o comparecimento do usuario em um evento.");
+            }
+
+            return comparece;
+        }
+    }
+
+    public Integer readNumeroParticipantes(Integer id) throws SQLException {
+        Integer participantes = null;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMERO_DE_PARTICIPANTES)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    participantes = Integer.parseInt(result.getString("participantes"));
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar numero de participantes do evento.");
+        }
+
+        return participantes;
     }
 
     public PgEventoDAO(Connection connection) {

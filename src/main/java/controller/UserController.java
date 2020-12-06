@@ -1,5 +1,6 @@
 package controller;
 
+import dao.DAO;
 import dao.DAOFactory;
 import dao.FeedDAO;
 import dao.UsuarioDAO;
@@ -43,7 +44,7 @@ import java.util.logging.Logger;
                 "/usuario/instrumentos",
                 "/usuario/perfil",
                 "/seguir-usuario",
-                "/parar-seguir-usuario"
+                "/parar-seguir-usuario",
         }
 )
 public class UserController extends HttpServlet {

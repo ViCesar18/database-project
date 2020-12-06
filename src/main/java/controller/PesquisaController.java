@@ -4,6 +4,7 @@ import dao.BandaDAO;
 import dao.DAOFactory;
 import dao.PesquisaDAO;
 import dao.UsuarioDAO;
+import dao.EventoDAO;
 import model.Pesquisa;
 import model.Usuario;
 
@@ -31,6 +32,7 @@ public class PesquisaController extends HttpServlet {
         PesquisaDAO pesquisaDAO;
         UsuarioDAO usuarioDAO;
         BandaDAO bandaDAO;
+        EventoDAO eventoDAO;
         RequestDispatcher dispatcher;
         HttpSession session = request.getSession();
 
@@ -92,6 +94,17 @@ public class PesquisaController extends HttpServlet {
                                 if(p.getIdBanda() != null) {
                                     p.setUsuarioLogadoSegueBanda(
                                             bandaDAO.readUsuarioSegueBanda(idUsuarioLogado, p.getIdBanda()));
+                                }
+                            }
+                        }
+
+                        if(filtroEvento != null){
+                            eventoDAO = daoFactory.getEventoDAO();
+                            for (Pesquisa p:pesquisas){
+                                if(p.getIdEvento() != null){
+                                    p.setUsuarioLogadoCompareceEvento(
+                                            eventoDAO.readUsuarioCompareceEvento(idUsuarioLogado, p.getIdEvento())
+                                    );
                                 }
                             }
                         }

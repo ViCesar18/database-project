@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 public class PgUsuarioDAO implements UsuarioDAO {
     private final Connection connection;
 
+
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.usuario" +
             "(username, email, senha, pnome, snome, dt_nascimento, imagem, cidade, estado, pais, " +
@@ -91,7 +92,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
             "SELECT COUNT(*) AS seguindo " +
             "FROM rede_musical.usuario_segue_usuario " +
             "WHERE usuario_id = ?;";
-
+    
     public PgUsuarioDAO(Connection connection) {
         this.connection = connection;
     }
