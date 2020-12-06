@@ -317,22 +317,28 @@ public class BandController extends HttpServlet {
                dispatcher.forward(request, response);
            }
            case "/banda/perfil": {
-               Integer idUsuarioLogado = ((Usuario) session.getAttribute("usuario")).getId();
+               if(session.getAttribute("usuario") != null) {
+                   Integer idUsuarioLogado = ((Usuario) session.getAttribute("usuario")).getId();
 
-               try(DAOFactory daoFactory = DAOFactory.getInstance()) {
-                   dao = daoFactory.getBandaDAO();
-                   int idBanda = Integer.parseInt(request.getParameter("id"));
+                   try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                       dao = daoFactory.getBandaDAO();
+                       int idBanda = Integer.parseInt(request.getParameter("id"));
 
-                   Banda b = dao.read(idBanda);
-                   Boolean segue = dao.readUsuarioSegueBanda(idUsuarioLogado, idBanda);
+                       Banda b = dao.read(idBanda);
+                       Boolean segue = dao.readUsuarioSegueBanda(idUsuarioLogado, idBanda);
+                       Integer seguidores = dao.readNumeroSeguidores(idBanda);
 
-                   request.setAttribute("banda", b);
-                   request.setAttribute("segue", segue);
+                       request.setAttribute("banda", b);
+                       request.setAttribute("segue", segue);
+                       request.setAttribute("seguidores", seguidores);
 
-                   dispatcher = request.getRequestDispatcher("/view/banda/perfil.jsp");
-                   dispatcher.forward(request, response);
-               } catch (Exception e){
-                   System.out.println(e);
+                       dispatcher = request.getRequestDispatcher("/view/banda/perfil.jsp");
+                       dispatcher.forward(request, response);
+                   } catch (Exception e){
+                       System.out.println(e);
+                   }
+               } else {
+                   response.sendRedirect(request.getContextPath() + "/");
                }
 
                break;

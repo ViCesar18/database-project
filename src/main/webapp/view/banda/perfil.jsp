@@ -51,36 +51,43 @@
     </div>
 
     <div>
+        <p><strong>Seguidores:</strong> ${requestScope.seguidores}</p>
         <p><strong>Gênero:</strong> ${banda.getGenero()}</p>
     </div>
-    <c:if test="${requestScope.criador}">
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Deletar banda</a>
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Editar banda</a>
-        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/update-foto?id=${banda.getId()}">Alterar imagem</a>
-    </c:if>
-    <c:if test="${!requestScope.criador}">
-        <c:if test="${!requestScope.segue}">
-            <button
-                    type="button"
-                    class="btn btn-success"
-                    onclick="seguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.banda.id})"
-            >
-                Seguir
-            </button>
-        </c:if>
-        <c:if test="${requestScope.segue}">
-            <button
-                    type="button"
-                    class="btn btn-warning"
-                    onclick="pararSeguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.banda.id})"
-            >
-                Deixar de Seguir
-            </button>
-        </c:if>
-        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Participar da banda</a>
-    </c:if>
-    <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
-    </div>
+        <div>
+            <c:if test="${requestScope.criador}">
+                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Editar banda</a>
+                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/banda/perfil/update-foto?id=${banda.getId()}">Alterar imagem</a>
+            </c:if>
+            <c:if test="${!requestScope.criador}">
+                <c:if test="${!requestScope.segue}">
+                    <button
+                            type="button"
+                            class="btn btn-success"
+                            onclick="seguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.banda.id})"
+                    >
+                        Seguir
+                    </button>
+                </c:if>
+                <c:if test="${requestScope.segue}">
+                    <button
+                            type="button"
+                            class="btn btn-warning"
+                            onclick="pararSeguirBanda(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${requestScope.banda.id})"
+                    >
+                        Deixar de Seguir
+                    </button>
+                </c:if>
+                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Participar da banda</a>
+            </c:if>
+            <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
+        </div>
+
+        <div class="row justify-content-end">
+            <c:if test="${requestScope.criador}">
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Deletar banda</a>
+            </c:if>
+        </div>
 </div>
 
 <%@include file="../include/scripts.jsp"%>
