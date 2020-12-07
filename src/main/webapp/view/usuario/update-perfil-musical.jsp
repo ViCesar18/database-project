@@ -28,9 +28,16 @@
                 <div class="form-group">
                     <label for="inputBanda">Banda Favorita</label>
                     <select class="form-control" required id="inputBanda" name="banda">
-                        <c:forEach var="banda" items="#{requestScope.bandas}">
-                            <option>${banda.nome} (${banda.sigla})</option>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${not empty requestScope.bandas}">
+                                <c:forEach var="banda" items="#{requestScope.bandas}">
+                                    <option>${banda.nome} (${banda.sigla})</option>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <option>Nenhuma Banda Disponível</option>
+                            </c:otherwise>
+                        </c:choose>
                     </select>
                 </div>
 
