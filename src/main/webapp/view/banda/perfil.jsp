@@ -51,7 +51,7 @@
     </div>
 
     <div>
-        <p><strong>Participantes</strong> ${requestScope.participantes}</p>
+        <p><strong>Integrantes:</strong> ${requestScope.participantes}</p>
         <p><strong>Seguidores:</strong> ${requestScope.seguidores}</p>
         <p><strong>Gênero:</strong> ${banda.getGenero()}</p>
     </div>

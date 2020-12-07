@@ -114,10 +114,10 @@
                         </td>
                         <td>
                             <c:if test="${pesquisa.usuarioLogadoParticipaBanda}">
-                                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/parar-participar-banda?id=${pesquisa.idBanda}">Deixar de participar da banda</a>
+                                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/parar-participar-banda?id=${pesquisa.idBanda}">Deixar de Participar da Banda</a>
                             </c:if>
                             <c:if test="${!pesquisa.usuarioLogadoParticipaBanda}">
-                                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/participar-banda?id=${pesquisa.idBanda}">Participar da banda</a>
+                                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/participar-banda?id=${pesquisa.idBanda}">Participar da Banda</a>
                             </c:if>
                         </td>
                         <td>
@@ -154,7 +154,7 @@
                                         class="btn btn-success"
                                         onclick="comparecerEvento(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idEvento})"
                                 >
-                                    Participar
+                                    Marcar Presença
                                 </button>
                             </c:if>
                             <c:if test="${pesquisa.usuarioLogadoCompareceEvento}">
@@ -163,7 +163,7 @@
                                         class="btn btn-warning"
                                         onclick="pararComparecerEvento(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${pesquisa.idEvento})"
                                 >
-                                    Deixar de participar
+                                    Desmarcar Presença
                                 </button>
                             </c:if>
                         </td>
