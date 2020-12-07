@@ -1,5 +1,7 @@
 package dao;
 
+import model.Post;
+
 import java.sql.Connection;
 
 public class PgDAOFactory extends DAOFactory{
@@ -19,4 +21,6 @@ public class PgDAOFactory extends DAOFactory{
     public PesquisaDAO getPesquisaDAO(){ return new PgPesquisaDAO(this.connection);}
 
     public FeedDAO getFeedDAO() { return new PgFeedDAO(this.connection); }
+
+    public PostDAO getPostDAO() { return new PgPostDAO(this.connection);}
 }

@@ -53,7 +53,19 @@
                 <button type="submit" class="btn btn-primary">Pesquisar</button>
             </form>
         </div>
+        <div class="container">
+            <form
+                    class="form"
+                    action="${pageContext.servletContext.contextPath}/publicar-post"
+                    method="post"
+            >
+                <div class="form-group">
+                    <label for="textoPost">O que te inspira no dia de hoje?</label>
+                    <input type="text" required class="form-control" id="textoPost" name="textoPost">
+                </div>
 
-        <%@include file="../include/scripts.jsp"%>
+                <button type="submit" class="btn btn-primary">Publicar</button>
+            </form>
+        </div>
     </body>
 </html>
