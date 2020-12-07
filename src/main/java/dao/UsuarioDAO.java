@@ -22,4 +22,6 @@ public interface UsuarioDAO extends DAO<Usuario> {
     Integer readNumeroSeguidores(Integer id) throws SQLException;
 
     Integer readNumeroSeguindo(Integer id) throws SQLException;
+
+    List<Integer> readListSeguidores(Integer id) throws SQLException;
 }

@@ -92,6 +92,11 @@ public class PgUsuarioDAO implements UsuarioDAO {
             "SELECT COUNT(*) AS seguindo " +
             "FROM rede_musical.usuario_segue_usuario " +
             "WHERE usuario_id = ?;";
+
+    private static final String GET_LIST_SEGUIDORES =
+            "SELECT usuario_id " +
+            "FROM rede_musical.usuario_segue_usuario usu " +
+            "WHERE usuario_id_seguido = ?;";
     
     public PgUsuarioDAO(Connection connection) {
         this.connection = connection;
@@ -446,6 +451,30 @@ public class PgUsuarioDAO implements UsuarioDAO {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
 
             throw new SQLException("Erro verificar numero de seguindo.");
+        }
+
+        return seguidores;
+    }
+
+    @Override
+    public List<Integer> readListSeguidores(Integer id) throws SQLException {
+        List<Integer> seguidores = new ArrayList<>();
+
+        try(PreparedStatement statement = connection.prepareStatement(GET_LIST_SEGUIDORES)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                while(result.next()) {
+                    Integer seguidor;
+                    seguidor = result.getInt("usuario_id");
+
+                    seguidores.add(seguidor);
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar seguidores.");
         }
 
         return seguidores;

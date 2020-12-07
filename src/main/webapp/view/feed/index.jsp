@@ -53,7 +53,7 @@
                 <button type="submit" class="btn btn-primary">Pesquisar</button>
             </form>
         </div>
-        <div class="container">
+        <div class="container" style="margin-top: 40px">
             <form
                     class="form"
                     action="${pageContext.servletContext.contextPath}/publicar-post"

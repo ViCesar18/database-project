@@ -3,6 +3,7 @@ package controller;
 import dao.DAOFactory;
 import dao.FeedDAO;
 import dao.PostDAO;
+import dao.UsuarioDAO;
 import model.Post;
 import model.Usuario;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(
         name = "PostController",
@@ -24,7 +26,9 @@ import java.io.IOException;
 public class PostController extends HttpServlet {
     protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PostDAO dao;
-        Usuario usuario = new Usuario();
+        UsuarioDAO usuarioDAO;
+        FeedDAO feedDAO;
+        Usuario usuario;
         String servletPath = request.getServletPath();
         HttpSession session = request.getSession();
 
@@ -40,6 +44,18 @@ public class PostController extends HttpServlet {
                     p.setUsuarioId(usuario.getId());
 
                     dao.create(p);
+
+                    usuarioDAO = daoFactory.getUsuarioDAO();
+                    List<Integer> seguidores;
+
+                    seguidores = usuarioDAO.readListSeguidores(usuario.getId());
+                    seguidores.add(usuario.getId());
+
+                    feedDAO = daoFactory.getFeedDAO();
+
+                    for (Integer s:seguidores) {
+                        feedDAO.insertPostInFeed(s, p.getId());
+                    }
 
                     response.sendRedirect(request.getContextPath() + "/feed");
                 } catch(Exception e){
