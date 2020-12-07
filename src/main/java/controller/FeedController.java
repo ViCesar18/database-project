@@ -50,6 +50,7 @@ public class FeedController extends HttpServlet {
                         List<Post> posts = dao.allPostsFeed(u.getId());
 
                         request.setAttribute("posts", posts);
+                        request.setAttribute("usuarioLogado", u);
 
                         dispatcher = request.getRequestDispatcher("/view/feed/index.jsp");
                         dispatcher.forward(request, response);

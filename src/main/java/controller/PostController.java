@@ -4,12 +4,14 @@ import dao.DAOFactory;
 import dao.FeedDAO;
 import dao.PostDAO;
 import dao.UsuarioDAO;
+import model.Banda;
 import model.Post;
 import model.Usuario;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,14 +21,19 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(
         name = "PostController",
         urlPatterns = {
-            "/publicar-post"
+            "/publicar-post",
+            "/apagar-post",
+            "/editar-post"
         }
 )
 
@@ -40,6 +47,7 @@ public class PostController extends HttpServlet {
         Usuario usuario;
         String servletPath = request.getServletPath();
         HttpSession session = request.getSession();
+        Post post = new Post();
 
         switch (servletPath) {
             case "/publicar-post":{
@@ -124,15 +132,92 @@ public class PostController extends HttpServlet {
                 } catch(Exception e){
                     System.out.println(e);
                 }
+                break;
             }
+            case "/editar-post":{
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    int idPost = Integer.parseInt(request.getParameter("id"));
+                    dao = daoFactory.getPostDAO();
+                    post.setId(Integer.parseInt(request.getParameter("id")));
+                    post.setTextoPost(request.getParameter("textoPost"));
+
+                    dao.update(post);
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                }catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao editar post.");
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                }
+
+                break;
+            }
+
         }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String servletPath = request.getServletPath();
+        PostDAO dao;
+        HttpSession session = request.getSession();
+        RequestDispatcher dispatcher;
+
         switch (servletPath) {
+            case "/apagar-post":{
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getPostDAO();
+                    int idPost = Integer.parseInt(request.getParameter("id"));
 
+                    System.out.println("chegou aqui");
+
+                    dao.delete(idPost);
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                }
+                break;
+            }
+            case "/editar-post":{
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    dao = daoFactory.getPostDAO();
+                    int idPost = Integer.parseInt(request.getParameter("id"));
+                    Post p;
+
+                    p = dao.read(idPost);
+
+                    request.setAttribute("post", p);
+
+                    dispatcher = request.getRequestDispatcher("/view/post/editar-post.jsp");
+                    dispatcher.forward(request, response);
+                }catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/feed");
+                }
+
+                break;
+            }
         }
-
     }
 }

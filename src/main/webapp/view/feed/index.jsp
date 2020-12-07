@@ -32,7 +32,7 @@
         </div>
 
         <div class="container">
-            <h1>Pesquise um usuário, banda ou evento!</h1>
+            <p><strong>Pesquise um usuário, banda ou evento!</strong></p>
             <form
                     class="form"
                     action="${pageContext.servletContext.contextPath}/pesquisa"
@@ -66,7 +66,7 @@
                     enctype="multipart/form-data"
             >
                 <div class="form-group">
-                    <label for="textoPost">O que te inspira no dia de hoje?</label>
+                    <label for="textoPost"><strong>O que te inspira no dia de hoje?</strong></label>
                     <input type="text" required class="form-control" id="textoPost" name="textoPost">
                 </div>
                 <div class="form-group">
@@ -75,7 +75,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Publicar</button>
-                <hr color="blue">
+                <hr color="grey">
             </form>
         </div>
         <c:if test="${requestScope.posts != null}">
@@ -92,21 +92,36 @@
                         <div>
                             <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
                             <p>${post.dtPublicacao}</p>
+                            <c:if test="${usuario.getId() == post.usuarioId}">
+                                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/apagar-post?id=${post.id}">Apagar post</a>
+                                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/editar-post?id=${post.id}">Editar post</a>
+                            </c:if>
+                            <hr>
                         </div>
                     </div>
                     <div widht="300">
-                        ${post.textoPost}
+                        <p>${post.textoPost}</p>
+                        <br>
+                            <c:if test="${post.imagem != null}">
+                                <img
+                                        src="${pageContext.request.contextPath}/assets/img/post/${post.imagem}"
+                                        alt="Avatar"
+                                >
+                            </c:if>
                         <br><br>
                     </div>
                     <div>
                         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Curtir</a>
                         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Comentar</a>
                         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Compartilhar</a>
-                        <hr color="blue">
+                        <hr color="grey">
                     </div>
                 </div>
             </c:forEach>
         </c:if>
+    <c:if test="${requestScope.posts.size() == 0}">
+        <h1 class="container" align="center">Seu feed ainda não têm posts. Faça um agora mesmo!</h1>
+    </c:if>
         <%@include file="../include/scripts.jsp"%>
     </body>
 </html>
