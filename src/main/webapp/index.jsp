@@ -15,8 +15,18 @@
     </head>
     <body>
         <div class="container">
-            <h1>Seja Bem Vindo!</h1>
-            <h2>Entre ou Cadastre-se.</h2>
+            <div style="display: flex; flex-direction: row">
+                <img
+                        src="${pageContext.request.contextPath}/assets/img/logo.png"
+                        class="rounded-circle"
+                        alt="Avatar"
+                >
+                <div>
+                    <br>
+                    <h1>Seja Bem Vindo!</h1>
+                    <h2>Entre ou Cadastre-se.</h2>
+                </div>
+            </div>
             <form
                 action="${pageContext.servletContext.contextPath}/login"
                 method="post"

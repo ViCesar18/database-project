@@ -12,6 +12,33 @@ public class Post {
     private Usuario usuario;
     private Boolean curtiu;
     private Boolean compartilhou;
+    private Integer nCurtidas;
+    private Integer nCompartilhamentos;
+    private Integer nComentarios;
+
+    public Integer getnCompartilhamentos() {
+        return nCompartilhamentos;
+    }
+
+    public void setnCompartilhamentos(Integer nCompartilhamentos) {
+        this.nCompartilhamentos = nCompartilhamentos;
+    }
+
+    public Integer getnComentarios() {
+        return nComentarios;
+    }
+
+    public void setnComentarios(Integer nComentarios) {
+        this.nComentarios = nComentarios;
+    }
+
+    public Integer getnCurtidas() {
+        return nCurtidas;
+    }
+
+    public void setnCurtidas(Integer nCurtidas) {
+        this.nCurtidas = nCurtidas;
+    }
 
     public List<Comentario> getComentarios() {
         return comentarios;

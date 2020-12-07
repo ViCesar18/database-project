@@ -37,7 +37,7 @@ public class FeedController extends HttpServlet {
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         FeedDAO dao;
-        ComentarioDAO daoComentario;
+        ComentarioDAO comentarioDAO;
         PostDAO postDAO;
 
         switch(request.getServletPath()) {
@@ -45,15 +45,18 @@ public class FeedController extends HttpServlet {
                 if(session.getAttribute("usuario") != null) {
                     try (DAOFactory daoFactory = DAOFactory.getInstance()) {
                         dao = daoFactory.getFeedDAO();
-                        daoComentario = daoFactory.getComentarioDAO();
+                        comentarioDAO = daoFactory.getComentarioDAO();
                         Usuario u = (Usuario) session.getAttribute("usuario");
 
                         List<Post> posts = dao.allPostsFeed(u.getId());
 
                         postDAO = daoFactory.getPostDAO();
                         for (Post p:posts) {
+                            p.setnCurtidas(postDAO.numberOfLikes(p.getId()));
+                            p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
+                            p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
                             p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
-                            p.setComentarios(daoComentario.allComentsPost(p.getId()));
+                            p.setComentarios(comentarioDAO.allComentsPost(p.getId()));
                             p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
                         }
 

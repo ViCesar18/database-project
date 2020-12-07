@@ -14,22 +14,22 @@
         <title>Rede Musical</title>
     </head>
     <body>
-        <div class="container">
-            <div style="margin: 10px">
-                <img
-                        src="${pageContext.request.contextPath}/assets/img/logo.png"
-                        class="rounded-circle"
-                        alt="Avatar"
-                >
-                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
+    <div class="container">
+        <div style="margin: 10px">
+            <img
+                    src="${pageContext.request.contextPath}/assets/img/logo.png"
+                    class="rounded-circle"
+                    alt="Avatar"
+            >
+            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
 
-                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
+            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
 
-                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
+            <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
 
-                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/logout">Sair</a>
-            </div>
+            <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/logout">Sair</a>
         </div>
+    </div>
 
         <div class="container">
             <p><strong>Pesquise um usuário, banda ou evento!</strong></p>
@@ -108,7 +108,9 @@
                                         alt="Avatar"
                                 >
                             </c:if>
-                        <br><br><br><br>
+                        <br><br>
+                        <strong>Curtidas:</strong> ${post.nCurtidas} <strong>Compartilhamento:</strong> ${post.nCompartilhamentos} <strong>Comentários:</strong> ${post.nComentarios}
+                        <br><br>
                     </div>
                     <div>
                         <c:choose>
@@ -181,9 +183,9 @@
                 </div>
             </c:forEach>
         </c:if>
-    <c:if test="${requestScope.posts.size() == 0}">
-        <h1 class="container" align="center">Seu feed ainda não têm posts. Faça um agora mesmo!</h1>
-    </c:if>
+        <c:if test="${requestScope.posts.size() == 0}">
+            <h1 class="container" align="center">Seu feed ainda não têm posts. Faça um agora mesmo!</h1>
+        </c:if>
         <%@include file="../include/scripts.jsp"%>
     </body>
 </html>

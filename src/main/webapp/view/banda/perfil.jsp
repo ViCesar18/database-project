@@ -38,6 +38,24 @@
     request.setAttribute("imgName", imgName);
 %>
 <div class="container">
+    <div class="container">
+        <div style="margin: 10px">
+            <img
+                    src="${pageContext.request.contextPath}/assets/img/logo.png"
+                    class="rounded-circle"
+                    alt="Avatar"
+            >
+            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/feed">Página Inicial</a>
+
+            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
+
+            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
+
+            <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
+
+            <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/logout">Sair</a>
+        </div>
+    </div>
     <div class="text-center">
         <img
                 src="${pageContext.request.contextPath}/assets/img/banda/${imgName}"

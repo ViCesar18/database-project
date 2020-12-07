@@ -15,7 +15,14 @@
     </head>
     <body>
         <div class="container">
-            <h1>Crie sua conta!</h1>
+            <div style="display: flex; flex-direction: row">
+                <img
+                        src="${pageContext.request.contextPath}/assets/img/logo.png"
+                        class="rounded-circle"
+                        alt="Avatar"
+                >
+                <h1>Crie sua conta!</h1>
+            </div>
             <form
                 class="form"
                 action="${pageContext.servletContext.contextPath}/usuario/create"
