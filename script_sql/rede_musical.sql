@@ -104,13 +104,17 @@ CREATE TABLE rede_musical.feed (
 CREATE TABLE rede_musical.feed_possui_posts (
 	feed_id INT,
 	post_id INT,
-	CONSTRAINT pk_feed_possui_posts PRIMARY KEY(feed_id, post_id),
+	id_usuario_compartilhou INT,
+	CONSTRAINT pk_feed_possui_posts PRIMARY KEY(feed_id, post_id, id_usuario_compartilhou),
 	CONSTRAINT fk_feed_post FOREIGN KEY(feed_id)
 		REFERENCES rede_musical.feed(usuario_id)
 		ON DELETE CASCADE,
 	CONSTRAINT fk_post_feed FOREIGN KEY(post_id)
 		REFERENCES rede_musical.post(id)
-		ON DELETE CASCADE
+		ON DELETE CASCADE,
+    CONSTRAINT fk_usuario_compartilhou FOREIGN KEY(id_usuario_compartilhou)
+        REFERENCES rede_musical.usuario(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE rede_musical.banda  (

@@ -53,6 +53,7 @@ public class FeedController extends HttpServlet {
                         postDAO = daoFactory.getPostDAO();
                         for (Post p:posts) {
                             p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
+                            p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
                         }
 
                         request.setAttribute("posts", posts);

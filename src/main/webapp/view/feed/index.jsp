@@ -126,11 +126,22 @@
                             </c:otherwise>
                         </c:choose>
                         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Comentar</a>
-                        <button
-                                type="button"
-                                class="btn btn-primary"
-                                onclick="descurtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
-                        >Compartilhar</button>
+                        <c:choose>
+                            <c:when test="${!post.compartilhou}">
+                                <button
+                                        type="button"
+                                        class="btn btn-primary"
+                                        onclick="compartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                                >Compartilhar</button>
+                            </c:when>
+                            <c:otherwise>
+                                <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        onclick="descompartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                                >Não Compartilhar</button>
+                            </c:otherwise>
+                        </c:choose>
                         <hr color="grey">
                     </div>
                 </div>

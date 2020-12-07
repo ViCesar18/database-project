@@ -40,12 +40,16 @@ public class PgFeedDAO implements FeedDAO{
 
     private static final String INSERT_POST_IN_FEED =
             "INSERT INTO rede_musical.feed_possui_posts " +
-            "(feed_id, post_id) " +
-            "VALUES(?, ?);";
+            "(feed_id, post_id, id_usuario_compartilhou) " +
+            "VALUES(?, ?, ?);";
 
     private static final String DELETE_POST_IN_FEED =
             "DELETE FROM rede_musical.feed_possui_posts " +
             "WHERE post_id = ?;";
+
+    private static final String DELETE_POST_COMPARTILHAMENTO =
+            "DELETE FROM rede_musical.feed_possui_posts " +
+            "WHERE post_id = ? AND id_usuario_compartilhou = ?;";
 
     public PgFeedDAO(Connection connection) {
         this.connection = connection;
@@ -141,10 +145,11 @@ public class PgFeedDAO implements FeedDAO{
     }
 
     @Override
-    public void insertPostInFeed(Integer feedId, Integer postId) throws SQLException {
+    public void insertPostInFeed(Integer feedId, Integer postId, Integer idUsuarioCompartilhou) throws SQLException {
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT_POST_IN_FEED)) {
             statement.setInt(1, feedId);
             statement.setInt(2, postId);
+            statement.setInt(3, idUsuarioCompartilhou);
 
             statement.executeUpdate();
         } catch(SQLException e) {
@@ -175,6 +180,27 @@ public class PgFeedDAO implements FeedDAO{
             }
             else {
                 throw new SQLException("Erro ao deletar post no feed.");
+            }
+        }
+    }
+
+    @Override
+    public void deletePostCompartilhamento(Integer postId, Integer idUsuarioCompartilhou) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement(DELETE_POST_COMPARTILHAMENTO)) {
+            statement.setInt(1, postId);
+            statement.setInt(2, idUsuarioCompartilhou);
+
+            if (statement.executeUpdate() < 1) {
+                throw new SQLException("Erro ao deletar: post(compartilhamento) não encontrado no feed.");
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().equals("Erro ao deletar: post(compartilhamento) não encontrado no feed.")) {
+                throw e;
+            }
+            else {
+                throw new SQLException("Erro ao deletar post(compartilhamento) no feed.");
             }
         }
     }

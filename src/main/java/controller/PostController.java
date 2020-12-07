@@ -35,7 +35,9 @@ import java.util.logging.Logger;
             "/apagar-post",
             "/editar-post",
             "/curtir-post",
-            "/descurtir-post"
+            "/descurtir-post",
+            "/compartilhar-post",
+            "/descompartilhar-post"
         }
 )
 
@@ -127,7 +129,7 @@ public class PostController extends HttpServlet {
                     feedDAO = daoFactory.getFeedDAO();
 
                     for (Integer s:seguidores) {
-                        feedDAO.insertPostInFeed(s, p.getId());
+                        feedDAO.insertPostInFeed(s, p.getId(), -1);
                     }
 
                     response.sendRedirect(request.getContextPath() + "/feed");
@@ -178,6 +180,8 @@ public class PostController extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+
+                break;
             }
             case "/descurtir-post": {
                 Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
@@ -201,6 +205,72 @@ public class PostController extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+
+                break;
+            }
+            case "/compartilhar-post": {
+                Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
+                Integer idPost = Integer.parseInt(request.getParameter("idPost"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getPostDAO();
+
+                    dao.insertCompartilhamentoPost(idUsuarioLogado, idPost);
+
+                    usuarioDAO = daoFactory.getUsuarioDAO();
+                    List<Integer> seguidores;
+
+                    seguidores = usuarioDAO.readListSeguidores(idUsuarioLogado);
+                    seguidores.add(idUsuarioLogado);
+
+                    feedDAO = daoFactory.getFeedDAO();
+
+                    for (Integer s:seguidores) {
+                        feedDAO.insertPostInFeed(s, idPost, idUsuarioLogado);
+                    }
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
+            }
+            case "/descompartilhar-post": {
+                Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
+                Integer idPost = Integer.parseInt(request.getParameter("idPost"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getPostDAO();
+                    dao.deleteCompartilhamentoPost(idUsuarioLogado, idPost);
+
+                    feedDAO = daoFactory.getFeedDAO();
+                    feedDAO.deletePostCompartilhamento(idPost, idUsuarioLogado);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
+                break;
             }
         }
     }

@@ -13,9 +13,11 @@ public interface PostDAO extends DAO<Post>{
 
     Boolean verificarLikePost(Integer userId, Integer postId) throws SQLException;
 
-    void insertCompartilhamentoPost(Integer postId) throws SQLException;
+    void insertCompartilhamentoPost(Integer userId, Integer postId) throws SQLException;
 
-    void deleteCompartilhamentoPost(Integer postId) throws SQLException;
+    void deleteCompartilhamentoPost(Integer userId, Integer postId) throws SQLException;
 
     Integer numberOfCompartilhamentos(Integer postId) throws SQLException;
+
+    Boolean verificarCompartilhamentoPost(Integer userId, Integer postId) throws SQLException;
 }

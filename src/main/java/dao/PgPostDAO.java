@@ -55,12 +55,17 @@ public class PgPostDAO implements PostDAO{
 
     private static final String DELETE_COMPARTILHAMENTO_POST =
             "DELETE FROM rede_musical.usuario_compartilha_post " +
-            "WHERE post_id = ?;";
+            "WHERE usuario_id = ? AND post_id = ?;";
 
     private static final String NUMBER_OF_COMPARTILHAMENTOS =
             "SELECT COUNT(*) AS compartilhamentos " +
             "FROM rede_musical.usuario_compartilha_post " +
             "WHERE post_id = ?;";
+
+    private static final String VERIRIFCAR_COMPARTILHAMENTO_POST =
+            "SELECT COUNT(*) > 0 AS compartilhou " +
+            "FROM rede_musical.usuario_compartilha_post " +
+            "WHERE usuario_id = ? AND post_id = ?;";
 
     public PgPostDAO(Connection connection) {
         this.connection = connection;
@@ -274,9 +279,10 @@ public class PgPostDAO implements PostDAO{
     }
 
     @Override
-    public void insertCompartilhamentoPost(Integer postId) throws SQLException {
+    public void insertCompartilhamentoPost(Integer userId, Integer postId) throws SQLException {
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT_COMPARTILHAMENTO_POST)) {
-            statement.setInt(1, postId);
+            statement.setInt(1, userId);
+            statement.setInt(2, postId);
 
             statement.executeUpdate();
         } catch(SQLException e) {
@@ -292,9 +298,10 @@ public class PgPostDAO implements PostDAO{
     }
 
     @Override
-    public void deleteCompartilhamentoPost(Integer postId) throws SQLException {
+    public void deleteCompartilhamentoPost(Integer userId, Integer postId) throws SQLException {
         try(PreparedStatement statement = connection.prepareStatement(DELETE_COMPARTILHAMENTO_POST)) {
-            statement.setInt(1, postId);
+            statement.setInt(1, userId);
+            statement.setInt(2, postId);
 
             if (statement.executeUpdate() < 1) {
                 throw new SQLException("Erro ao deletar: compartilhamento não encontrado no post.");
@@ -338,5 +345,29 @@ public class PgPostDAO implements PostDAO{
         }
 
         return compartilhamentos;
+    }
+
+    @Override
+    public Boolean verificarCompartilhamentoPost(Integer userId, Integer postId) throws SQLException {
+        Boolean compartilhou = false;
+
+        try(PreparedStatement statement = connection.prepareStatement(VERIRIFCAR_COMPARTILHAMENTO_POST)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, postId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    String segueStr = result.getString("compartilhou");
+
+                    compartilhou = segueStr.equals("t") ? true : false;
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar se usuario compartilhou post.");
+        }
+
+        return compartilhou;
     }
 }
