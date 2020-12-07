@@ -81,22 +81,26 @@
         <c:if test="${requestScope.posts != null}">
             <c:forEach var="post" items="${requestScope.posts}">
                 <div class="container">
-                    <div style="display: flex; flex-direction: row">
-                        <img
-                                src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem}"
-                                class="rounded-circle"
-                                alt="Avatar"
-                                height="50"
-                                width="50"
-                        >
+                    <div style="display: flex; flex-direction: row; justify-content: space-between">
+                        <div style="display: flex; flex-direction: row">
+                            <img
+                                    src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem}"
+                                    class="rounded-circle"
+                                    alt="Avatar"
+                                    height="50"
+                                    width="50"
+                            >
+                            <div>
+                                <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
+                                <p>${post.dtPublicacao}</p>
+                                <hr>
+                            </div>
+                        </div>
                         <div>
-                            <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
-                            <p>${post.dtPublicacao}</p>
                             <c:if test="${usuario.getId() == post.usuarioId}">
-                                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/apagar-post?id=${post.id}">Apagar post</a>
                                 <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/editar-post?id=${post.id}">Editar post</a>
+                                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/apagar-post?id=${post.id}">Apagar post</a>
                             </c:if>
-                            <hr>
                         </div>
                     </div>
                     <div widht="300">
@@ -105,7 +109,7 @@
                             <c:if test="${post.imagem != null}">
                                 <img
                                         src="${pageContext.request.contextPath}/assets/img/post/${post.imagem}"
-                                        alt="Avatar"
+                                        style="width: 100%; height: 75%; object-fit: contain"
                                 >
                             </c:if>
                         <br><br>
