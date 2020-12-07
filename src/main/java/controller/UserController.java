@@ -140,7 +140,9 @@ public class UserController extends HttpServlet {
                                     break;
 
                                 case "banda":
-                                    usuario.setBandaFavorita(fieldValue);
+                                    if(!fieldValue.equals("Nenhuma Banda DisponÃ\u00ADvel")) {
+                                        usuario.setBandaFavorita(fieldValue);
+                                    }
                                     break;
 
                                 case "musica":
@@ -178,12 +180,14 @@ public class UserController extends HttpServlet {
                     dao = daoFactory.getUsuarioDAO();
                     dao.create(usuario);
 
-                    bandaDAO = daoFactory.getBandaDAO();
-                    String[] bandaStr = usuario.getBandaFavorita().split("\\s\\(");
-                    StringBuilder siglaBanda = new StringBuilder(bandaStr[1]);
-                    siglaBanda.deleteCharAt(bandaStr[1].length() - 1);
-                    Integer bandaId = bandaDAO.getBandaId(bandaStr[0], siglaBanda.toString());
-                    bandaDAO.insertUsuarioSegueBanda(usuario.getId(), bandaId);
+                    if(usuario.getBandaFavorita() != null) {
+                        bandaDAO = daoFactory.getBandaDAO();
+                        String[] bandaStr = usuario.getBandaFavorita().split("\\s\\(");
+                        StringBuilder siglaBanda = new StringBuilder(bandaStr[1]);
+                        siglaBanda.deleteCharAt(bandaStr[1].length() - 1);
+                        Integer bandaId = bandaDAO.getBandaId(bandaStr[0], siglaBanda.toString());
+                        bandaDAO.insertUsuarioSegueBanda(usuario.getId(), bandaId);
+                    }
 
                     Feed feed = new Feed(usuario.getId());
                     feedDao = daoFactory.getFeedDAO();

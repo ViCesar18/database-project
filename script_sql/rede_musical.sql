@@ -12,7 +12,7 @@ CREATE TABLE rede_musical.usuario (
 	cidade VARCHAR(50),
 	estado VARCHAR(50),
 	pais VARCHAR(50) NOT NULL,
-	banda_favorita VARCHAR(20) NOT NULL,
+	banda_favorita VARCHAR(20),
 	musica_favorita VARCHAR(20) NOT NULL,
 	genero_favorito VARCHAR(20) NOT NULL,
 	instrumento_favorito VARCHAR(20) NOT NULL,
