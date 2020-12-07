@@ -108,7 +108,7 @@
                                         alt="Avatar"
                                 >
                             </c:if>
-                        <br><br>
+                        <br><br><br><br>
                     </div>
                     <div>
                         <c:choose>
@@ -125,7 +125,6 @@
                                 >Descurtir</button>
                             </c:otherwise>
                         </c:choose>
-                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Comentar</a>
                         <c:choose>
                             <c:when test="${!post.compartilhou}">
                                 <button
@@ -141,7 +140,42 @@
                                         onclick="descompartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
                                 >Não Compartilhar</button>
                             </c:otherwise>
-                        </c:choose>
+                        </c:choose> <br><br><br>
+                        <c:if test="${post.comentarios != null}">
+                            <c:forEach var="comentario" items="${post.comentarios}">
+                                <div>
+                                    <div style="display: flex; flex-direction: row">
+                                        <img
+                                                src="${pageContext.request.contextPath}/assets/img/usuario/${comentario.usuario.imagem}"
+                                                class="rounded-circle"
+                                                alt="Avatar"
+                                                height="50"
+                                                width="50"
+                                        >
+                                        <div>
+                                            <p><strong>${comentario.usuario.pNome} ${comentario.usuario.sNome}</strong></p>
+                                            <p>${comentario.dtPublicacao}</p><br>
+                                        </div>
+                                        <div widht="300">
+                                            <p>${comentario.textoComentario}</p>
+                                        </div>
+                                    </div>
+                            </c:forEach>
+                        </c:if>
+                        <form
+                                class="form"
+                                action="${pageContext.servletContext.contextPath}/publicar-comentario?idPost=${post.id}"
+                                method="post"
+                        >
+                            <div class="form-group">
+                                <label for="textoComentario"><strong></strong></label>
+                                <input type="text" required class="form-control" id="textoComentario" name="textoComentario">
+                            </div>
+
+                            <div align="right">
+                                <button type="submit" class="btn btn-primary">Comentar</button>
+                            </div>
+                        </form>
                         <hr color="grey">
                     </div>
                 </div>

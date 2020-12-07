@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Post {
     private Integer id;
@@ -11,6 +12,16 @@ public class Post {
     private Usuario usuario;
     private Boolean curtiu;
     private Boolean compartilhou;
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    private List<Comentario> comentarios;
 
     public Integer getId() {
         return id;

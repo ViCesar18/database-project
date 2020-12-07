@@ -164,25 +164,27 @@ public class PgComentarioDAO implements ComentarioDAO {
     public List<Comentario> allComentsPost(Integer postId) throws SQLException {
         List<Comentario> comentarios = new ArrayList<>();
 
-        try (PreparedStatement statement = connection.prepareStatement(ALL_COMMENTS_OF_POST);
-             ResultSet result = statement.executeQuery()) {
-            while(result.next()) {
-                Comentario comentario = new Comentario();
-                Usuario usuario = new Usuario();
+        try (PreparedStatement statement = connection.prepareStatement(ALL_COMMENTS_OF_POST)){
+             statement.setInt(1, postId);
 
-                comentario.setId(result.getInt("id"));
-                comentario.setDtPublicacao(result.getTimestamp("dt_publicacao"));
-                comentario.setTextoComentario(result.getString("texto_comentario"));
-                comentario.setPostId(result.getInt("post_id"));
-                comentario.setUsuarioId(result.getInt("usuario_id"));
-                usuario.setId(result.getInt("usuario_id"));
-                usuario.setpNome(result.getString("pnome"));
-                usuario.setsNome(result.getString("snome"));
-                usuario.setImagem(result.getString("imagem"));
-                comentario.setUsuario(usuario);
+             try (ResultSet result = statement.executeQuery()) {
+                while(result.next()) {
+                    Comentario comentario = new Comentario();
+                    Usuario usuario = new Usuario();
 
-                comentarios.add(comentario);
-            }
+                    comentario.setId(result.getInt("id"));
+                    comentario.setDtPublicacao(result.getTimestamp("dt_publicacao"));
+                    comentario.setTextoComentario(result.getString("texto_comentario"));
+                    comentario.setPostId(result.getInt("post_id"));
+                    comentario.setUsuarioId(result.getInt("usuario_id"));
+                    usuario.setId(result.getInt("usuario_id"));
+                    usuario.setpNome(result.getString("pnome"));
+                    usuario.setsNome(result.getString("snome"));
+                    usuario.setImagem(result.getString("imagem"));
+                    comentario.setUsuario(usuario);
+
+                    comentarios.add(comentario);
+                }
         } catch(SQLException e) {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
 
@@ -190,6 +192,7 @@ public class PgComentarioDAO implements ComentarioDAO {
         }
 
         return comentarios;
+        }
     }
 
     @Override

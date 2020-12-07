@@ -199,3 +199,5 @@ CREATE TABLE rede_musical.usuario_comparece_em_evento (
 		REFERENCES rede_musical.evento(id)
 		ON DELETE CASCADE
 );
+
+INSERT INTO rede_musical.usuario VALUES(-1, 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', '2000-04-18', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum')

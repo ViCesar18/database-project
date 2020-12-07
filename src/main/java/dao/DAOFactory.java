@@ -45,6 +45,8 @@ public abstract class DAOFactory implements AutoCloseable{
 
     public abstract PostDAO getPostDAO();
 
+    public abstract ComentarioDAO getComentarioDAO();
+
     @Override
     public void close() throws Exception {
         this.closeConnection();

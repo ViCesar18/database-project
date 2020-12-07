@@ -1,10 +1,8 @@
 package controller;
 
-import dao.DAOFactory;
-import dao.FeedDAO;
-import dao.PostDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import model.Banda;
+import model.Comentario;
 import model.Post;
 import model.Usuario;
 
@@ -39,6 +37,7 @@ public class FeedController extends HttpServlet {
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         FeedDAO dao;
+        ComentarioDAO daoComentario;
         PostDAO postDAO;
 
         switch(request.getServletPath()) {
@@ -46,6 +45,7 @@ public class FeedController extends HttpServlet {
                 if(session.getAttribute("usuario") != null) {
                     try (DAOFactory daoFactory = DAOFactory.getInstance()) {
                         dao = daoFactory.getFeedDAO();
+                        daoComentario = daoFactory.getComentarioDAO();
                         Usuario u = (Usuario) session.getAttribute("usuario");
 
                         List<Post> posts = dao.allPostsFeed(u.getId());
@@ -53,6 +53,7 @@ public class FeedController extends HttpServlet {
                         postDAO = daoFactory.getPostDAO();
                         for (Post p:posts) {
                             p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
+                            p.setComentarios(daoComentario.allComentsPost(p.getId()));
                             p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
                         }
 
