@@ -68,7 +68,7 @@ public class PgBandaDAO implements BandaDAO {
             "VALUES(?,?,?);";
 
     private static final String DELETE_USUARIO_PARTICIPA_BANDA =
-            "DELETE FROM rede_musical.usuario_participa_de_banda" +
+            "DELETE FROM rede_musical.usuario_participa_de_banda " +
             "WHERE usuario_id = ? AND banda_id = ?;";
 
     private static final String READ_USUARIO_PARTICIPA_BANDA =
@@ -306,5 +306,74 @@ public class PgBandaDAO implements BandaDAO {
         }
 
         return seguidores;
+    }
+
+    public void insertUsuarioParticipaBanda(Integer idUsuario, Integer idBanda, String instrumento) throws SQLException{
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_USUARIO_PARTICIPA_BANDA)){
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idBanda);
+            statement.setString(3, instrumento);
+
+            statement.executeUpdate();
+        } catch (SQLException e){
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao participar de banda");
+        }
+    }
+
+    public void deleteUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException{
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_USUARIO_PARTICIPA_BANDA)){
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idBanda);
+
+            statement.executeUpdate();
+        } catch (SQLException e){
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao deixa de participar em banda");        }
+    }
+
+    public Boolean readUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException{
+        Boolean participa = false;
+
+        try (PreparedStatement statement = connection.prepareStatement(READ_USUARIO_PARTICIPA_BANDA)){
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idBanda);
+
+            try (ResultSet result = statement.executeQuery()){
+                if (result.next()) {
+                    String participaStr = result.getString("participa");
+
+                    participa = participaStr.equals("t") ? true : false;
+                }
+            } catch (SQLException e){
+                Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+                throw new SQLException("Erro ao verificar a participação do usuario em uma banda.");
+            }
+
+            return participa;
+        }
+    }
+
+    public Integer readNumeroParticipantes(Integer id) throws SQLException {
+        Integer participantes = null;
+
+        try(PreparedStatement statement = connection.prepareStatement(NUMERO_DE_PARTICIPANTES)) {
+            statement.setInt(1, id);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    participantes = Integer.parseInt(result.getString("participantes"));
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar numero de participantes da banda.");
+        }
+
+        return participantes;
     }
 }

@@ -51,6 +51,7 @@
     </div>
 
     <div>
+        <p><strong>Participantes</strong> ${requestScope.participantes}</p>
         <p><strong>Seguidores:</strong> ${requestScope.seguidores}</p>
         <p><strong>Gênero:</strong> ${banda.getGenero()}</p>
     </div>
@@ -78,7 +79,12 @@
                         Deixar de Seguir
                     </button>
                 </c:if>
-                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/banda/perfil/update?id=${banda.getId()}">Participar da banda</a>
+                <c:if test="${!requestScope.participa}">
+                    <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/participar-banda?id=${banda.getId()}">Participar da banda</a>
+                </c:if>
+                <c:if test="${requestScope.participa}">
+                    <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/parar-participar-banda?id=${banda.getId()}">Deixar de participar da banda</a>
+                </c:if>
             </c:if>
             <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
         </div>

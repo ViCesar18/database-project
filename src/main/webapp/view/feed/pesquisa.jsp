@@ -77,6 +77,7 @@
                 <th scope="col">Sigla</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Seguir</th>
+                <th scope="col">Participar</th>
                 <th scope="col">Acessar Banda</th>
             </tr>
             </thead>
@@ -109,6 +110,14 @@
                                 >
                                     Deixar de Seguir
                                 </button>
+                            </c:if>
+                        </td>
+                        <td>
+                            <c:if test="${pesquisa.usuarioLogadoParticipaBanda}">
+                                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/parar-participar-banda?id=${pesquisa.idBanda}">Deixar de participar da banda</a>
+                            </c:if>
+                            <c:if test="${!pesquisa.usuarioLogadoParticipaBanda}">
+                                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/participar-banda?id=${pesquisa.idBanda}">Participar da banda</a>
                             </c:if>
                         </td>
                         <td>

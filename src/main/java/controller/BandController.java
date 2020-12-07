@@ -37,7 +37,9 @@ import java.util.logging.Logger;
                 "/banda/perfil/update",
                 "/banda/perfil/update-foto",
                 "/seguir-banda",
-                "/parar-seguir-banda"
+                "/parar-seguir-banda",
+                "/participar-banda",
+                "/parar-participar-banda"
         }
 )
 
@@ -110,7 +112,7 @@ public class BandController extends HttpServlet {
                     banda.setUsername_id(usuario.getId());
 
                     dao.create(banda);
-
+                    
                     response.sendRedirect(request.getContextPath() + "/");
                 } catch (ParseException e) {
                     Logger.getLogger(BandController.class.getName()).log(Level.SEVERE, "Controller", e);
@@ -297,6 +299,29 @@ public class BandController extends HttpServlet {
 
                 break;
             }
+            case "/participar-banda":{
+                try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                    dao = daoFactory.getBandaDAO();
+                    Usuario usuarioLogado = (Usuario) session.getAttribute("usuario");
+
+                    int idBanda = Integer.parseInt(request.getParameter("id"));
+                    int idUsuario = usuarioLogado.getId();
+                    String instrumento = request.getParameter("instrumento");
+
+                    Banda b = dao.read(idBanda);
+                    dao.insertUsuarioParticipaBanda(idUsuario, idBanda, instrumento);
+
+                    response.sendRedirect(request.getContextPath() + "/banda/perfil?id=" + b.getId());
+                }catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", "Erro ao participar de banda.");
+
+                    response.sendRedirect(request.getContextPath() + "/banda/perfil?id=" + banda.getId());
+                }
+
+                break;
+            }
         }
     }
 
@@ -326,11 +351,15 @@ public class BandController extends HttpServlet {
 
                        Banda b = dao.read(idBanda);
                        Boolean segue = dao.readUsuarioSegueBanda(idUsuarioLogado, idBanda);
+                       Boolean participa = dao.readUsuarioParticipaBanda(idUsuarioLogado, idBanda);
                        Integer seguidores = dao.readNumeroSeguidores(idBanda);
+                       Integer participantes = dao.readNumeroParticipantes(idBanda);
 
                        request.setAttribute("banda", b);
                        request.setAttribute("segue", segue);
+                       request.setAttribute("participa", participa);
                        request.setAttribute("seguidores", seguidores);
+                       request.setAttribute("participantes", participantes);
 
                        dispatcher = request.getRequestDispatcher("/view/banda/perfil.jsp");
                        dispatcher.forward(request, response);
@@ -440,6 +469,82 @@ public class BandController extends HttpServlet {
 
                break;
            }
+           case "/participar-banda":{
+               try (DAOFactory daoFactory = DAOFactory.getInstance()){
+                   dao = daoFactory.getBandaDAO();
+                   int idBanda = Integer.parseInt(request.getParameter("id"));
+                   Banda b;
+
+                   b = dao.read(idBanda);
+
+                   request.setAttribute("banda", b);
+                   dispatcher = request.getRequestDispatcher("/view/banda/escolher-instrumento.jsp");
+                   dispatcher.forward(request, response);
+               } catch (Exception e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", "Erro ao participar de banda.");
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               }
+               break;
+           }
+
+           case "/parar-participar-banda":{
+               try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                   dao = daoFactory.getBandaDAO();
+                   Usuario usuarioLogado = (Usuario) session.getAttribute("usuario");
+
+                   int idBanda = Integer.parseInt(request.getParameter("id"));
+                   int idUsuario = usuarioLogado.getId();
+
+                   Banda b = dao.read(idBanda);
+                   dao.deleteUsuarioParticipaBanda(idUsuario, idBanda);
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil?id=" + b.getId());
+               }catch (Exception e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", "Erro ao deixar de participar da banda.");
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               }
+
+               break;
+           }
+
+
+
+
+
+           /*case "/banda/perfil/update": {
+               try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                   dao = daoFactory.getBandaDAO();
+                   int idBanda = Integer.parseInt(request.getParameter("id"));
+                   Banda b;
+
+                   b = dao.read(idBanda);
+
+                   request.setAttribute("banda", b);
+
+                   dispatcher = request.getRequestDispatcher("/view/banda/update-perfil.jsp");
+                   dispatcher.forward(request, response);
+               } catch (SQLException | ClassNotFoundException e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", e.getMessage());
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               } catch (Exception e) {
+                   Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                   session.setAttribute("error", e.getMessage());
+
+                   response.sendRedirect(request.getContextPath() + "/banda/perfil");
+               }
+
+               break;
+           }*/
        }
     }
 

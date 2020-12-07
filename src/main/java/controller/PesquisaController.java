@@ -94,6 +94,8 @@ public class PesquisaController extends HttpServlet {
                                 if(p.getIdBanda() != null) {
                                     p.setUsuarioLogadoSegueBanda(
                                             bandaDAO.readUsuarioSegueBanda(idUsuarioLogado, p.getIdBanda()));
+                                    p.setUsuarioLogadoParticipaBanda(
+                                            bandaDAO.readUsuarioParticipaBanda(idUsuarioLogado, p.getIdBanda()));
                                 }
                             }
                         }

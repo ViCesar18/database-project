@@ -16,6 +16,22 @@ public class Pesquisa {
     private String nomeBanda;
     private Boolean usuarioLogadoSegueBanda;
 
+    private Boolean usuarioLogadoCompareceEvento;
+    private Integer idCriadorBanda;
+
+    private Integer idEvento;
+    private String nomeEvento;
+
+    public Boolean getUsuarioLogadoParticipaBanda() {
+        return usuarioLogadoParticipaBanda;
+    }
+
+    public void setUsuarioLogadoParticipaBanda(Boolean usuarioLogadoParticipaBanda) {
+        this.usuarioLogadoParticipaBanda = usuarioLogadoParticipaBanda;
+    }
+
+    private Boolean usuarioLogadoParticipaBanda;
+
     public Boolean getUsuarioLogadoCompareceEvento() {
         return usuarioLogadoCompareceEvento;
     }
@@ -23,12 +39,6 @@ public class Pesquisa {
     public void setUsuarioLogadoCompareceEvento(Boolean usuarioLogadoCompareceEvento) {
         this.usuarioLogadoCompareceEvento = usuarioLogadoCompareceEvento;
     }
-
-    private Boolean usuarioLogadoCompareceEvento;
-    private Integer idCriadorBanda;
-
-    private Integer idEvento;
-    private String nomeEvento;
 
     public String getPesquisa() {
         return pesquisa;
