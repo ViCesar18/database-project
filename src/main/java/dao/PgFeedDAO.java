@@ -31,12 +31,12 @@ public class PgFeedDAO implements FeedDAO{
             "WHERE usuario_id = ?";
 
     private static final String ALL_POSTS_OF_FEED =
-            "SELECT p.*, u.pnome, u.snome, u.imagem  " +
+            "SELECT p.*, u.pnome, u.snome, u.imagem AS imagem_usuario " +
             "FROM rede_musical.feed_possui_posts fpp " +
             "JOIN rede_musical.post p ON fpp.post_id = p.id " +
             "JOIN rede_musical.usuario u ON p.usuario_id = u.id " +
             "WHERE fpp.feed_id = ? " +
-            "ORDER BY dt_publicacao;";
+            "ORDER BY dt_publicacao DESC;";
 
     private static final String INSERT_POST_IN_FEED =
             "INSERT INTO rede_musical.feed_possui_posts " +
@@ -108,25 +108,29 @@ public class PgFeedDAO implements FeedDAO{
     public List<Post> allPostsFeed(Integer id) throws SQLException {
         List<Post> posts = new ArrayList<>();
 
-        try (PreparedStatement statement = connection.prepareStatement(ALL_POSTS_OF_FEED);
-             ResultSet result = statement.executeQuery()) {
-            while(result.next()) {
-                Post post = new Post();
-                Usuario usuario = new Usuario();
+        try (PreparedStatement statement = connection.prepareStatement(ALL_POSTS_OF_FEED)) {
+            statement.setInt(1, id);
+                try(ResultSet result = statement.executeQuery()){
+                    while(result.next()) {
+                        Post post = new Post();
+                        Usuario usuario = new Usuario();
 
-                post.setId(result.getInt("id"));
-                post.setTextoPost(result.getString("texto_post"));
-                post.setImagem(result.getString("imagem"));
-                post.setDtPublicacao(result.getTimestamp("dt_publicacao"));
-                post.setUsuarioId(result.getInt("usuario_id"));
-                usuario.setId(result.getInt("usuario_id"));
-                usuario.setpNome(result.getString("pnome"));
-                usuario.setsNome(result.getString("snome"));
-                usuario.setImagem(result.getString("imagem"));
-                post.setUsuario(usuario);
+                        post.setId(result.getInt("id"));
+                        post.setTextoPost(result.getString("texto_post"));
+                        post.setImagem(result.getString("imagem"));
+                        post.setDtPublicacao(result.getTimestamp("dt_publicacao"));
+                        post.setUsuarioId(result.getInt("usuario_id"));
+                        usuario.setId(result.getInt("usuario_id"));
+                        usuario.setpNome(result.getString("pnome"));
+                        usuario.setsNome(result.getString("snome"));
+                        usuario.setImagem(result.getString("imagem_usuario"));
+                        post.setUsuario(usuario);
 
-                posts.add(post);
-            }
+                        posts.add(post);
+                    }
+                }catch (SQLException e) {
+                    throw new SQLException("Erro verificar posts.");
+                }
         } catch(SQLException e) {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
 

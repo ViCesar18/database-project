@@ -16,6 +16,11 @@
     <body>
         <div class="container">
             <div style="margin: 10px">
+                <img
+                        src="${pageContext.request.contextPath}/assets/img/logo.png"
+                        class="rounded-circle"
+                        alt="Avatar"
+                >
                 <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
 
                 <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
@@ -58,14 +63,50 @@
                     class="form"
                     action="${pageContext.servletContext.contextPath}/publicar-post"
                     method="post"
+                    enctype="multipart/form-data"
             >
                 <div class="form-group">
                     <label for="textoPost">O que te inspira no dia de hoje?</label>
                     <input type="text" required class="form-control" id="textoPost" name="textoPost">
                 </div>
+                <div class="form-group">
+                    <label for="inputImagem">Foto</label>
+                    <input type="file" class="form-control-file" id="inputImagem" name="imagem">
+                </div>
 
                 <button type="submit" class="btn btn-primary">Publicar</button>
+                <hr color="blue">
             </form>
         </div>
+        <c:if test="${requestScope.posts != null}">
+            <c:forEach var="post" items="${requestScope.posts}">
+                <div class="container">
+                    <div style="display: flex; flex-direction: row">
+                        <img
+                                src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem}"
+                                class="rounded-circle"
+                                alt="Avatar"
+                                height="50"
+                                width="50"
+                        >
+                        <div>
+                            <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
+                            <p>${post.dtPublicacao}</p>
+                        </div>
+                    </div>
+                    <div widht="300">
+                        ${post.textoPost}
+                        <br><br>
+                    </div>
+                    <div>
+                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Curtir</a>
+                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Comentar</a>
+                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Compartilhar</a>
+                        <hr color="blue">
+                    </div>
+                </div>
+            </c:forEach>
+        </c:if>
+        <%@include file="../include/scripts.jsp"%>
     </body>
 </html>
