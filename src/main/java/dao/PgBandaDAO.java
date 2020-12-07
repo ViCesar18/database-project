@@ -81,6 +81,11 @@ public class PgBandaDAO implements BandaDAO {
             "FROM rede_musical.usuario_participa_de_banda " +
             "WHERE banda_id = ?;";
 
+    private static final String GET_ID_BANDA =
+            "SELECT id " +
+            "FROM rede_musical.banda " +
+            "WHERE nome = ? AND SIGLA = ?;";
+
     @Override
     public void create(Banda banda) throws SQLException {
         try (PreparedStatement statement = this.connection.prepareStatement(CREATE_QUERY)) {
@@ -375,5 +380,35 @@ public class PgBandaDAO implements BandaDAO {
         }
 
         return participantes;
+    }
+
+    @Override
+    public Integer getBandaId(String bandaNome, String bandaSigla) throws SQLException {
+        Integer id;
+
+        try (PreparedStatement statement = connection.prepareStatement(GET_ID_BANDA)){
+            statement.setString(1, bandaNome);
+            statement.setString(2, bandaSigla);
+
+            try (ResultSet result = statement.executeQuery()){
+                if (result.next()){
+                    id = result.getInt("id");
+                }
+                else {
+                    throw new SQLException("Erro ao buscar ID: banda não encontrada");
+                }
+            }
+        } catch(SQLException e){
+            Logger.getLogger(PgBandaDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if (e.getMessage().equals("Erro ao buscar ID: banda não encontrada")) {
+                throw e;
+            }
+            else{
+                throw new SQLException("Erro ao buscar ID.");
+            }
+        }
+
+        return id;
     }
 }

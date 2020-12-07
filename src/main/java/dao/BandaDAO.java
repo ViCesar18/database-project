@@ -19,4 +19,6 @@ public interface BandaDAO extends DAO<Banda> {
     public Boolean readUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException;
 
     public Integer readNumeroParticipantes(Integer id) throws SQLException;
+
+    public Integer getBandaId(String bandaNome, String bandaSigla) throws SQLException;
 }

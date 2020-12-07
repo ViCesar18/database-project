@@ -1,9 +1,7 @@
 package controller;
 
-import dao.DAO;
-import dao.DAOFactory;
-import dao.FeedDAO;
-import dao.UsuarioDAO;
+import dao.*;
+import model.Banda;
 import model.Feed;
 import model.Usuario;
 import org.apache.commons.fileupload.FileItem;
@@ -60,6 +58,7 @@ public class UserController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsuarioDAO dao;
+        BandaDAO bandaDAO;
         FeedDAO feedDao;
         Usuario usuario = new Usuario();
         String servletPath = request.getServletPath();
@@ -177,13 +176,17 @@ public class UserController extends HttpServlet {
                     }
 
                     dao = daoFactory.getUsuarioDAO();
-
                     dao.create(usuario);
 
+                    bandaDAO = daoFactory.getBandaDAO();
+                    String[] bandaStr = usuario.getBandaFavorita().split("\\s\\(");
+                    StringBuilder siglaBanda = new StringBuilder(bandaStr[1]);
+                    siglaBanda.deleteCharAt(bandaStr[1].length() - 1);
+                    Integer bandaId = bandaDAO.getBandaId(bandaStr[0], siglaBanda.toString());
+                    bandaDAO.insertUsuarioSegueBanda(usuario.getId(), bandaId);
+
                     Feed feed = new Feed(usuario.getId());
-
                     feedDao = daoFactory.getFeedDAO();
-
                     feedDao.create(feed);
 
                     response.sendRedirect(request.getContextPath() + "/");
@@ -266,8 +269,16 @@ public class UserController extends HttpServlet {
                     usuario.setInstrumentoFavorito(request.getParameter("instrumento"));
 
                     dao = daoFactory.getUsuarioDAO();
-
                     dao.update(usuario);
+
+                    bandaDAO = daoFactory.getBandaDAO();
+                    String[] bandaStr = usuario.getBandaFavorita().split("\\s\\(");
+                    StringBuilder siglaBanda = new StringBuilder(bandaStr[1]);
+                    siglaBanda.deleteCharAt(bandaStr[1].length() - 1);
+                    Integer bandaId = bandaDAO.getBandaId(bandaStr[0], siglaBanda.toString());
+                    if(!bandaDAO.readUsuarioSegueBanda(usuario.getId(), bandaId)) {
+                        bandaDAO.insertUsuarioSegueBanda(usuario.getId(), bandaId);
+                    }
 
                     response.sendRedirect(request.getContextPath() + "/usuario/meu-perfil");
                 } catch (ParseException e) {
@@ -492,6 +503,7 @@ public class UserController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UsuarioDAO dao;
+        BandaDAO bandaDAO;
         Usuario usuario;
         RequestDispatcher dispatcher;
         HttpSession session = request.getSession();
@@ -504,8 +516,29 @@ public class UserController extends HttpServlet {
                 break;
             }
             case "/usuario/create": {
-                dispatcher = request.getRequestDispatcher("/view/usuario/create.jsp");
-                dispatcher.forward(request, response);
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+                    bandaDAO = daoFactory.getBandaDAO();
+
+                    List<Banda> bandas = bandaDAO.all();
+
+                    request.setAttribute("bandas", bandas);
+
+                    dispatcher = request.getRequestDispatcher("/view/usuario/create.jsp");
+                    dispatcher.forward(request, response);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+
                 break;
             }
             case "/usuario/meu-perfil": {
@@ -586,10 +619,12 @@ public class UserController extends HttpServlet {
 
                     try(DAOFactory daoFactory = DAOFactory.getInstance()) {
                         dao = daoFactory.getUsuarioDAO();
-
                         usuario = dao.read(usuarioLogin.getId());
-
                         request.setAttribute("usuario", usuario);
+
+                        bandaDAO = daoFactory.getBandaDAO();
+                        List<Banda> bandas = bandaDAO.all();
+                        request.setAttribute("bandas", bandas);
 
                         dispatcher = request.getRequestDispatcher("/view/usuario/update-perfil-musical.jsp");
                         dispatcher.forward(request, response);

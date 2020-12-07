@@ -5,6 +5,8 @@
   Time: 15:29
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
@@ -105,7 +107,11 @@
 
                 <div class="form-group">
                     <label for="inputBanda">Banda Favorita</label>
-                    <input type="text" required class="form-control" id="inputBanda" name="banda">
+                    <select class="form-control" required id="inputBanda" name="banda">
+                        <c:forEach var="banda" items="#{requestScope.bandas}">
+                            <option>${banda.nome} (${banda.sigla})</option>
+                        </c:forEach>
+                    </select>
                 </div>
 
                 <div class="form-group">

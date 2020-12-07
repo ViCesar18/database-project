@@ -470,6 +470,8 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
                     seguidores.add(seguidor);
                 }
+            } catch (SQLException e) {
+                throw new SQLException("Erro verificar seguidores.");
             }
         } catch(SQLException e) {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
