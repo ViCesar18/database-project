@@ -111,9 +111,26 @@
                         <br><br>
                     </div>
                     <div>
-                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Curtir</a>
+                        <c:choose>
+                            <c:when test="${!post.curtiu}">
+                                <button
+                                        type="button" class="btn btn-primary"
+                                        onclick="curtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                                >Curtir</button>
+                            </c:when>
+                            <c:otherwise>
+                                <button
+                                        type="button" class="btn btn-warning"
+                                        onclick="descurtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                                >Descurtir</button>
+                            </c:otherwise>
+                        </c:choose>
                         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Comentar</a>
-                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Compartilhar</a>
+                        <button
+                                type="button"
+                                class="btn btn-primary"
+                                onclick="descurtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                        >Compartilhar</button>
                         <hr color="grey">
                     </div>
                 </div>

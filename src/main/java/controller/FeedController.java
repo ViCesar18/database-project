@@ -39,6 +39,7 @@ public class FeedController extends HttpServlet {
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher;
         FeedDAO dao;
+        PostDAO postDAO;
 
         switch(request.getServletPath()) {
             case "/feed": {
@@ -48,6 +49,11 @@ public class FeedController extends HttpServlet {
                         Usuario u = (Usuario) session.getAttribute("usuario");
 
                         List<Post> posts = dao.allPostsFeed(u.getId());
+
+                        postDAO = daoFactory.getPostDAO();
+                        for (Post p:posts) {
+                            p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
+                        }
 
                         request.setAttribute("posts", posts);
                         request.setAttribute("usuarioLogado", u);

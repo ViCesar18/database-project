@@ -9,6 +9,8 @@ public class Post {
     private Timestamp dtPublicacao;
     private Integer usuarioId;
     private Usuario usuario;
+    private Boolean curtiu;
+    private Boolean compartilhou;
 
     public Integer getId() {
         return id;
@@ -56,5 +58,21 @@ public class Post {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Boolean getCurtiu() {
+        return curtiu;
+    }
+
+    public void setCurtiu(Boolean curtiu) {
+        this.curtiu = curtiu;
+    }
+
+    public Boolean getCompartilhou() {
+        return compartilhou;
+    }
+
+    public void setCompartilhou(Boolean compartilhou) {
+        this.compartilhou = compartilhou;
     }
 }

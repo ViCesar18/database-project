@@ -16,3 +16,5 @@
 <script src="${pageContext.request.contextPath}/assets/js/banda.js"></script>
 
 <script src="${pageContext.request.contextPath}/assets/js/evento.js"></script>
+
+<script src="${pageContext.request.contextPath}/assets/js/post.js"></script>

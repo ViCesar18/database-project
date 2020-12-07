@@ -33,7 +33,9 @@ import java.util.logging.Logger;
         urlPatterns = {
             "/publicar-post",
             "/apagar-post",
-            "/editar-post"
+            "/editar-post",
+            "/curtir-post",
+            "/descurtir-post"
         }
 )
 
@@ -154,7 +156,52 @@ public class PostController extends HttpServlet {
 
                 break;
             }
+            case "/curtir-post": {
+                Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
+                Integer idPost = Integer.parseInt(request.getParameter("idPost"));
 
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getPostDAO();
+
+                    dao.insertLikePost(idUsuarioLogado, idPost);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+            }
+            case "/descurtir-post": {
+                Integer idUsuarioLogado = Integer.parseInt(request.getReader().readLine());
+                Integer idPost = Integer.parseInt(request.getParameter("idPost"));
+
+                try(DAOFactory daoFactory = DAOFactory.getInstance()) {
+
+                    dao = daoFactory.getPostDAO();
+
+                    dao.deleteLikePost(idUsuarioLogado, idPost);
+                } catch (SQLException | ClassNotFoundException e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                } catch (Exception e) {
+                    Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, "Controller", e);
+
+                    session.setAttribute("error", e.getMessage());
+
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
+            }
         }
     }
 

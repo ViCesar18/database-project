@@ -36,12 +36,17 @@ public class PgPostDAO implements PostDAO{
 
     private static final String DELETE_LIKE_POST =
             "DELETE FROM rede_musical.usuario_da_like_em_post " +
-            "WHERE post_id = ?;";
+            "WHERE usuario_id = ? AND post_id = ?;";
 
     private static final String NUMBER_OF_LIKES =
             "SELECT COUNT(*) AS likes " +
             "FROM rede_musical.usuario_da_like_em_post udlep " +
             "WHERE post_id = ?;";
+
+    private static final String VERIRIFCAR_LIKE_POST =
+            "SELECT COUNT(*) > 0 AS curtiu " +
+            "FROM rede_musical.usuario_da_like_em_post udlep " +
+            "WHERE usuario_id = ? AND post_id = ?;";
 
     private static final String INSERT_COMPARTILHAMENTO_POST =
             "INSERT INTO rede_musical.usuario_compartilha_post " +
@@ -176,9 +181,10 @@ public class PgPostDAO implements PostDAO{
     }
 
     @Override
-    public void insertLikePost(Integer postId) throws SQLException {
+    public void insertLikePost(Integer userId, Integer postId) throws SQLException {
         try(PreparedStatement statement = this.connection.prepareStatement(INSERT_LIKE_POST)) {
-            statement.setInt(1, postId);
+            statement.setInt(1, userId);
+            statement.setInt(2, postId);
 
             statement.executeUpdate();
         } catch(SQLException e) {
@@ -194,9 +200,10 @@ public class PgPostDAO implements PostDAO{
     }
 
     @Override
-    public void deleteLikePost(Integer postId) throws SQLException {
+    public void deleteLikePost(Integer userId, Integer postId) throws SQLException {
         try(PreparedStatement statement = connection.prepareStatement(DELETE_LIKE_POST)) {
-            statement.setInt(1, postId);
+            statement.setInt(1, userId);
+            statement.setInt(2, postId);
 
             if (statement.executeUpdate() < 1) {
                 throw new SQLException("Erro ao deletar: like não encontrado no post.");
@@ -240,6 +247,30 @@ public class PgPostDAO implements PostDAO{
         }
 
         return likes;
+    }
+
+    @Override
+    public Boolean verificarLikePost(Integer userId, Integer postId) throws SQLException {
+        Boolean curtiu = false;
+
+        try(PreparedStatement statement = connection.prepareStatement(VERIRIFCAR_LIKE_POST)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, postId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                if(result.next()) {
+                    String segueStr = result.getString("curtiu");
+
+                    curtiu = segueStr.equals("t") ? true : false;
+                }
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar se usuario curte post.");
+        }
+
+        return curtiu;
     }
 
     @Override
