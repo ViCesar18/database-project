@@ -15,21 +15,22 @@
     </head>
     <body>
     <div class="container">
-        <div style="margin: 10px">
-            <img
-                    src="${pageContext.request.contextPath}/assets/img/logo.png"
-                    class="rounded-circle"
-                    alt="Avatar"
-            >
-            <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
+        <div class="container">
+            <div style="margin: 10px">
+                <img
+                        src="${pageContext.request.contextPath}/assets/img/logo.png"
+                        class="rounded-circle"
+                        alt="Avatar"
+                >
+                <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
 
-            <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
+                <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
 
-            <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
+                <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
 
-            <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/logout">Sair</a>
+                <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/logout">Sair</a>
+            </div>
         </div>
-    </div>
 
         <div class="container">
             <p><strong>Pesquise um usuário, banda ou evento!</strong></p>
@@ -53,12 +54,13 @@
                     <label class="form-check-label" for="filtroEvento">Evento</label>
                 </div>
                 <c:if test="${requestScope.erroPesquisa}">
-                    <p style="color: red">Você deve selecionar ao menos um filtro!</p>
+                    <p style="color: #ff0000">Você deve selecionar ao menos um filtro!</p>
                 </c:if>
                 <button type="submit" class="btn btn-primary">Pesquisar</button>
             </form>
         </div>
-        <div class="container" style="margin-top: 40px">
+        <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
+        <div class="container">
             <form
                     class="form"
                     action="${pageContext.servletContext.contextPath}/publicar-post"
@@ -70,12 +72,12 @@
                     <input type="text" required class="form-control" id="textoPost" name="textoPost">
                 </div>
                 <div class="form-group">
-                    <label for="inputImagem">Foto</label>
+                    <label for="inputImagem">Imagem</label>
                     <input type="file" class="form-control-file" id="inputImagem" name="imagem">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Publicar</button>
-                <hr color="grey">
+                <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 50px">
             </form>
         </div>
         <c:if test="${requestScope.posts != null}">
@@ -83,33 +85,33 @@
                 <div class="container">
                     <div style="display: flex; flex-direction: row; justify-content: space-between">
                         <div style="display: flex; flex-direction: row">
-                            <div style="display: flex; flex-direction: row">
+                            <div style="display: flex; flex-direction: row; align-items: center">
                                 <img
                                         src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem != null ? post.usuario.imagem : "default_avatar.png"}"
                                         class="rounded-circle"
                                         alt="Avatar"
                                         height="50"
                                         width="50"
+                                        style="object-fit: cover"
                                 >
-                                <div>
-                                    <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
-                                    <p>${post.dtPublicacao}</p>
-                                    <hr>
+                                <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 15px">
+                                    <p style="height: 5px"><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
+                                    <p style="height: 5px;"><i>${post.dtPublicacao}</i></p>
                                 </div>
                             </div>
                             <c:if test="${not empty post.banda}">
-                                <div style="display: flex; flex-direction: row; margin-left: 20px">
+                                <div style="display: flex; flex-direction: row; align-items: center; margin-left: 20px">
                                     <img
                                             src="${pageContext.request.contextPath}/assets/img/banda/${post.banda.imagem != null ? post.banda.imagem : "default_avatar.png"}"
                                             class="rounded-circle"
                                             alt="Avatar"
                                             height="50"
                                             width="50"
+                                            style="object-fit: cover"
                                     >
-                                    <div>
-                                        <p><strong>${post.banda.nome} (${post.banda.sigla})</strong></p>
-                                        <p>${post.dtPublicacao}</p>
-                                        <hr>
+                                    <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 15px">
+                                        <p style="height: 5px"><strong>${post.banda.nome} (${post.banda.sigla})</strong></p>
+                                        <p style="height: 5px;"><i>${post.dtPublicacao}</i></p>
                                     </div>
                                 </div>
                             </c:if>
@@ -121,18 +123,17 @@
                             </c:if>
                         </div>
                     </div>
-                    <div widht="300">
+                    <div style="margin-top: 20px">
                         <p>${post.textoPost}</p>
-                        <br>
                             <c:if test="${post.imagem != null}">
                                 <img
                                         src="${pageContext.request.contextPath}/assets/img/post/${post.imagem}"
                                         style="width: 100%; height: 75%; object-fit: contain"
                                 >
                             </c:if>
-                        <br><br>
-                        <strong>Curtidas:</strong> ${post.nCurtidas} <strong>Compartilhamento:</strong> ${post.nCompartilhamentos} <strong>Comentários:</strong> ${post.nComentarios}
-                        <br><br>
+                        <p style="margin-top: 20px">
+                            <strong>Curtidas:</strong> ${post.nCurtidas} <strong>Compartilhamento:</strong> ${post.nCompartilhamentos} <strong>Comentários:</strong> ${post.nComentarios}
+                        </p>
                     </div>
                     <div>
                         <c:choose>
@@ -140,6 +141,7 @@
                                 <button
                                         type="button" class="btn btn-primary"
                                         onclick="curtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                                        style="margin-right: 10px"
                                 >Curtir</button>
                             </c:when>
                             <c:otherwise>
@@ -155,6 +157,7 @@
                                         type="button"
                                         class="btn btn-primary"
                                         onclick="compartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                                        style="margin-right: 10px"
                                 >Compartilhar</button>
                             </c:when>
                             <c:otherwise>
@@ -164,43 +167,46 @@
                                         onclick="descompartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
                                 >Não Compartilhar</button>
                             </c:otherwise>
-                        </c:choose> <br><br><br>
+                        </c:choose>
                         <c:if test="${post.comentarios != null}">
                             <c:forEach var="comentario" items="${post.comentarios}">
                                 <div>
-                                    <div style="display: flex; flex-direction: row">
+                                    <div style="display: flex; flex-direction: row; margin-top: 20px; align-items: center">
                                         <img
                                                 src="${pageContext.request.contextPath}/assets/img/usuario/${comentario.usuario.imagem}"
                                                 class="rounded-circle"
                                                 alt="Avatar"
                                                 height="50"
                                                 width="50"
+                                                style="object-fit: cover"
                                         >
-                                        <div>
-                                            <p><strong>${comentario.usuario.pNome} ${comentario.usuario.sNome}</strong></p>
-                                            <p>${comentario.dtPublicacao}</p><br>
+                                        <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 15px">
+                                            <p style="height: 5px"><strong>${comentario.usuario.pNome} ${comentario.usuario.sNome}</strong></p>
+                                            <p style="height: 5px"><i>${comentario.dtPublicacao}</i></p>
                                         </div>
-                                        <div widht="300">
+                                        <div style="margin-left: 20px; justify-self: start">
                                             <p>${comentario.textoComentario}</p>
                                         </div>
                                     </div>
                             </c:forEach>
                         </c:if>
-                        <form
-                                class="form"
-                                action="${pageContext.servletContext.contextPath}/publicar-comentario?idPost=${post.id}"
-                                method="post"
-                        >
-                            <div class="form-group">
-                                <label for="textoComentario"><strong></strong></label>
-                                <input type="text" required class="form-control" id="textoComentario" name="textoComentario">
-                            </div>
+                        <div style="margin-top: 20px">
+                            <form
+                                    class="form"
+                                    action="${pageContext.servletContext.contextPath}/publicar-comentario?idPost=${post.id}"
+                                    method="post"
+                            >
+                                <div class="form-group">
+                                    <label for="textoComentario"><strong></strong></label>
+                                    <input type="text" required class="form-control" id="textoComentario" name="textoComentario">
+                                </div>
 
-                            <div align="right">
-                                <button type="submit" class="btn btn-primary">Comentar</button>
-                            </div>
-                        </form>
-                        <hr color="grey">
+                                <div align="right">
+                                    <button type="submit" class="btn btn-primary">Comentar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 50px">
                     </div>
                 </div>
             </c:forEach>
@@ -210,5 +216,6 @@
         </c:if>
 
         <%@include file="../include/scripts.jsp"%>
+    </div>
     </body>
 </html>

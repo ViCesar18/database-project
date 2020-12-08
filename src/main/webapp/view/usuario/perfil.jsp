@@ -57,6 +57,7 @@
                     alt="Avatar"
                     height="350"
                     width="350"
+                    style="object-fit: cover"
                 >
 
                 <h1>${usuario.getpNome()} ${usuario.getsNome()}</h1>

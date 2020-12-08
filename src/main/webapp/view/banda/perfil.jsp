@@ -63,6 +63,7 @@
                 alt="Avatar"
                 height="350"
                 width="350"
+                style="object-fit: cover"
         >
 
         <h1>${banda.getNome()} (${banda.getSigla()})</h1>
@@ -112,9 +113,9 @@
             <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Deletar banda</a>
         </c:if>
     </div>
-
+    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
     <c:if test="${requestScope.participa}">
-        <div class="container" style="margin-top: 40px">
+        <div class="container">
             <form
                     class="form"
                     action="${pageContext.servletContext.contextPath}/banda/publicar-post?id=${requestScope.banda.id}"
@@ -126,105 +127,110 @@
                     <input type="text" required class="form-control" id="textoPost" name="textoPost">
                 </div>
                 <div class="form-group">
-                    <label for="inputImagem">Foto</label>
+                    <label for="inputImagem">Imagem</label>
                     <input type="file" class="form-control-file" id="inputImagem" name="imagem">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Publicar</button>
-                <hr color="grey">
+                <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 50px">
             </form>
         </div>
     </c:if>
     <c:if test="${requestScope.posts != null}">
     <c:forEach var="post" items="${requestScope.posts}">
-        <div class="container">
-            <div style="display: flex; flex-direction: row; justify-content: space-between">
-                <div style="display: flex; flex-direction: row">
+    <div class="container">
+        <div style="display: flex; flex-direction: row; justify-content: space-between">
+            <div style="display: flex; flex-direction: row">
+                <div style="display: flex; flex-direction: row; align-items: center">
                     <img
                             src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem != null ? post.usuario.imagem : "default_avatar.png"}"
                             class="rounded-circle"
                             alt="Avatar"
                             height="50"
                             width="50"
+                            style="object-fit: cover"
                     >
-                    <div>
-                        <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
-                        <p>${post.dtPublicacao}</p>
-                        <hr>
+                    <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 15px">
+                        <p style="height: 5px"><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
+                        <p style="height: 5px;"><i>${post.dtPublicacao}</i></p>
                     </div>
                 </div>
-                <div>
-                    <c:if test="${usuario.getId() == post.usuarioId}">
-                        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/editar-post?id=${post.id}">Editar post</a>
-                        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/apagar-post?id=${post.id}">Apagar post</a>
-                    </c:if>
-                </div>
-            </div>
-            <div widht="300">
-                <p>${post.textoPost}</p>
-                <br>
-                <c:if test="${post.imagem != null}">
-                    <img
-                            src="${pageContext.request.contextPath}/assets/img/post/${post.imagem}"
-                            style="width: 100%; height: 75%; object-fit: contain"
-                    >
-                </c:if>
-                <br><br>
-                <strong>Curtidas:</strong> ${post.nCurtidas} <strong>Compartilhamento:</strong> ${post.nCompartilhamentos} <strong>Comentários:</strong> ${post.nComentarios}
-                <br><br>
             </div>
             <div>
-                <c:choose>
-                    <c:when test="${!post.curtiu}">
-                        <button
-                                type="button" class="btn btn-primary"
-                                onclick="curtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
-                        >Curtir</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button
-                                type="button" class="btn btn-warning"
-                                onclick="descurtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
-                        >Descurtir</button>
-                    </c:otherwise>
-                </c:choose>
-                <c:choose>
-                    <c:when test="${!post.compartilhou}">
-                        <button
-                                type="button"
-                                class="btn btn-primary"
-                                onclick="compartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
-                        >Compartilhar</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button
-                                type="button"
-                                class="btn btn-warning"
-                                onclick="descompartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
-                        >Não Compartilhar</button>
-                    </c:otherwise>
-                </c:choose> <br><br><br>
-                <c:if test="${post.comentarios != null}">
-                <c:forEach var="comentario" items="${post.comentarios}">
-                <div>
-                    <div style="display: flex; flex-direction: row">
-                        <img
-                                src="${pageContext.request.contextPath}/assets/img/usuario/${comentario.usuario.imagem}"
-                                class="rounded-circle"
-                                alt="Avatar"
-                                height="50"
-                                width="50"
-                        >
-                        <div>
-                            <p><strong>${comentario.usuario.pNome} ${comentario.usuario.sNome}</strong></p>
-                            <p>${comentario.dtPublicacao}</p><br>
-                        </div>
-                        <div widht="300">
-                            <p>${comentario.textoComentario}</p>
-                        </div>
+                <c:if test="${usuario.getId() == post.usuarioId}">
+                    <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/editar-post?id=${post.id}">Editar post</a>
+                    <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/apagar-post?id=${post.id}">Apagar post</a>
+                </c:if>
+            </div>
+        </div>
+        <div style="margin-top: 20px">
+            <p>${post.textoPost}</p>
+            <c:if test="${post.imagem != null}">
+                <img
+                        src="${pageContext.request.contextPath}/assets/img/post/${post.imagem}"
+                        style="width: 100%; height: 75%; object-fit: contain"
+                >
+            </c:if>
+            <p style="margin-top: 20px">
+                <strong>Curtidas:</strong> ${post.nCurtidas} <strong>Compartilhamento:</strong> ${post.nCompartilhamentos} <strong>Comentários:</strong> ${post.nComentarios}
+            </p>
+        </div>
+        <div>
+            <c:choose>
+                <c:when test="${!post.curtiu}">
+                    <button
+                            type="button" class="btn btn-primary"
+                            onclick="curtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                            style="margin-right: 10px"
+                    >Curtir</button>
+                </c:when>
+                <c:otherwise>
+                    <button
+                            type="button" class="btn btn-warning"
+                            onclick="descurtirPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                    >Descurtir</button>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${!post.compartilhou}">
+                    <button
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="compartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                            style="margin-right: 10px"
+                    >Compartilhar</button>
+                </c:when>
+                <c:otherwise>
+                    <button
+                            type="button"
+                            class="btn btn-warning"
+                            onclick="descompartilharPost(this, '${pageContext.servletContext.contextPath}', ${sessionScope.usuario.id}, ${post.id})"
+                    >Não Compartilhar</button>
+                </c:otherwise>
+            </c:choose>
+            <c:if test="${post.comentarios != null}">
+            <c:forEach var="comentario" items="${post.comentarios}">
+            <div>
+                <div style="display: flex; flex-direction: row; margin-top: 20px; align-items: center">
+                    <img
+                            src="${pageContext.request.contextPath}/assets/img/usuario/${comentario.usuario.imagem}"
+                            class="rounded-circle"
+                            alt="Avatar"
+                            height="50"
+                            width="50"
+                            style="object-fit: cover"
+                    >
+                    <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 15px">
+                        <p style="height: 5px"><strong>${comentario.usuario.pNome} ${comentario.usuario.sNome}</strong></p>
+                        <p style="height: 5px"><i>${comentario.dtPublicacao}</i></p>
                     </div>
-                    </c:forEach>
-                    </c:if>
+                    <div style="margin-left: 20px; justify-self: start">
+                        <p>${comentario.textoComentario}</p>
+                    </div>
+                </div>
+                </c:forEach>
+                </c:if>
+                <div style="margin-top: 20px">
                     <form
                             class="form"
                             action="${pageContext.servletContext.contextPath}/publicar-comentario?idPost=${post.id}"
@@ -239,9 +245,10 @@
                             <button type="submit" class="btn btn-primary">Comentar</button>
                         </div>
                     </form>
-                    <hr color="grey">
                 </div>
+                <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 50px">
             </div>
+        </div>
         </c:forEach>
     </c:if>
     <c:if test="${requestScope.posts.size() == 0}">
