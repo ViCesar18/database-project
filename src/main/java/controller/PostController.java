@@ -1,9 +1,6 @@
 package controller;
 
-import dao.DAOFactory;
-import dao.FeedDAO;
-import dao.PostDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import model.Banda;
 import model.Post;
 import model.Usuario;
@@ -37,7 +34,8 @@ import java.util.logging.Logger;
             "/curtir-post",
             "/descurtir-post",
             "/compartilhar-post",
-            "/descompartilhar-post"
+            "/descompartilhar-post",
+            "/banda/publicar-post"
         }
 )
 
@@ -49,6 +47,7 @@ public class PostController extends HttpServlet {
         UsuarioDAO usuarioDAO;
         FeedDAO feedDAO;
         Usuario usuario;
+        BandaDAO bandaDAO;
         String servletPath = request.getServletPath();
         HttpSession session = request.getSession();
         Post post = new Post();
@@ -271,6 +270,99 @@ public class PostController extends HttpServlet {
                 }
 
                 break;
+            }
+            case "/banda/publicar-post":{
+                if(session.getAttribute("usuario") != null) {
+                    // Se fosse um forms simples
+                    // String username = request.getParameter("usuario");
+
+                    // Como existe upload de arquivos (imagem), deve-se usar enctype="multipart/form-data"
+
+                    // Cria a factory para itens de arquivos disk-based
+                    DiskFileItemFactory factory = new DiskFileItemFactory();
+
+                    //  as restrições da factory
+                    factory.setSizeThreshold(MAX_FILE_SIZE);
+
+                    // Seta o diretório usado para armazenar arquivos temporários que são maiores que o tamanho máximo configurado
+                    factory.setRepository(new File("/temp"));
+
+                    // Cria um novo manipulador de upload de arquivos
+                    ServletFileUpload upload = new ServletFileUpload(factory);
+
+                    // Seta a restrição geral do tamanho da requisição
+                    upload.setSizeMax(MAX_FILE_SIZE);
+                    try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                        List<FileItem> items = upload.parseRequest(request);
+                        Iterator<FileItem> iterator = items.iterator();
+                        Post p = new Post();
+                        while(iterator.hasNext()) {
+                            FileItem item = iterator.next();
+
+                            // Processa os campos regulares do formulário
+                            if(item.isFormField()) {
+                                String fieldName = item.getFieldName();
+                                String fieldValue = item.getString();
+
+                                switch(fieldName) {
+                                    case "textoPost":
+                                        p.setTextoPost(fieldValue);
+                                        break;
+                                }
+                            }
+                            else {
+                                // Processa os arquivos upados
+                                String fieldName = item.getFieldName();
+                                String fileName = item.getName();
+
+                                if(fieldName.equals("imagem") && !fileName.isBlank()) {
+                                    // Pega o caminho absoluto da aplicação
+                                    String appPath = request.getServletContext().getRealPath("");
+
+                                    // Grava o arquivo upado na pasta img no caminho absoluto
+                                    String savePath = appPath + File.separator + SAVE_DIR + File.separator + fileName;
+                                    File uploadedFile = new File(savePath);
+                                    item.write(uploadedFile);
+
+                                    p.setImagem(fileName);
+                                }
+                            }
+                        }
+                        Integer bandaId = Integer.parseInt(request.getParameter("id"));
+
+                        usuario = (Usuario) session.getAttribute("usuario");
+                        p.setUsuario(usuario);
+                        p.setUsuarioId(usuario.getId());
+
+                        dao = daoFactory.getPostDAO();
+
+                        dao.create(p);
+                        dao.insertBandPost(p.getId(), bandaId);
+
+                        List<Integer> seguidores = dao.listSeguidoresBandaPost(p.getId(), bandaId);
+                        List<Integer> participantes = dao.listParticipantesBandaPost(p.getId(), bandaId);
+
+                        feedDAO = daoFactory.getFeedDAO();
+                        bandaDAO = daoFactory.getBandaDAO();
+
+                        for (Integer s:seguidores) {
+                            feedDAO.insertPostInFeed(s, p.getId(), -1);
+                        }
+
+                        for (Integer s:participantes) {
+                            if(!bandaDAO.readUsuarioSegueBanda(s, bandaId)) {
+                                feedDAO.insertPostInFeed(s, p.getId(), -1);
+                            }
+                        }
+
+                        response.sendRedirect(request.getContextPath() + "/banda/perfil?id=" + bandaId);
+                    } catch(Exception e){
+                        System.out.println(e);
+                    }
+                    break;
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/");
+                }
             }
         }
     }

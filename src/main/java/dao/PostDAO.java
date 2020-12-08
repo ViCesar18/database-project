@@ -3,6 +3,7 @@ package dao;
 import model.Post;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface PostDAO extends DAO<Post>{
     void insertLikePost(Integer userId, Integer postId) throws SQLException;
@@ -20,4 +21,10 @@ public interface PostDAO extends DAO<Post>{
     Integer numberOfCompartilhamentos(Integer postId) throws SQLException;
 
     Boolean verificarCompartilhamentoPost(Integer userId, Integer postId) throws SQLException;
+
+    void insertBandPost(Integer postId, Integer bandId) throws SQLException;
+
+    List<Integer> listSeguidoresBandaPost(Integer postId, Integer bandId) throws SQLException;
+
+    List<Integer> listParticipantesBandaPost(Integer postId, Integer bandId) throws SQLException;
 }

@@ -3,6 +3,7 @@ package dao;
 import model.Post;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,6 +67,21 @@ public class PgPostDAO implements PostDAO{
             "SELECT COUNT(*) > 0 AS compartilhou " +
             "FROM rede_musical.usuario_compartilha_post " +
             "WHERE usuario_id = ? AND post_id = ?;";
+
+    private static final String INSERT_BAND_POST =
+            "INSERT INTO rede_musical.post_banda " +
+            "(post_id, banda_id) " +
+            "VALUES(?, ?);";
+
+    private static final String LIST_OF_SEGUIDORES_BANDA_POST =
+            "SELECT usb.usuario_id FROM rede_musical.post_banda pb " +
+            "JOIN rede_musical.usuario_segue_banda usb ON usb.banda_id = pb.banda_id " +
+            "WHERE pb.post_id = ? AND pb.banda_id = ?;";
+
+    private static final String LIST_OF_PARTICIPANTES_BANDA_POST =
+            "SELECT updb.usuario_id FROM rede_musical.post_banda pb " +
+            "JOIN rede_musical.usuario_participa_de_banda updb ON updb.banda_id = pb.banda_id " +
+            "WHERE pb.post_id = ? AND pb.banda_id = ?;";
 
     public PgPostDAO(Connection connection) {
         this.connection = connection;
@@ -369,5 +385,78 @@ public class PgPostDAO implements PostDAO{
         }
 
         return compartilhou;
+    }
+
+    @Override
+    public void insertBandPost(Integer postId, Integer bandId) throws SQLException {
+        try(PreparedStatement statement = this.connection.prepareStatement(INSERT_BAND_POST)) {
+            statement.setInt(1, postId);
+            statement.setInt(2, bandId);
+
+            statement.executeUpdate();
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            if(e.getMessage().contains("pk_post_banda")) {
+                throw new SQLException("Erro ao inserir: post(banda) já existe.");
+            }
+            else {
+                throw new SQLException("Erro ao inserir post(banda).");
+            }
+        }
+    }
+
+    @Override
+    public List<Integer> listSeguidoresBandaPost(Integer postId, Integer bandId) throws SQLException {
+        List<Integer> seguidores = new ArrayList<>();
+
+        try(PreparedStatement statement = connection.prepareStatement(LIST_OF_SEGUIDORES_BANDA_POST)) {
+            statement.setInt(1, postId);
+            statement.setInt(2, bandId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                while(result.next()) {
+                    Integer seguidor;
+                    seguidor = result.getInt("usuario_id");
+
+                    seguidores.add(seguidor);
+                }
+            } catch (SQLException e) {
+                throw new SQLException("Erro verificar seguidores de banda.");
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar seguidores de banda.");
+        }
+
+        return seguidores;
+    }
+
+    @Override
+    public List<Integer> listParticipantesBandaPost(Integer postId, Integer bandId) throws SQLException {
+        List<Integer> seguidores = new ArrayList<>();
+
+        try(PreparedStatement statement = connection.prepareStatement(LIST_OF_PARTICIPANTES_BANDA_POST)) {
+            statement.setInt(1, postId);
+            statement.setInt(2, bandId);
+
+            try(ResultSet result = statement.executeQuery()) {
+                while(result.next()) {
+                    Integer seguidor;
+                    seguidor = result.getInt("usuario_id");
+
+                    seguidores.add(seguidor);
+                }
+            } catch (SQLException e) {
+                throw new SQLException("Erro verificar participantes de banda.");
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro verificar participantes de banda.");
+        }
+
+        return seguidores;
     }
 }

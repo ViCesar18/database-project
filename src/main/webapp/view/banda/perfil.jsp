@@ -112,6 +112,29 @@
                 <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/banda/perfil/delete?id=${banda.getId()}">Deletar banda</a>
             </c:if>
         </div>
+
+        <c:if test="${requestScope.participa}">
+            <div class="container" style="margin-top: 40px">
+                <form
+                        class="form"
+                        action="${pageContext.servletContext.contextPath}/banda/publicar-post?id=${requestScope.banda.id}"
+                        method="post"
+                        enctype="multipart/form-data"
+                >
+                    <div class="form-group">
+                        <label for="textoPost"><strong>O que te inspira no dia de hoje?</strong></label>
+                        <input type="text" required class="form-control" id="textoPost" name="textoPost">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputImagem">Foto</label>
+                        <input type="file" class="form-control-file" id="inputImagem" name="imagem">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Publicar</button>
+                    <hr color="grey">
+                </form>
+            </div>
+        </c:if>
 </div>
 
 <%@include file="../include/scripts.jsp"%>
