@@ -1,9 +1,11 @@
 package controller;
 
 import dao.BandaDAO;
-import dao.DAO;
+import dao.ComentarioDAO;
 import dao.DAOFactory;
+import dao.PostDAO;
 import model.Banda;
+import model.Post;
 import model.Usuario;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -327,6 +329,8 @@ public class BandController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
        BandaDAO dao;
+       PostDAO postDAO;
+       ComentarioDAO comentarioDAO;
        Banda banda;
        RequestDispatcher dispatcher;
        HttpSession session = request.getSession();
@@ -360,6 +364,21 @@ public class BandController extends HttpServlet {
                        request.setAttribute("participa", participa);
                        request.setAttribute("seguidores", seguidores);
                        request.setAttribute("participantes", participantes);
+
+                       List<Post> posts = dao.allPostsBanda(idBanda);
+
+                       postDAO = daoFactory.getPostDAO();
+                       comentarioDAO = daoFactory.getComentarioDAO();
+                       for (Post p:posts) {
+                           p.setnCurtidas(postDAO.numberOfLikes(p.getId()));
+                           p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
+                           p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
+                           p.setCurtiu(postDAO.verificarLikePost(idUsuarioLogado, p.getId()));
+                           p.setComentarios(comentarioDAO.allComentsPost(p.getId()));
+                           p.setCompartilhou(postDAO.verificarCompartilhamentoPost(idUsuarioLogado, p.getId()));
+                       }
+
+                       request.setAttribute("posts", posts);
 
                        dispatcher = request.getRequestDispatcher("/view/banda/perfil.jsp");
                        dispatcher.forward(request, response);

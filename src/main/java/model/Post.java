@@ -10,6 +10,7 @@ public class Post {
     private Timestamp dtPublicacao;
     private Integer usuarioId;
     private Usuario usuario;
+    private Banda banda;
     private Boolean curtiu;
     private Boolean compartilhou;
     private Integer nCurtidas;
@@ -96,6 +97,14 @@ public class Post {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Banda getBanda() {
+        return banda;
+    }
+
+    public void setBanda(Banda banda) {
+        this.banda = banda;
     }
 
     public Boolean getCurtiu() {

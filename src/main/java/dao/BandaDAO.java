@@ -1,7 +1,9 @@
 package dao;
 import model.Banda;
+import model.Post;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface BandaDAO extends DAO<Banda> {
     void insertUsuarioSegueBanda(Integer usuarioId, Integer bandaId) throws SQLException;
@@ -12,13 +14,15 @@ public interface BandaDAO extends DAO<Banda> {
 
     Integer readNumeroSeguidores(Integer id) throws SQLException;
 
-    public void insertUsuarioParticipaBanda(Integer idUsuario, Integer idBanda, String instrumento) throws SQLException;
+    void insertUsuarioParticipaBanda(Integer idUsuario, Integer idBanda, String instrumento) throws SQLException;
 
-    public void deleteUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException;
+    void deleteUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException;
 
-    public Boolean readUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException;
+    Boolean readUsuarioParticipaBanda(Integer idUsuario, Integer idBanda) throws SQLException;
 
-    public Integer readNumeroParticipantes(Integer id) throws SQLException;
+    Integer readNumeroParticipantes(Integer id) throws SQLException;
 
-    public Integer getBandaId(String bandaNome, String bandaSigla) throws SQLException;
+    Integer getBandaId(String bandaNome, String bandaSigla) throws SQLException;
+
+    List<Post> allPostsBanda(Integer bandaId) throws SQLException;
 }

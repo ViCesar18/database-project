@@ -1,6 +1,8 @@
 package dao;
 
 import model.Banda;
+import model.Post;
+import model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,6 +87,14 @@ public class PgBandaDAO implements BandaDAO {
             "SELECT id " +
             "FROM rede_musical.banda " +
             "WHERE nome = ? AND SIGLA = ?;";
+
+    private static final String ALL_POSTS_OF_BAND =
+        "SELECT pb.banda_id, p.*, u.pnome, u.snome, u.imagem AS imagem_usuario , b.nome, b.sigla, b.imagem AS imagem_banda FROM rede_musical.post_banda pb " +
+        "JOIN rede_musical.post p ON p.id = pb.post_id " +
+        "JOIN rede_musical.usuario u ON p.usuario_id = u.id " +
+        "JOIN rede_musical.banda b ON b.id = pb.banda_id " +
+        "WHERE pb.banda_id = ?" +
+        "ORDER BY dt_publicacao DESC;";
 
     @Override
     public void create(Banda banda) throws SQLException {
@@ -410,5 +420,47 @@ public class PgBandaDAO implements BandaDAO {
         }
 
         return id;
+    }
+
+    @Override
+    public List<Post> allPostsBanda(Integer bandaId) throws SQLException {
+        List<Post> posts = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(ALL_POSTS_OF_BAND)) {
+            statement.setInt(1, bandaId);
+            try(ResultSet result = statement.executeQuery()){
+                while(result.next()) {
+                    Post post = new Post();
+                    Usuario usuario = new Usuario();
+                    Banda banda = new Banda();
+
+                    post.setId(result.getInt("id"));
+                    post.setTextoPost(result.getString("texto_post"));
+                    post.setImagem(result.getString("imagem"));
+                    post.setDtPublicacao(result.getTimestamp("dt_publicacao"));
+                    post.setUsuarioId(result.getInt("usuario_id"));
+                    usuario.setId(result.getInt("usuario_id"));
+                    usuario.setpNome(result.getString("pnome"));
+                    usuario.setsNome(result.getString("snome"));
+                    usuario.setImagem(result.getString("imagem_usuario"));
+                    post.setUsuario(usuario);
+                    banda.setId(bandaId);
+                    banda.setNome(result.getString("nome"));
+                    banda.setSigla(result.getString("sigla"));
+                    banda.setImagem(result.getString("imagem_banda"));
+                    post.setBanda(banda);
+
+                    posts.add(post);
+                }
+            }catch (SQLException e) {
+                throw new SQLException("Erro listar posts de banda.");
+            }
+        } catch(SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+            throw new SQLException("Erro ao listar posts de banda.");
+        }
+
+        return posts;
     }
 }

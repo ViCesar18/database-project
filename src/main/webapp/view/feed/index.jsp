@@ -83,18 +83,36 @@
                 <div class="container">
                     <div style="display: flex; flex-direction: row; justify-content: space-between">
                         <div style="display: flex; flex-direction: row">
-                            <img
-                                    src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem}"
-                                    class="rounded-circle"
-                                    alt="Avatar"
-                                    height="50"
-                                    width="50"
-                            >
-                            <div>
-                                <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
-                                <p>${post.dtPublicacao}</p>
-                                <hr>
+                            <div style="display: flex; flex-direction: row">
+                                <img
+                                        src="${pageContext.request.contextPath}/assets/img/usuario/${post.usuario.imagem != null ? post.usuario.imagem : "default_avatar.png"}"
+                                        class="rounded-circle"
+                                        alt="Avatar"
+                                        height="50"
+                                        width="50"
+                                >
+                                <div>
+                                    <p><strong>${post.usuario.pNome} ${post.usuario.sNome}</strong></p>
+                                    <p>${post.dtPublicacao}</p>
+                                    <hr>
+                                </div>
                             </div>
+                            <c:if test="${not empty post.banda}">
+                                <div style="display: flex; flex-direction: row; margin-left: 20px">
+                                    <img
+                                            src="${pageContext.request.contextPath}/assets/img/banda/${post.banda.imagem != null ? post.banda.imagem : "default_avatar.png"}"
+                                            class="rounded-circle"
+                                            alt="Avatar"
+                                            height="50"
+                                            width="50"
+                                    >
+                                    <div>
+                                        <p><strong>${post.banda.nome} (${post.banda.sigla})</strong></p>
+                                        <p>${post.dtPublicacao}</p>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </c:if>
                         </div>
                         <div>
                             <c:if test="${usuario.getId() == post.usuarioId}">
@@ -190,6 +208,7 @@
         <c:if test="${requestScope.posts.size() == 0}">
             <h1 class="container" align="center">Seu feed ainda não têm posts. Faça um agora mesmo!</h1>
         </c:if>
+
         <%@include file="../include/scripts.jsp"%>
     </body>
 </html>

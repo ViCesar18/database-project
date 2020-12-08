@@ -1,5 +1,6 @@
 package dao;
 
+import model.Banda;
 import model.Feed;
 import model.Post;
 import model.Usuario;
@@ -31,10 +32,12 @@ public class PgFeedDAO implements FeedDAO{
             "WHERE usuario_id = ?";
 
     private static final String ALL_POSTS_OF_FEED =
-            "SELECT p.*, u.pnome, u.snome, u.imagem AS imagem_usuario " +
+            "SELECT p.*, u.pnome, u.snome, u.imagem AS imagem_usuario , pb.banda_id, b.nome, b.sigla, b.imagem AS imagem_banda \n" +
             "FROM rede_musical.feed_possui_posts fpp " +
             "JOIN rede_musical.post p ON fpp.post_id = p.id " +
             "JOIN rede_musical.usuario u ON p.usuario_id = u.id " +
+            "LEFT JOIN rede_musical.post_banda pb ON p.id = pb.post_id " +
+            "LEFT JOIN rede_musical.banda b ON pb.banda_id = b.id " +
             "WHERE fpp.feed_id = ? " +
             "ORDER BY dt_publicacao DESC;";
 
@@ -130,10 +133,19 @@ public class PgFeedDAO implements FeedDAO{
                         usuario.setImagem(result.getString("imagem_usuario"));
                         post.setUsuario(usuario);
 
+                        if(result.getString("nome") != null) {
+                            Banda banda = new Banda();
+                            banda.setId(result.getInt("banda_id"));
+                            banda.setNome(result.getString("nome"));
+                            banda.setSigla(result.getString("sigla"));
+                            banda.setImagem(result.getString("imagem_banda"));
+                            post.setBanda(banda);
+                        }
+
                         posts.add(post);
                     }
                 }catch (SQLException e) {
-                    throw new SQLException("Erro verificar posts.");
+                    throw new SQLException("Erro listar posts.");
                 }
         } catch(SQLException e) {
             Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
