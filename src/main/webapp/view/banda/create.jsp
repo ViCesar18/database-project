@@ -21,8 +21,6 @@
         >
         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/feed">Página Inicial</a>
 
-        <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/feed">Página Inicial</a>
-
         <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/usuario/meu-perfil">Seu Perfil</a>
 
         <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
