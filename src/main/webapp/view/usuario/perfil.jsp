@@ -64,7 +64,7 @@
             </div>
 
             <div>
-                <p><strong>Seguidores:</strong> ${seguidores} <ta <strong>Seguindo:</strong> ${seguindo}</p>
+                <p><strong>Seguidores:</strong> ${seguidores} <strong>Seguindo:</strong> ${seguindo}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
                 <p><strong>Sexo:</strong> ${usuario.getSexo()}</p>
                 <p><strong>Data de Nascimento:</strong> ${date}</p>
