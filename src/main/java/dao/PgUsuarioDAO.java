@@ -14,19 +14,19 @@ public class PgUsuarioDAO implements UsuarioDAO {
 
     private static final String CREATE_QUERY =
             "INSERT INTO rede_musical.usuario" +
-            "(username, email, senha, pnome, snome, dt_nascimento, imagem, cidade, estado, pais, " +
+            "(username, email, senha, pnome, snome, sexo, dt_nascimento, imagem, cidade, estado, pais, " +
             "banda_favorita, musica_favorita, genero_favorito, instrumento_favorito) " +
-            "VALUES(?, ?, md5(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            "VALUES(?, ?, md5(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     private static final String READ_QUERY =
-            "SELECT username, email, pnome, snome, dt_nascimento, imagem, cidade, " +
+            "SELECT username, email, pnome, snome, sexo, dt_nascimento, imagem, cidade, " +
             "estado, pais, banda_favorita, musica_favorita, genero_favorito, instrumento_favorito " +
             "FROM rede_musical.usuario " +
             "WHERE id = ?;";
 
     private static final String UPDATE_PERSONAL_DATA_QUERY =
             "UPDATE rede_musical.usuario " +
-            "SET username = ?, email = ?, pnome = ?, snome = ?, dt_nascimento = ?, cidade = ?, estado = ?, pais = ? " +
+            "SET username = ?, email = ?, pnome = ?, snome = ?, sexo = ?, dt_nascimento = ?, cidade = ?, estado = ?, pais = ? " +
             "WHERE id = ?;";
 
     private static final String UPDATE_MUSICAL_DATA_QUERY =
@@ -110,15 +110,16 @@ public class PgUsuarioDAO implements UsuarioDAO {
             statement.setString(3, usuario.getSenha());
             statement.setString(4, usuario.getpNome());
             statement.setString(5, usuario.getsNome());
-            statement.setDate(6, usuario.getDtNascimento());
-            statement.setString(7, usuario.getImagem());
-            statement.setString(8, usuario.getCidade());
-            statement.setString(9, usuario.getEstado());
-            statement.setString(10, usuario.getPais());
-            statement.setString(11, usuario.getBandaFavorita());
-            statement.setString(12, usuario.getMusicaFavorita());
-            statement.setString(13, usuario.getGeneroFavorito());
-            statement.setString(14, usuario.getInstrumentoFavorito());
+            statement.setString(6, usuario.getSexo());
+            statement.setDate(7, usuario.getDtNascimento());
+            statement.setString(8, usuario.getImagem());
+            statement.setString(9, usuario.getCidade());
+            statement.setString(10, usuario.getEstado());
+            statement.setString(11, usuario.getPais());
+            statement.setString(12, usuario.getBandaFavorita());
+            statement.setString(13, usuario.getMusicaFavorita());
+            statement.setString(14, usuario.getGeneroFavorito());
+            statement.setString(15, usuario.getInstrumentoFavorito());
 
             statement.executeUpdate();
 
@@ -162,6 +163,7 @@ public class PgUsuarioDAO implements UsuarioDAO {
                     usuario.setEmail(result.getString("email"));
                     usuario.setpNome(result.getString("pnome"));
                     usuario.setsNome(result.getString("snome"));
+                    usuario.setSexo(result.getString("sexo"));
                     usuario.setDtNascimento(result.getDate("dt_nascimento"));
                     usuario.setImagem(result.getString("imagem"));
                     usuario.setCidade(result.getString("cidade"));
@@ -229,11 +231,12 @@ public class PgUsuarioDAO implements UsuarioDAO {
                 statement.setString(2, usuario.getEmail());
                 statement.setString(3, usuario.getpNome());
                 statement.setString(4, usuario.getsNome());
-                statement.setDate(5, usuario.getDtNascimento());
-                statement.setString(6, usuario.getCidade());
-                statement.setString(7, usuario.getEstado());
-                statement.setString(8, usuario.getPais());
-                statement.setInt(9, usuario.getId());
+                statement.setString(5, usuario.getSexo());
+                statement.setDate(6, usuario.getDtNascimento());
+                statement.setString(7, usuario.getCidade());
+                statement.setString(8, usuario.getEstado());
+                statement.setString(9, usuario.getPais());
+                statement.setInt(10, usuario.getId());
             }
 
             if(statement.executeUpdate() < 1) {

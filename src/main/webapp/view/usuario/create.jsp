@@ -30,52 +30,68 @@
                 enctype="multipart/form-data"
             >
                 <div class="form-group">
-                    <label for="inputUsername">Usuário</label>
+                    <label for="inputUsername"><b>Usuário</b></label>
                     <input type="text" required class="form-control" id="inputUsername" name="usuario">
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail">E-mail</label>
+                    <label for="inputEmail"><b>E-mail</b></label>
                     <input type="email" required class="form-control" id="inputEmail" name="email">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputSenha">Senha</label>
+                    <label for="inputSenha"><b>Senha</b></label>
                     <input type="password" required class="form-control password-input" id="inputSenha" name="senha">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputConfirmacaoSenha">Confirmação de Senha</label>
+                    <label for="inputConfirmacaoSenha"><b>Confirmação de Senha</b></label>
                     <input type="password" required class="form-control password-confirm" id="inputConfirmacaoSenha" name="confirmacaoSenha">
                     <p class="help-block" style="color: red"></p>
                 </div>
 
                 <div class="form-group">
-                    <label for="inputNome">Nome</label>
+                    <label for="inputNome"><b>Nome</b></label>
                     <input type="text" required class="form-control" id="inputNome" name="nome">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputSobrenome">Sobrenome</label>
+                    <label for="inputSobrenome"><b>Sobrenome</b></label>
                     <input type="text" required class="form-control" id="inputSobrenome" name="sobrenome">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputDtNascimento">Data de Nascimento</label>
+                    <b>Sexo</b>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexoMasculino" id="inputMasculino">
+                        <label class="form-check-label" for="inputMasculino">
+                            Masculino
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexoFemenino" id="inputFemenino">
+                        <label class="form-check-label" for="inputFemenino">
+                            Femenino
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputDtNascimento"><b>Data de Nascimento</b></label>
                     <input type="date" required class="form-control" id="inputDtNascimento" name="nascimento">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputImagem">Foto de Perfil</label>
+                    <label for="inputImagem"><b>Foto de Perfil</b></label>
                     <input type="file" class="form-control-file" id="inputImagem" name="imagem">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputCidade">Cidade</label>
+                    <label for="inputCidade"><b>Cidade</b></label>
                     <input type="text" required class="form-control" id="inputCidade" name="cidade">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputEstado">Estado</label>
+                    <label for="inputEstado"><b>Estado</b></label>
                     <select class="form-control" required id="inputEstado" name="estado">
                         <option>AC</option>
                         <option>AL</option>
@@ -108,12 +124,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputPais">País</label>
+                    <label for="inputPais"><b>País</b></label>
                     <input type="text" required readonly class="form-control" id="inputPais" value="Brasil" name="pais">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputBanda">Banda Favorita</label>
+                    <label for="inputBanda"><b>Banda Favorita</b></label>
                     <select class="form-control" required id="inputBanda" name="banda">
                         <c:choose>
                             <c:when test="${not empty requestScope.bandas}">
@@ -129,12 +145,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputMusica">Música Favorita</label>
+                    <label for="inputMusica"><b>Música Favorita</b></label>
                     <input type="text" required class="form-control" id="inputMusica" name="musica">
                 </div>
 
                 <div class="form-group">
-                    <label for="inputGenero">Gênero Favorito</label>
+                    <label for="inputGenero"><b>Gênero Favorito</b></label>
                     <select class="form-control" required id="inputGenero" name="genero">
                         <option>Alternativo</option>
                         <option>Axé</option>
@@ -215,7 +231,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputInstrumento">Instrumento Favorito</label>
+                    <label for="inputInstrumento"><b>Instrumento Favorito</b></label>
                     <input type="text" required class="form-control" id="inputInstrumento" name="instrumento">
                 </div>
 

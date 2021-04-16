@@ -60,6 +60,22 @@
                 </div>
 
                 <div class="form-group">
+                    Sexo
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexo" id="inputMasculino" value="M" ${usuario.getSexo().equals("M") ? "checked" : null}>
+                        <label class="form-check-label" for="inputMasculino">
+                            Masculino
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sexo" id="inputFemenino" value="F" ${usuario.getSexo().equals("F") ? "checked" : null}>
+                        <label class="form-check-label" for="inputFemenino">
+                            Femenino
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="inputDtNascimento">Data de Nascimento</label>
                     <input type="date" required class="form-control" id="inputDtNascimento" name="nascimento" value="${usuario.getDtNascimento()}">
                 </div>

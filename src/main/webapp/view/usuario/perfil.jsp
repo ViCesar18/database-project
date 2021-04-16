@@ -66,6 +66,7 @@
             <div>
                 <p><strong>Seguidores:</strong> ${seguidores} <ta <strong>Seguindo:</strong> ${seguindo}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
+                <p><strong>Sexo:</strong> ${usuario.getSexo()}</p>
                 <p><strong>Data de Nascimento:</strong> ${date}</p>
                 <p><strong>Email:</strong> ${usuario.getEmail()}</p>
                 <p><strong>Local:</strong> ${usuario.getCidade()}/${usuario.getEstado()}/${usuario.getPais()}</p>

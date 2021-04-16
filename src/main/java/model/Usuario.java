@@ -9,6 +9,7 @@ public class Usuario {
     private String senha;
     private String pNome;
     private String sNome;
+    private String sexo;
     private Date dtNascimento;
     private String imagem;
     private String bandaFavorita;
@@ -65,6 +66,14 @@ public class Usuario {
 
     public void setsNome(String sNome) {
         this.sNome = sNome;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public Date getDtNascimento() {

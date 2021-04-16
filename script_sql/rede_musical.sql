@@ -7,6 +7,7 @@ CREATE TABLE rede_musical.usuario (
 	senha VARCHAR(100) NOT NULL,
 	pnome VARCHAR(30) NOT NULL,
 	snome VARCHAR(30) NOT NULL,
+	sexo VARCHAR(1) NOT NULL,
 	dt_nascimento DATE,
 	imagem TEXT,
 	cidade VARCHAR(50),
@@ -200,4 +201,4 @@ CREATE TABLE rede_musical.usuario_comparece_em_evento (
 		ON DELETE CASCADE
 );
 
-INSERT INTO rede_musical.usuario VALUES(-1, 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', '2000-04-18', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum')
+INSERT INTO rede_musical.usuario VALUES(-1, 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'M', '2000-04-18', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum', 'nenhum')
