@@ -106,8 +106,96 @@ def gerar_usuarios(connection, cursor):
         ('Juliano','M')
     )
 
-    sobrenome = ['Santos', 'Reis', 'Barusso', 'Kaster']
+    bandas = (
+        ('QNN', 'Queen', 'Rock'),
+        ('RHCP', 'Red Hot', 'Rock'),
+        ('BDP', 'Barões', 'Forró'),
+        ('A7X', 'Avenged Sevenfold', 'Rock'),
+        ('TB', 'The Beatles', 'Rock'),
+        ('LP', 'Linkin Park', 'Rock'),
+        ('JEM', 'Jorge e Matheus', 'Sertanejo'),
+        ('PJ', 'Pearl Jam', 'Rock')
+    )
 
+    generos = [ 
+        'Alternativo',
+        'Axé',
+        'Blues',
+        'Bolero',
+        'Bossa Nova',
+        'Brega'
+        'Clássico',
+        'Country',
+        'Cuarteto',
+        'Cumbia',
+        'Dance',
+        'Disco',
+        'Eletrônica',
+        'Emocore',
+        'Fado',
+        'Folk',
+        'Forró',
+        'Funk',
+        'Funk Internacional',
+        'Gospel/Religioso',
+        'Grunge',
+        'Guarânia',
+        'Gótico',
+        'Hard Rock',
+        'Hardcore',
+        'Heavy Metal',
+        'Hip Hop/Rap',
+        'House',
+        'Indie',
+        'Industrial',
+        'Infantil',
+        'Instrumental',
+        'J-Pop/J-Rock',
+        'Jazz',
+        'Jovem Guarda',
+        'K-Pop/K-Rock',
+        'MPB',
+        'Mambo',
+        'Marchas/Hinos',
+        'Mariachi',
+        'Merengue',
+        'Música Andina',
+        'New Age',
+        'New Wave',
+        'Pagode',
+        'Pop',
+        'Pop Rock',
+        'Post-Rock',
+        'Power-Pop',
+        'Psicodelia',
+        'Punk Rock',
+        'R&B',
+        'Ranchera',
+        'Reggae',
+        'Reggaeton',
+        'Regional',
+        'Rock',
+        'Rock Progressivo',
+        'Rockabilly',
+        'Romântico',
+        'Salsa',
+        'Samba',
+        'Samba Enredo',
+        'Sertanejo',
+        'Ska',
+        'Soft Rock',
+        'Soul',
+        'Surf Music',
+        'Tango',
+        'Tecnopop',
+        'Trova',
+        'Velha Guarda',
+        'World Music',
+        'Zamba',
+        'Zouk'
+    ]
+
+    sobrenome = ['Santos', 'Reis', 'Barusso', 'Kaster']
     email = ['gmail.com', 'outlook.com', 'uel.br']
     instrumentos = ['Violão', 'Piano', 'Teclado', 'Bateria', 'Guitarra', 'Baixo', 'Flauta']
 
@@ -127,17 +215,18 @@ def gerar_usuarios(connection, cursor):
                 'cidade' + str(i), 
                 'estado' + str(i), 
                 'pais' + str(i), 
-                'banda' + str(i), 
+                bandas[random.randint(0, len(bandas) - 1)][1],
                 'musica' + str(i), 
-                'genero' + str(i), 
+                generos[random.randint(0, len(generos) - 1)], 
                 instrumentos[random.randint(0, 5)]
-                )
+        )
         
         cursor.execute(query, insert)
         cursor.execute(query_feed, [i])
         i+=1
 
     seguir_usuarios(cursor)
+    criar_seguir_bandas(cursor, bandas)
 
     connection.commit()
     count = cursor.rowcount 
@@ -168,3 +257,44 @@ def seguir_usuarios(cursor):
 
         i+=1
         usuarios_seguidos.clear()
+
+def criar_seguir_bandas(cursor, bandas):
+    query_criar_banda = """ INSERT INTO rede_musical.banda (ID, SIGLA, NOME, GENERO_MUSICAL, USUARIO_ID) VALUES (%s, %s, %s, %s, %s) """
+    query_seguir_banda = """ INSERT INTO rede_musical.usuario_segue_banda (USUARIO_ID, BANDA_ID) VALUES (%s, %s) """
+
+    i = 0
+    while (i < len(bandas)):
+        insert_criar_banda = (
+            i,
+            bandas[i][0],
+            bandas[i][1],
+            bandas[i][2],
+            random.randint(0,98),
+        )
+
+        cursor.execute(query_criar_banda, insert_criar_banda)
+        i+=1
+    
+    count = cursor.rowcount 
+    print(count, "Inserção de Bandas finalizada")
+
+    bandas_seguidas = []
+    i = 0
+    while (i < 98):
+        numero_bandas_seguindo = random.randint(0, len(bandas))
+
+        for j in range (numero_bandas_seguindo):
+            id_banda_seguida = random.randint(0, len(bandas) - 1)
+
+            if id_banda_seguida not in bandas_seguidas:
+                bandas_seguidas.append(id_banda_seguida)
+
+                inser_seguir_banda = (
+                    i,
+                    id_banda_seguida
+                )
+
+                cursor.execute(query_seguir_banda, inser_seguir_banda)
+        
+        i+=1
+        bandas_seguidas.clear()

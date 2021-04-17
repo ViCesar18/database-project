@@ -8,7 +8,7 @@ def gerar_posts(connection, cursor):
     query_feed = """ INSERT INTO rede_musical.feed_possui_posts (FEED_ID, POST_ID, ID_USUARIO_COMPARTILHOU) VALUES (%s,%s, -1)"""
     query_seguidores = """ SELECT usuario_id FROM rede_musical.usuario_segue_usuario WHERE usuario_id_seguido = %s """
 
-    while (i < 99):
+    while (i < 98):
         id_usuario = random.randint(1, 98)
 
         insert = (

@@ -2,13 +2,14 @@ import psycopg2
 from delete_script import limpar_tabelas
 from script_usuario import gerar_usuarios
 from script_post import gerar_posts
+from script_evento import gerar_eventos
 from script_interacoes import *
 
 connection = psycopg2.connect(user="postgres",
-                                    password="8468",
-                                    host="localhost",
-                                    port="5432",
-                                    database="uel")
+                                  password="3323",
+                                  host="localhost",
+                                  port="5432",
+                                  database="UEL")
 
 cursor = connection.cursor()
 
@@ -24,6 +25,8 @@ try:
     gerar_comentarios(connection, cursor)
 
     gerar_compartilhamentos(connection, cursor)
+
+    gerar_eventos(connection, cursor)
 
 except (Exception, psycopg2.Error) as error:
         print("Falha ao inserir", error)
