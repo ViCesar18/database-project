@@ -1,14 +1,8 @@
 import psycopg2
 import random
 
-i = 0
-try:
-    connection = psycopg2.connect(user="postgres",
-                                  password="3323",
-                                  host="localhost",
-                                  port="5432",
-                                  database="UEL")
-    cursor = connection.cursor()
+def gerar_posts(connection, cursor):
+    i = 0
 
     query = """ INSERT INTO rede_musical.post (ID, TEXTO_POST, DT_PUBLICACAO, USUARIO_ID) VALUES (%s,%s,%s,%s)"""
     query_feed = """ INSERT INTO rede_musical.feed_possui_posts (FEED_ID, POST_ID, ID_USUARIO_COMPARTILHOU) VALUES (%s,%s, -1)"""
@@ -53,13 +47,4 @@ try:
 
     connection.commit()
     count = cursor.rowcount 
-    print(count, "Inserção finalizada")
-
-except (Exception, psycopg2.Error) as error:
-    print("Falha ao inserir", error)
-
-finally:
-    if connection:
-        cursor.close()
-        connection.close()
-        print("Conexão com PostgreSQL fechada")
+    print(count, "Inserção de Posts finalizada")

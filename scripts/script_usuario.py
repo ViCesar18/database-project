@@ -141,7 +141,7 @@ def gerar_usuarios(connection, cursor):
 
     connection.commit()
     count = cursor.rowcount 
-    print(count, "Inserção finalizada")
+    print(count, "Inserção de Usuários finalizada")
 
 
 def seguir_usuarios(cursor):
