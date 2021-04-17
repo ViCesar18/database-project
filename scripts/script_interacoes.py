@@ -17,10 +17,12 @@ def gerar_likes(connection, cursor):
 
         total_likes = random.randint(0, len(lista_posts))
 
-        for j in range(total_likes):
-            post_like = random.randint(0, len(lista_posts) - 1)
+        for _ in range(total_likes):
+            post_like = random.choice(lista_posts)
 
-            cursor.execute(inserir_like_query, (i, lista_posts.pop(post_like)))
+            cursor.execute(inserir_like_query, (i, post_like))
+
+            lista_posts.remove(post_like)
 
     connection.commit()
     count = cursor.rowcount 
@@ -43,17 +45,19 @@ def gerar_comentarios(connection, cursor):
 
         total_comentarios = random.randint(0, len(lista_posts))
 
-        for j in range(total_comentarios):
-            post_comentario = random.randint(0, len(lista_posts) - 1)
+        for _ in range(total_comentarios):
+            post_comentario = random.choice(lista_posts)
 
             comentario = (
                 '2021-01-01',
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a neque dolor. Nam et interdum.',
                 i,
-                lista_posts.pop(post_comentario)
+                post_comentario
             )
 
             cursor.execute(inserir_comentario_query, comentario)
+
+            lista_posts.remove(post_comentario)
 
     connection.commit()
     count = cursor.rowcount 
@@ -76,10 +80,12 @@ def gerar_compartilhamentos(connection, cursor):
 
         total_compartilhamentos = random.randint(0, len(lista_posts))
 
-        for j in range(total_compartilhamentos):
-            post_compartilhamento = random.randint(0, len(lista_posts) - 1)
+        for _ in range(total_compartilhamentos):
+            post_compartilhamento = random.choice(lista_posts)
 
-            cursor.execute(inserir_compartilhamento_query, (i, lista_posts.pop(post_compartilhamento)))
+            cursor.execute(inserir_compartilhamento_query, (i, post_compartilhamento))
+
+            lista_posts.remove(post_compartilhamento)
 
     connection.commit()
     count = cursor.rowcount 
