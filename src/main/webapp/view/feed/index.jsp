@@ -168,8 +168,8 @@
                                 >Não Compartilhar</button>
                             </c:otherwise>
                         </c:choose>
-                        <c:if test="${post.comentarios != null}">
-                            <c:forEach var="comentario" items="${post.comentarios}">
+                        <c:if test="${post.fiveFirstComentarios != null}">
+                            <c:forEach var="comentario" items="${post.fiveFirstComentarios}">
                                 <div>
                                     <div style="display: flex; flex-direction: row; margin-top: 20px; align-items: center">
                                         <img
@@ -189,6 +189,11 @@
                                         </div>
                                     </div>
                             </c:forEach>
+                        </c:if>
+                        <c:if test="${post.nComentarios > 5}">
+                            <div align="center">
+                                <a class="btn btn-success" href="${pageContext.servletContext.contextPath}/feed/post?id=${post.id}">Ver todos os comentarios</a>
+                            </div>
                         </c:if>
                         <div style="margin-top: 20px">
                             <form

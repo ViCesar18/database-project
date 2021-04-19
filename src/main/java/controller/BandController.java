@@ -374,7 +374,7 @@ public class BandController extends HttpServlet {
                            p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
                            p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
                            p.setCurtiu(postDAO.verificarLikePost(idUsuarioLogado, p.getId()));
-                           p.setComentarios(comentarioDAO.allComentsPost(p.getId()));
+                           p.setComentarios(comentarioDAO.allComentsPost(p.getId(), p.getDtPublicacao()));
                            p.setCompartilhou(postDAO.verificarCompartilhamentoPost(idUsuarioLogado, p.getId()));
                        }
 

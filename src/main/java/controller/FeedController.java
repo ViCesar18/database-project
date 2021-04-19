@@ -20,6 +20,7 @@ import java.util.List;
         name = "FeedController",
         urlPatterns = {
                 "/feed",
+                "/feed/post"
         }
 )
 public class FeedController extends HttpServlet {
@@ -39,6 +40,7 @@ public class FeedController extends HttpServlet {
         FeedDAO dao;
         ComentarioDAO comentarioDAO;
         PostDAO postDAO;
+        UsuarioDAO usuarioDAO;
 
         switch(request.getServletPath()) {
             case "/feed": {
@@ -56,7 +58,8 @@ public class FeedController extends HttpServlet {
                             p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
                             p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
                             p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
-                            p.setComentarios(comentarioDAO.allComentsPost(p.getId()));
+                            p.setComentarios(comentarioDAO.allComentsPost(p.getId(), p.getDtPublicacao()));
+                            p.setFiveFirstComentarios(comentarioDAO.fiveFirstCommentsPost(p.getId(), p.getDtPublicacao()));
                             p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
                         }
 
@@ -71,6 +74,37 @@ public class FeedController extends HttpServlet {
                 }
                 else {
                     response.sendRedirect(request.getContextPath() + "/");
+                }
+            }
+            case "/feed/post":{
+                try(DAOFactory daoFactory = DAOFactory.getInstance()){
+                    comentarioDAO = daoFactory.getComentarioDAO();
+                    usuarioDAO = daoFactory.getUsuarioDAO();
+                    postDAO = daoFactory.getPostDAO();
+
+                   Usuario u = (Usuario) session.getAttribute("usuario");
+                   int idPost = Integer.parseInt(request.getParameter("id"));
+
+                   Post p = postDAO.read(idPost);
+
+                   Usuario usuarioCriador = usuarioDAO.read(p.getUsuarioId());
+                    p.setnCurtidas(postDAO.numberOfLikes(p.getId()));
+                    p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
+                    p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
+                    p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
+                    p.setComentarios(comentarioDAO.allComentsPost(p.getId(), p.getDtPublicacao()));
+                    p.setFiveFirstComentarios(comentarioDAO.fiveFirstCommentsPost(p.getId(), p.getDtPublicacao()));
+                    p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
+                    p.setUsuario(usuarioCriador);
+
+                   request.setAttribute("post", p);
+
+                   //System.out.println(post.getUsuario().getpNome());
+
+                   dispatcher = request.getRequestDispatcher("/view/feed/post.jsp");
+                   dispatcher.forward(request, response);
+                }catch (Exception e){
+                    System.out.println(e);
                 }
             }
         }

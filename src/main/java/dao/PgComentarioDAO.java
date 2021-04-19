@@ -36,7 +36,16 @@ public class PgComentarioDAO implements ComentarioDAO {
             "SELECT c.*, u.pnome, u.snome, u.imagem " +
             "FROM rede_musical.comentario c " +
             "JOIN rede_musical.usuario u ON c.usuario_id = u.id " +
-            "WHERE post_id = ?;";
+            "WHERE post_id = ? " +
+            "ORDER BY c.dt_publicacao DESC;";
+
+    private static final String FIVE_FIRST_COMMENTS_OF_POSTS =
+            "SELECT c.*, u.pnome, u.snome, u.imagem " +
+            "FROM rede_musical.comentario c " +
+            "JOIN rede_musical.usuario u ON c.usuario_id = u.id " +
+            "WHERE post_id = ?" +
+            "ORDER BY c.dt_publicacao DESC " +
+            "LIMIT 5;";
 
     private static final String NUMBER_OF_COMMENTS =
             "SELECT COUNT(*) AS n_comentarios " +
@@ -161,13 +170,13 @@ public class PgComentarioDAO implements ComentarioDAO {
     }
 
     @Override
-    public List<Comentario> allComentsPost(Integer postId) throws SQLException {
+    public List<Comentario> allComentsPost(Integer postId, Timestamp data) throws SQLException {
         List<Comentario> comentarios = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(ALL_COMMENTS_OF_POST)){
-             statement.setInt(1, postId);
+            statement.setInt(1, postId);
 
-             try (ResultSet result = statement.executeQuery()) {
+            try (ResultSet result = statement.executeQuery()) {
                 while(result.next()) {
                     Comentario comentario = new Comentario();
                     Usuario usuario = new Usuario();
@@ -185,13 +194,47 @@ public class PgComentarioDAO implements ComentarioDAO {
 
                     comentarios.add(comentario);
                 }
-        } catch(SQLException e) {
-            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+            } catch(SQLException e) {
+                Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
 
-            throw new SQLException("Erro ao listar comentários.");
+                throw new SQLException("Erro ao listar comentários.");
+            }
+
+            return comentarios;
         }
+    }
 
-        return comentarios;
+    public List<Comentario> fiveFirstCommentsPost(Integer postId, Timestamp data) throws SQLException {
+        List<Comentario> comentarios = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(FIVE_FIRST_COMMENTS_OF_POSTS)){
+            statement.setInt(1, postId);
+
+            try (ResultSet result = statement.executeQuery()) {
+                while(result.next()) {
+                    Comentario comentario = new Comentario();
+                    Usuario usuario = new Usuario();
+
+                    comentario.setId(result.getInt("id"));
+                    comentario.setDtPublicacao(result.getTimestamp("dt_publicacao"));
+                    comentario.setTextoComentario(result.getString("texto_comentario"));
+                    comentario.setPostId(result.getInt("post_id"));
+                    comentario.setUsuarioId(result.getInt("usuario_id"));
+                    usuario.setId(result.getInt("usuario_id"));
+                    usuario.setpNome(result.getString("pnome"));
+                    usuario.setsNome(result.getString("snome"));
+                    usuario.setImagem(result.getString("imagem"));
+                    comentario.setUsuario(usuario);
+
+                    comentarios.add(comentario);
+                }
+            } catch(SQLException e) {
+                Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+
+                throw new SQLException("Erro ao listar comentários.");
+            }
+
+            return comentarios;
         }
     }
 

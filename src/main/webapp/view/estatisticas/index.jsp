@@ -15,18 +15,17 @@
 </head>
 <body>
 <div class="container">
-    <div style="display: flex; flex-direction: row">
+    <div style="margin: 10px">
         <img
                 src="${pageContext.request.contextPath}/assets/img/logo.png"
                 class="rounded-circle"
                 alt="Avatar"
         >
-        <div>
-            <h1>Estatisticas</h1>
-        </div>
     </div>
+    <h1> Estatisticas</h1>
     <canvas id="myChart"></canvas>
 </div>
+
 
 <script>
     const labels = [

@@ -16,6 +16,8 @@ public class Post {
     private Integer nCurtidas;
     private Integer nCompartilhamentos;
     private Integer nComentarios;
+    private List<Comentario> comentarios;
+    private List<Comentario> fiveFirstComentarios;
 
     public Integer getnCompartilhamentos() {
         return nCompartilhamentos;
@@ -49,7 +51,11 @@ public class Post {
         this.comentarios = comentarios;
     }
 
-    private List<Comentario> comentarios;
+    public List<Comentario> getFiveFirstComentarios(){return fiveFirstComentarios;}
+
+    public void setFiveFirstComentarios (List<Comentario> comentarios){
+        this.fiveFirstComentarios = comentarios;
+    }
 
     public Integer getId() {
         return id;
