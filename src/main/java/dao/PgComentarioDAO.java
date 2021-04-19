@@ -1,7 +1,6 @@
 package dao;
 
 import model.Comentario;
-import model.Post;
 import model.Usuario;
 
 import java.sql.*;

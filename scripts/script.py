@@ -6,10 +6,10 @@ from script_evento import gerar_eventos
 from script_interacoes import *
 
 connection = psycopg2.connect(user="postgres",
-                                  password="3323",
+                                  password="8468",
                                   host="localhost",
                                   port="5432",
-                                  database="UEL")
+                                  database="uel")
 
 cursor = connection.cursor()
 
@@ -18,15 +18,15 @@ try:
 
     gerar_usuarios(connection, cursor)
 
-    #gerar_posts(connection, cursor)
+    gerar_posts(connection, cursor)
 
-    #gerar_likes(connection, cursor)
+    gerar_likes(connection, cursor)
 
-    #gerar_comentarios(connection, cursor)
+    gerar_comentarios(connection, cursor)
 
-    #gerar_compartilhamentos(connection, cursor)
+    gerar_compartilhamentos(connection, cursor)
 
-    #gerar_eventos(connection, cursor)
+    gerar_eventos(connection, cursor)
 
 except (Exception, psycopg2.Error) as error:
         print("Falha ao inserir", error)
