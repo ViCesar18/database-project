@@ -202,6 +202,7 @@ def gerar_usuarios(connection, cursor):
 
     query = """ INSERT INTO rede_musical.usuario (ID, USERNAME, EMAIL, SENHA, PNOME, SNOME, SEXO, DT_NASCIMENTO, CIDADE, ESTADO, PAIS, BANDA_FAVORITA, MUSICA_FAVORITA, GENERO_FAVORITO, INSTRUMENTO_FAVORITO) VALUES (%s,%s,%s,md5(%s),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
     query_feed = """ INSERT INTO rede_musical.feed (USUARIO_ID) VALUES (%s)"""
+    query_instrumentos_usuario = """ INSERT INTO rede_musical.usuario_instrumentos (USUARIO_ID, INSTRUMENTO) VALUES (%s, %s) """
 
     while (i < NUMERO_USUARIOS):
         index_nome = i % 100
@@ -226,8 +227,32 @@ def gerar_usuarios(connection, cursor):
         
         cursor.execute(query, insert)
         cursor.execute(query_feed, [i])
-        i+=1
 
+        instrumentos_favoritos = []
+
+        instrumento_favorito = instrumentos[random.randint(0, 5)]
+        while instrumento_favorito in instrumentos_favoritos:
+            instrumento_favorito = instrumentos[random.randint(0, 5)]
+        instrumentos_favoritos.append(instrumento_favorito)
+
+        insert_instrumentos = (
+            i,
+            instrumento_favorito,
+        )
+        cursor.execute(query_instrumentos_usuario, insert_instrumentos)
+
+        instrumento_favorito = instrumentos[random.randint(0, 5)]
+        while instrumento_favorito in instrumentos_favoritos:
+            instrumento_favorito = instrumentos[random.randint(0, 5)]
+
+        insert_instrumentos = (
+            i,
+            instrumento_favorito,
+        )
+        cursor.execute(query_instrumentos_usuario, insert_instrumentos)
+
+        i+=1
+    
     seguir_usuarios(cursor)
     criar_seguir_bandas(cursor, bandas)
 
