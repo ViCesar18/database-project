@@ -115,7 +115,7 @@
         <div>
             <div style="display: flex; flex-direction: row; margin-top: 20px; align-items: center">
                 <img
-                        src="${pageContext.request.contextPath}/assets/img/usuario/${comentario.usuario.imagem}"
+                        src="${pageContext.request.contextPath}/assets/img/usuario/${comentario.usuario.imagem != null ? comentario.usuario.imagem : "default_avatar.png"}"
                         class="rounded-circle"
                         alt="Avatar"
                         height="50"
