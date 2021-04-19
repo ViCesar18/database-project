@@ -1,5 +1,6 @@
 import psycopg2
 import random
+from constants import NUMERO_USUARIOS
 
 def gerar_eventos (connection, cursor):
     query_criar_evento = """ INSERT INTO rede_musical.evento (ID, NOME_LOCAL, RUA, NUMERO, BAIRRO, CEP, DATA_INICIO, DATA_TERMINO, NOME, DESCRICAO, NUMERO_PARTICIPANTES, CATEGORIA, USUARIO_ID) VALUES (%s, %s, %s, %s, %s, %s,'2021-04-17 22:00:00', '2021-04-18 05:00:00',%s, %s, %s, %s, %s) """
@@ -22,7 +23,7 @@ def gerar_eventos (connection, cursor):
             "Vai ter um(a) " + categoria + " no " + local + ". Esperamos todos vocês lá!",
             0,
             categoria,
-            random.randint(0, 98)
+            random.randint(0, NUMERO_USUARIOS - 1)
         )
         
         cursor.execute(query_criar_evento, insert_evento)

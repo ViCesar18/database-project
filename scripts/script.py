@@ -6,10 +6,10 @@ from script_evento import gerar_eventos
 from script_interacoes import *
 
 connection = psycopg2.connect(user="postgres",
-                                  password="3323",
+                                  password="8468",
                                   host="localhost",
                                   port="5432",
-                                  database="UEL")
+                                  database="uel")
 
 cursor = connection.cursor()
 

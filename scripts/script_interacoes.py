@@ -1,12 +1,13 @@
 import psycopg2
 import random
+from constants import NUMERO_USUARIOS
 
 def gerar_likes(connection, cursor):
     buscar_posts_query = """SELECT post_id FROM rede_musical.feed_possui_posts fpp WHERE feed_id = %s"""
 
     inserir_like_query = """INSERT INTO rede_musical.usuario_da_like_em_post (usuario_id , post_id) VALUES (%s, %s)"""
 
-    for i in range(100):
+    for i in range(NUMERO_USUARIOS + 1):
         cursor.execute(buscar_posts_query, [i])
         row = cursor.fetchone()
 
@@ -34,7 +35,7 @@ def gerar_comentarios(connection, cursor):
 
     inserir_comentario_query = """INSERT INTO rede_musical.comentario (dt_publicacao, texto_comentario, usuario_id, post_id) VALUES (%s, %s, %s, %s)"""
 
-    for i in range(100):
+    for i in range(NUMERO_USUARIOS + 1):
         cursor.execute(buscar_posts_query, [i])
         row = cursor.fetchone()
 
@@ -69,7 +70,7 @@ def gerar_compartilhamentos(connection, cursor):
 
     inserir_compartilhamento_query = """INSERT INTO rede_musical.usuario_compartilha_post (usuario_id , post_id) VALUES (%s, %s)"""
 
-    for i in range(100):
+    for i in range(NUMERO_USUARIOS + 1):
         cursor.execute(buscar_posts_query, [i])
         row = cursor.fetchone()
 

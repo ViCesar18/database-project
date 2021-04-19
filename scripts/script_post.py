@@ -1,5 +1,6 @@
 import psycopg2
 import random
+from constants import NUMERO_USUARIOS
 
 def gerar_posts(connection, cursor):
     i = 0
@@ -9,7 +10,7 @@ def gerar_posts(connection, cursor):
     query_seguidores = """ SELECT usuario_id FROM rede_musical.usuario_segue_usuario WHERE usuario_id_seguido = %s """
 
     while (i < 98):
-        id_usuario = random.randint(1, 98)
+        id_usuario = random.randint(1, NUMERO_USUARIOS - 1)
 
         insert = (
                 i, 

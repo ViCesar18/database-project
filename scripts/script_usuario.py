@@ -1,5 +1,6 @@
 import psycopg2
 import random
+from constants import NUMERO_USUARIOS
 
 def gerar_usuarios(connection, cursor):
     i = 0
@@ -202,15 +203,17 @@ def gerar_usuarios(connection, cursor):
     query = """ INSERT INTO rede_musical.usuario (ID, USERNAME, EMAIL, SENHA, PNOME, SNOME, SEXO, DT_NASCIMENTO, CIDADE, ESTADO, PAIS, BANDA_FAVORITA, MUSICA_FAVORITA, GENERO_FAVORITO, INSTRUMENTO_FAVORITO) VALUES (%s,%s,%s,md5(%s),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
     query_feed = """ INSERT INTO rede_musical.feed (USUARIO_ID) VALUES (%s)"""
 
-    while (i < 99):
+    while (i < NUMERO_USUARIOS):
+        index_nome = i % 100
+
         insert = (
                 i, 
                 'username' + str(i), 
-                str(nomes[i][0]).lower().replace(' ','_') + '@' + email[random.randint(0, 2)], 
+                str(nomes[index_nome][0]).lower().replace(' ','_') + str(i) + '@' + email[random.randint(0, 2)], 
                 'a', 
-                str(nomes[i][0]), 
+                str(nomes[index_nome][0]), 
                 sobrenome[random.randint(0,3)],
-                str(nomes[i][1]),
+                str(nomes[index_nome][1]),
                 '2021-01-01',
                 'cidade' + str(i), 
                 'estado' + str(i), 
@@ -239,11 +242,11 @@ def seguir_usuarios(cursor):
     i=0
 
     usuarios_seguidos = []
-    while (i < 98):
-        numero_seguindo = random.randint(0,98)
+    while (i < NUMERO_USUARIOS - 1):
+        numero_seguindo = random.randint(0, NUMERO_USUARIOS - 1)
 
         for j in range (numero_seguindo):
-            id_seguido = random.randint(0,98)
+            id_seguido = random.randint(0, NUMERO_USUARIOS - 1)
 
             if id_seguido != i and id_seguido not in usuarios_seguidos:
                 usuarios_seguidos.append(id_seguido)
@@ -269,7 +272,7 @@ def criar_seguir_bandas(cursor, bandas):
             bandas[i][0],
             bandas[i][1],
             bandas[i][2],
-            random.randint(0,98),
+            random.randint(0, NUMERO_USUARIOS - 1),
         )
 
         cursor.execute(query_criar_banda, insert_criar_banda)
@@ -280,7 +283,7 @@ def criar_seguir_bandas(cursor, bandas):
 
     bandas_seguidas = []
     i = 0
-    while (i < 98):
+    while (i < NUMERO_USUARIOS - 1):
         numero_bandas_seguindo = random.randint(0, len(bandas))
 
         for j in range (numero_bandas_seguindo):
