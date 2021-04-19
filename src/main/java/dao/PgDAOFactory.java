@@ -26,4 +26,6 @@ public class PgDAOFactory extends DAOFactory{
     public PostDAO getPostDAO() { return new PgPostDAO(this.connection);}
 
     public ComentarioDAO getComentarioDAO(){ return new PgComentarioDAO(this.connection);}
+
+    public EstatisticasDAO getEstatisticasDAO(){ return new PgEstatisticasDAO(this.connection); }
 }
