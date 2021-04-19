@@ -169,7 +169,7 @@ public class PgComentarioDAO implements ComentarioDAO {
     }
 
     @Override
-    public List<Comentario> allComentsPost(Integer postId, Timestamp data) throws SQLException {
+    public List<Comentario> allComentsPost(Integer postId) throws SQLException {
         List<Comentario> comentarios = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(ALL_COMMENTS_OF_POST)){
@@ -203,7 +203,7 @@ public class PgComentarioDAO implements ComentarioDAO {
         }
     }
 
-    public List<Comentario> fiveFirstCommentsPost(Integer postId, Timestamp data) throws SQLException {
+    public List<Comentario> fiveFirstCommentsPost(Integer postId) throws SQLException {
         List<Comentario> comentarios = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(FIVE_FIRST_COMMENTS_OF_POSTS)){

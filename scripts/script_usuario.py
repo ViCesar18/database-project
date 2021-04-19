@@ -3,7 +3,7 @@ import random
 from constants import NUMERO_USUARIOS
 
 def gerar_usuarios(connection, cursor):
-    i = 0
+    i = 1
     nomes = (
         ('Laura','F'),
         ('Maria Clara','F'),
@@ -200,15 +200,14 @@ def gerar_usuarios(connection, cursor):
     email = ['gmail.com', 'outlook.com', 'uel.br']
     instrumentos = ['Violão', 'Piano', 'Teclado', 'Bateria', 'Guitarra', 'Baixo', 'Flauta']
 
-    query = """ INSERT INTO rede_musical.usuario (ID, USERNAME, EMAIL, SENHA, PNOME, SNOME, SEXO, DT_NASCIMENTO, CIDADE, ESTADO, PAIS, BANDA_FAVORITA, MUSICA_FAVORITA, GENERO_FAVORITO, INSTRUMENTO_FAVORITO) VALUES (%s,%s,%s,md5(%s),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+    query = """ INSERT INTO rede_musical.usuario (USERNAME, EMAIL, SENHA, PNOME, SNOME, SEXO, DT_NASCIMENTO, CIDADE, ESTADO, PAIS, BANDA_FAVORITA, MUSICA_FAVORITA, GENERO_FAVORITO, INSTRUMENTO_FAVORITO) VALUES (%s,%s,md5(%s),%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
     query_feed = """ INSERT INTO rede_musical.feed (USUARIO_ID) VALUES (%s)"""
     query_instrumentos_usuario = """ INSERT INTO rede_musical.usuario_instrumentos (USUARIO_ID, INSTRUMENTO) VALUES (%s, %s) """
 
-    while (i < NUMERO_USUARIOS):
+    while i <= NUMERO_USUARIOS:
         index_nome = i % 100
 
         insert = (
-                i, 
                 'username' + str(i), 
                 str(nomes[index_nome][0]).lower().replace(' ','_') + str(i) + '@' + email[random.randint(0, 2)], 
                 'a', 
@@ -264,14 +263,14 @@ def gerar_usuarios(connection, cursor):
 def seguir_usuarios(cursor):
     query_seguir = """ INSERT INTO rede_musical.usuario_segue_usuario (USUARIO_ID, USUARIO_ID_SEGUIDO) VALUES (%s,%s)"""
 
-    i=0
+    i=1
 
     usuarios_seguidos = []
-    while (i < NUMERO_USUARIOS - 1):
-        numero_seguindo = random.randint(0, NUMERO_USUARIOS - 1)
+    while (i <= NUMERO_USUARIOS):
+        numero_seguindo = random.randint(0, NUMERO_USUARIOS)
 
         for j in range (numero_seguindo):
-            id_seguido = random.randint(0, NUMERO_USUARIOS - 1)
+            id_seguido = random.randint(1, NUMERO_USUARIOS)
 
             if id_seguido != i and id_seguido not in usuarios_seguidos:
                 usuarios_seguidos.append(id_seguido)
@@ -287,17 +286,16 @@ def seguir_usuarios(cursor):
         usuarios_seguidos.clear()
 
 def criar_seguir_bandas(cursor, bandas):
-    query_criar_banda = """ INSERT INTO rede_musical.banda (ID, SIGLA, NOME, GENERO_MUSICAL, USUARIO_ID) VALUES (%s, %s, %s, %s, %s) """
+    query_criar_banda = """ INSERT INTO rede_musical.banda (SIGLA, NOME, GENERO_MUSICAL, USUARIO_ID) VALUES (%s, %s, %s, %s) """
     query_seguir_banda = """ INSERT INTO rede_musical.usuario_segue_banda (USUARIO_ID, BANDA_ID) VALUES (%s, %s) """
 
     i = 0
     while (i < len(bandas)):
         insert_criar_banda = (
-            i,
             bandas[i][0],
             bandas[i][1],
             bandas[i][2],
-            random.randint(0, NUMERO_USUARIOS - 1),
+            random.randint(0, NUMERO_USUARIOS),
         )
 
         cursor.execute(query_criar_banda, insert_criar_banda)
@@ -307,12 +305,12 @@ def criar_seguir_bandas(cursor, bandas):
     print(count, "Inserção de Bandas finalizada")
 
     bandas_seguidas = []
-    i = 0
-    while (i < NUMERO_USUARIOS - 1):
+    i = 1
+    while (i <= NUMERO_USUARIOS):
         numero_bandas_seguindo = random.randint(0, len(bandas))
 
         for j in range (numero_bandas_seguindo):
-            id_banda_seguida = random.randint(0, len(bandas) - 1)
+            id_banda_seguida = random.randint(1, len(bandas))
 
             if id_banda_seguida not in bandas_seguidas:
                 bandas_seguidas.append(id_banda_seguida)

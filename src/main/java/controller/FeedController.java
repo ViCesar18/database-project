@@ -58,8 +58,8 @@ public class FeedController extends HttpServlet {
                             p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
                             p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
                             p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
-                            p.setComentarios(comentarioDAO.allComentsPost(p.getId(), p.getDtPublicacao()));
-                            p.setFiveFirstComentarios(comentarioDAO.fiveFirstCommentsPost(p.getId(), p.getDtPublicacao()));
+                            p.setComentarios(comentarioDAO.allComentsPost(p.getId()));
+                            p.setFiveFirstComentarios(comentarioDAO.fiveFirstCommentsPost(p.getId()));
                             p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
                         }
 
@@ -92,14 +92,12 @@ public class FeedController extends HttpServlet {
                     p.setnComentarios(comentarioDAO.numberOfComents(p.getId()));
                     p.setnCompartilhamentos(postDAO.numberOfCompartilhamentos(p.getId()));
                     p.setCurtiu(postDAO.verificarLikePost(u.getId(), p.getId()));
-                    p.setComentarios(comentarioDAO.allComentsPost(p.getId(), p.getDtPublicacao()));
-                    p.setFiveFirstComentarios(comentarioDAO.fiveFirstCommentsPost(p.getId(), p.getDtPublicacao()));
+                    p.setComentarios(comentarioDAO.allComentsPost(p.getId()));
+                    p.setFiveFirstComentarios(comentarioDAO.fiveFirstCommentsPost(p.getId()));
                     p.setCompartilhou(postDAO.verificarCompartilhamentoPost(u.getId(), p.getId()));
                     p.setUsuario(usuarioCriador);
 
                    request.setAttribute("post", p);
-
-                   //System.out.println(post.getUsuario().getpNome());
 
                    dispatcher = request.getRequestDispatcher("/view/feed/post.jsp");
                    dispatcher.forward(request, response);

@@ -3,17 +3,16 @@ import random
 from constants import NUMERO_USUARIOS
 
 def gerar_eventos (connection, cursor):
-    query_criar_evento = """ INSERT INTO rede_musical.evento (ID, NOME_LOCAL, RUA, NUMERO, BAIRRO, CEP, DATA_INICIO, DATA_TERMINO, NOME, DESCRICAO, NUMERO_PARTICIPANTES, CATEGORIA, USUARIO_ID) VALUES (%s, %s, %s, %s, %s, %s,'2021-04-17 22:00:00', '2021-04-18 05:00:00',%s, %s, %s, %s, %s) """
+    query_criar_evento = """ INSERT INTO rede_musical.evento (NOME_LOCAL, RUA, NUMERO, BAIRRO, CEP, DATA_INICIO, DATA_TERMINO, NOME, DESCRICAO, NUMERO_PARTICIPANTES, CATEGORIA, USUARIO_ID) VALUES (%s, %s, %s, %s, %s,'2021-04-17 22:00:00', '2021-04-18 05:00:00',%s, %s, %s, %s, %s) """
     
     locais  = ['Morumbi', 'Maracanã', 'Vitrola Bar', 'Beco', 'Valentino', 'Moringão']
     categorias = ['Show', 'Concerto', 'Festival']
     i = 0
-    while (i < 21):
+    while i < 21:
         local = locais[random.randint(0, len(locais) - 1)]
         categoria = categorias[random.randint(0, len(categorias) - 1)]
         
         insert_evento = (
-            i, 
             local,
             "Rua do " + local,
             "Numero do " + local,
@@ -39,12 +38,12 @@ def comparecer_evento (connect, cursor):
     query_usuario_comparece_evento = """ INSERT INTO rede_musical.usuario_comparece_em_evento (USUARIO_ID, EVENTO_ID) VALUES (%s, %s) """
 
     eventos_comparecidos = []
-    i = 0
-    while(i < 98):
+    i = 1
+    while(i <= NUMERO_USUARIOS):
         numero_eventos_comparecidos = random.randint(0, 20)
 
         for j in range (numero_eventos_comparecidos):
-            id_evento_comparecido = random.randint(0, 20)
+            id_evento_comparecido = random.randint(1, 20)
 
             if id_evento_comparecido not in eventos_comparecidos:
                 eventos_comparecidos.append(id_evento_comparecido)
