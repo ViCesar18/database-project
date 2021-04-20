@@ -127,7 +127,7 @@ public class UserController extends HttpServlet {
                                     break;
 
                                 case "nascimento":
-                                    java.util.Date dtNascimento = new SimpleDateFormat("yyyy-mm-dd").parse(fieldValue);
+                                    java.util.Date dtNascimento = new SimpleDateFormat("yyyy-MM-dd").parse(fieldValue);
                                     usuario.setDtNascimento(new Date(dtNascimento.getTime()));
                                     break;
 
@@ -235,7 +235,7 @@ public class UserController extends HttpServlet {
                     usuario.setsNome(request.getParameter("sobrenome"));
                     usuario.setSexo(request.getParameter("inputSexo"));
 
-                    java.util.Date dtNascimento = new SimpleDateFormat("yyyy-mm-dd").parse(request.getParameter("nascimento"));
+                    java.util.Date dtNascimento = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("nascimento"));
                     usuario.setDtNascimento(new Date(dtNascimento.getTime()));
 
                     usuario.setCidade(request.getParameter("cidade"));
