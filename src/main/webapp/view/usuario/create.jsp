@@ -62,15 +62,15 @@
                 <div class="form-group">
                     <b>Sexo</b>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sexoMasculino" id="inputMasculino">
+                        <input class="form-check-input" type="radio" name="inputSexo" id="inputMasculino" value="M" checked>
                         <label class="form-check-label" for="inputMasculino">
                             Masculino
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sexoFemenino" id="inputFemenino">
-                        <label class="form-check-label" for="inputFemenino">
-                            Femenino
+                        <input class="form-check-input" type="radio" name="inputSexo" id="inputFeminino" value="F">
+                        <label class="form-check-label" for="inputFeminino">
+                            Feminino
                         </label>
                     </div>
                 </div>

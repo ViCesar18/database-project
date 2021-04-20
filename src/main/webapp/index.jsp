@@ -44,7 +44,7 @@
                 <a class="btn btn-success" href="${pageContext.servletContext.contextPath}/usuario/create">Criar Conta</a>
 
                 <div align="right">
-                    <a class="btn btn-success" href="${pageContext.servletContext.contextPath}/estatisticas">Estatísticas</a>
+                    <a class="btn btn-danger" href="${pageContext.servletContext.contextPath}/estatisticas">Estatísticas</a>
                 </div>
             </form>
         </div>

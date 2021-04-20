@@ -62,13 +62,13 @@
                 <div class="form-group">
                     Sexo
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sexo" id="inputMasculino" value="M" ${usuario.getSexo().equals("M") ? "checked" : null}>
+                        <input class="form-check-input" type="radio" name="inputSexo" id="inputMasculino" value="M" ${usuario.getSexo().equals("M") ? "checked" : null}>
                         <label class="form-check-label" for="inputMasculino">
                             Masculino
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sexo" id="inputFemenino" value="F" ${usuario.getSexo().equals("F") ? "checked" : null}>
+                        <input class="form-check-input" type="radio" name="inputSexo" id="inputFemenino" value="F" ${usuario.getSexo().equals("F") ? "checked" : null}>
                         <label class="form-check-label" for="inputFemenino">
                             Femenino
                         </label>
