@@ -238,9 +238,41 @@
     <div style="align-self: center; height: 10%; width: 30%">
         <canvas id="graficoIdadesFrequentes"></canvas>
     </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>A geração mais ativa na rede é a <b style="color: rgb(255, 99, 132)">${geracaoMaisAtiva == 0 ? 'Geração Boomer' : ''} ${geracaoMaisAtiva == 1 ? 'Geração X' : ''} ${geracaoMaisAtiva == 2 ? 'Geração Millennials' : ''} ${geracaoMaisAtiva == 3 ? 'Geração Z' : ''}</b></h1>
+        <p>Com <b style="color: rgb(255, 99, 132)">${geracaoMaisAtiva == 0 ? geracaoBoomer : ''} ${geracaoMaisAtiva == 1 ? geracaoX : ''} ${geracaoMaisAtiva == 2 ? geracaoMillennials : ''} ${geracaoMaisAtiva == 3 ? geracaoZ : ''} %</b> de atividade na rede</p>
+    </div>
+
+    <div style="display: flex; justify-content: center">
+        <table class="table" style="width: 50%">
+            <thead>
+            <tr>
+                <th scope="col">Geração</th>
+                <th scope="col">%</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Geração Boomer</td>
+                <td>${geracaoBoomer}</td>
+            </tr>
+            <tr>
+                <td>Geração X</td>
+                <td>${geracaoX}</td>
+            </tr>
+            <tr>
+                <td>Geração Millennials</td>
+                <td>${geracaoMillennials}</td>
+            </tr>
+            <tr>
+                <td>Geração Z</td>
+                <td>${geracaoZ}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
