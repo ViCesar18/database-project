@@ -1,5 +1,6 @@
 import psycopg2
 import random
+from datetime import datetime
 from constants import NUMERO_USUARIOS
 
 def gerar_usuarios(connection, cursor):
@@ -207,6 +208,11 @@ def gerar_usuarios(connection, cursor):
     while i <= NUMERO_USUARIOS:
         index_nome = i % 100
 
+        d1 = datetime.strptime('1930-01-01', '%Y-%m-%d')
+        d2 = datetime.strptime('2006-01-01', '%Y-%m-%d')
+
+        random_date = d1 + (d2 - d1) * random.random()
+
         insert = (
                 'username' + str(i), 
                 str(nomes[index_nome][0]).lower().replace(' ','_') + str(i) + '@' + email[random.randint(0, 2)], 
@@ -214,7 +220,7 @@ def gerar_usuarios(connection, cursor):
                 str(nomes[index_nome][0]), 
                 sobrenome[random.randint(0,3)],
                 str(nomes[index_nome][1]),
-                '2021-01-01',
+                str(random_date.year) + '-' + str(random_date.month) + '-' + str(random_date.day), 
                 'cidade' + str(i), 
                 'estado' + str(i), 
                 'pais' + str(i), 
