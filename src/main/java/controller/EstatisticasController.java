@@ -4,6 +4,7 @@ import dao.ComentarioDAO;
 import dao.DAOFactory;
 import dao.EstatisticasDAO;
 import dao.PostDAO;
+import dao.UsuarioDAO;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,24 +40,23 @@ public class EstatisticasController extends HttpServlet {
         switch (request.getServletPath()) {
             case "/estatisticas": {
                 try (DAOFactory daoFactory = DAOFactory.getInstance()) {
-                    Usuario u = (Usuario) session.getAttribute("usuario");
-
                     EstatisticasDAO estatisticasDAO = daoFactory.getEstatisticasDAO();
                     PostDAO postDAO = daoFactory.getPostDAO();
                     ComentarioDAO comentarioDAO = daoFactory.getComentarioDAO();
+                    UsuarioDAO usuarioDAO = daoFactory.getUsuarioDAO();
+
+                    Usuario usuario;
 
                     // Post com mais likes
                     Post postLikes = postDAO
                         .read(estatisticasDAO.buscarPostMaiorNumeroLikes().getId());
+                    usuario = usuarioDAO.read(postLikes.getUsuarioId());
 
                     postLikes.setnCurtidas(postDAO.numberOfLikes(postLikes.getId()));
                     postLikes.setnComentarios(comentarioDAO.numberOfComents(postLikes.getId()));
                     postLikes.setnCompartilhamentos(
                         postDAO.numberOfCompartilhamentos(postLikes.getId()));
-                    postLikes.setCurtiu(postDAO.verificarLikePost(u.getId(), postLikes.getId()));
-                    postLikes.setComentarios(comentarioDAO.allComentsPost(postLikes.getId()));
-                    postLikes.setCompartilhou(postDAO
-                        .verificarCompartilhamentoPost(postLikes.getId(), postLikes.getId()));
+                    postLikes.setUsuario(usuario);
 
                     session.setAttribute("postLikes", postLikes);
 
@@ -64,25 +64,21 @@ public class EstatisticasController extends HttpServlet {
                     Post postComentarios = postDAO
                         .read(estatisticasDAO.buscarPostMaiorNumeroComentarios()
                             .getId());
+                    usuario = usuarioDAO.read(postComentarios.getUsuarioId());
 
                     postComentarios.setnCurtidas(postDAO.numberOfLikes(postComentarios.getId()));
                     postComentarios
                         .setnComentarios(comentarioDAO.numberOfComents(postComentarios.getId()));
                     postComentarios.setnCompartilhamentos(
                         postDAO.numberOfCompartilhamentos(postComentarios.getId()));
-                    postComentarios
-                        .setCurtiu(postDAO.verificarLikePost(u.getId(), postComentarios.getId()));
-                    postComentarios
-                        .setComentarios(comentarioDAO.allComentsPost(postComentarios.getId()));
-                    postComentarios.setCompartilhou(postDAO
-                        .verificarCompartilhamentoPost(postComentarios.getId(),
-                            postComentarios.getId()));
+                    postComentarios.setUsuario(usuario);
 
                     session.setAttribute("postComentarios", postComentarios);
 
                     // Post com mais compartilhamentos
                     Post postCompartilhamentos = postDAO
                         .read(estatisticasDAO.buscarPostMaiorNumeroCompartilhamentos().getId());
+                    usuario = usuarioDAO.read(postCompartilhamentos.getUsuarioId());
 
                     postCompartilhamentos
                         .setnCurtidas(postDAO.numberOfLikes(postCompartilhamentos.getId()));
@@ -91,15 +87,7 @@ public class EstatisticasController extends HttpServlet {
                             comentarioDAO.numberOfComents(postCompartilhamentos.getId()));
                     postCompartilhamentos.setnCompartilhamentos(
                         postDAO.numberOfCompartilhamentos(postCompartilhamentos.getId()));
-                    postCompartilhamentos
-                        .setCurtiu(
-                            postDAO.verificarLikePost(u.getId(), postCompartilhamentos.getId()));
-                    postCompartilhamentos
-                        .setComentarios(
-                            comentarioDAO.allComentsPost(postCompartilhamentos.getId()));
-                    postCompartilhamentos.setCompartilhou(postDAO
-                        .verificarCompartilhamentoPost(postCompartilhamentos.getId(),
-                            postCompartilhamentos.getId()));
+                    postCompartilhamentos.setUsuario(usuario);
 
                     session.setAttribute("postCompartilhamentos", postCompartilhamentos);
 
