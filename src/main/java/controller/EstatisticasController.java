@@ -117,11 +117,42 @@ public class EstatisticasController extends HttpServlet {
                     // Gênero favorito (homens)
                     List<Estatisticas> generosPreferidosHomens = estatisticasDAO.buscarGeneroPreferidoHomens();
 
+                    session.setAttribute("generosPreferidosHomens", generosPreferidosHomens);
+
+                    // Frequência Gerações
                     Estatisticas frequenciaGeracoes = estatisticasDAO.buscarFrequenciaGeracoes();
 
                     session.setAttribute("frequenciaGeracoes", frequenciaGeracoes);
 
-                    session.setAttribute("generosPreferidosHomens", generosPreferidosHomens);
+                    // Geração Mais Ativa
+                    Integer geracaoBoomer = estatisticasDAO.buscarGeracoesMaisAtivas(60, 91);
+                    Integer geracaoX = estatisticasDAO.buscarGeracoesMaisAtivas(40, 60);
+                    Integer geracaoMillennials = estatisticasDAO.buscarGeracoesMaisAtivas(25, 40);
+                    Integer geracaoZ = estatisticasDAO.buscarGeracoesMaisAtivas(10, 25);
+                    Integer total = geracaoBoomer + geracaoX + geracaoMillennials + geracaoZ;
+                    Integer geracaoMaisAtiva = -1;
+
+                    if(geracaoBoomer > geracaoX && geracaoBoomer > geracaoMillennials && geracaoBoomer > geracaoZ) {
+                        geracaoMaisAtiva = 0;
+                    } else if(geracaoX > geracaoBoomer && geracaoX > geracaoMillennials && geracaoX > geracaoZ) {
+                        geracaoMaisAtiva = 1;
+                    } else if(geracaoMillennials > geracaoBoomer && geracaoMillennials > geracaoX && geracaoMillennials > geracaoZ) {
+                        geracaoMaisAtiva = 2;
+                    }
+                    else if(geracaoZ > geracaoBoomer && geracaoZ > geracaoX && geracaoZ > geracaoMillennials) {
+                        geracaoMaisAtiva = 3;
+                    }
+
+                    geracaoBoomer = (100 * geracaoBoomer) / total;
+                    geracaoX = (100 * geracaoX) / total;
+                    geracaoMillennials = (100 * geracaoMillennials) / total;
+                    geracaoZ = (100 * geracaoZ) / total;
+
+                    request.setAttribute("geracaoMaisAtiva", geracaoMaisAtiva);
+                    request.setAttribute("geracaoBoomer", geracaoBoomer);
+                    request.setAttribute("geracaoX", geracaoX);
+                    request.setAttribute("geracaoMillennials", geracaoMillennials);
+                    request.setAttribute("geracaoZ", geracaoZ);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
