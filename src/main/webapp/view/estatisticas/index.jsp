@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <head>
@@ -235,6 +236,17 @@
     </div>
 </div>
 
+<hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
+
+<div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
+    <h1>Idades mais frequentes</h1>
+</div>
+<div style="text-align: center; alignment: center; height: 10%; width: 30%;">
+    <canvas id="graficoIdadesFrequentes"></canvas>
+</div>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -463,6 +475,46 @@
       document.getElementById('graficoGeneroHomens'),
       configGeneroHomens
   );
+</script>
+
+<script>
+    const labelsIdadesFrequentes = [
+        'Geracao Boomer',
+        'Geracao X',
+        'Geracao Millennials',
+        'Geracao Z'
+    ];
+
+    const dataIdadesFrequentes = {
+        labels: labelsIdadesFrequentes,
+        datasets: [{
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54,162,235)',
+                'rgb(111,212,56)',
+                'rgb(235,211,54)',
+            ],
+            data: [
+                ${frequenciaGeracoes.geracao_boomer_count},
+                ${frequenciaGeracoes.geracao_x_count},
+                ${frequenciaGeracoes.geracao_millennials_count},
+                ${frequenciaGeracoes.geracao_z_count},
+            ],
+        }]
+    };
+
+    const configIdadesFrequentes = {
+        type: 'doughnut',
+        data: dataIdadesFrequentes,
+        options: {
+            responsive:true
+        }
+    };
+
+    graficoIdadesFrequentes = new Chart(
+        document.getElementById('graficoIdadesFrequentes'),
+        configIdadesFrequentes
+    );
 </script>
 
 <%@include file="../include/scripts.jsp"%>

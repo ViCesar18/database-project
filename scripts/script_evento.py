@@ -22,7 +22,7 @@ def gerar_eventos (connection, cursor):
             "Vai ter um(a) " + categoria + " no " + local + ". Esperamos todos vocês lá!",
             0,
             categoria,
-            random.randint(0, NUMERO_USUARIOS - 1)
+            random.randint(1, NUMERO_USUARIOS)
         )
         
         cursor.execute(query_criar_evento, insert_evento)

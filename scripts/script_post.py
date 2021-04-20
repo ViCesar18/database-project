@@ -1,5 +1,6 @@
 import psycopg2
 import random
+from datetime import datetime
 from constants import NUMERO_USUARIOS
 
 def gerar_posts(connection, cursor):
@@ -12,9 +13,14 @@ def gerar_posts(connection, cursor):
     while (i < 100):
         id_usuario = random.randint(1, NUMERO_USUARIOS)
 
+        d1 = datetime.strptime('2021-01-01', '%Y-%m-%d')
+        d2 = datetime.strptime('2018-01-01', '%Y-%m-%d')
+
+        random_date = d1 + (d2 - d1) * random.random()
+
         insert = (
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 
-                '2021-01-01', 
+                str(random_date.year) + '-' + str(random_date.month) + '-' + str(random_date.day), 
                 id_usuario
                 )
 

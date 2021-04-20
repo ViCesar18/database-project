@@ -117,6 +117,10 @@ public class EstatisticasController extends HttpServlet {
                     // Gênero favorito (homens)
                     List<Estatisticas> generosPreferidosHomens = estatisticasDAO.buscarGeneroPreferidoHomens();
 
+                    Estatisticas frequenciaGeracoes = estatisticasDAO.buscarFrequenciaGeracoes();
+
+                    session.setAttribute("frequenciaGeracoes", frequenciaGeracoes);
+
                     session.setAttribute("generosPreferidosHomens", generosPreferidosHomens);
                 } catch (Exception e) {
                     System.out.println(e);
