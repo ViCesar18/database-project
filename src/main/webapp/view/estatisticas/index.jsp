@@ -15,7 +15,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<div style="padding: 50px">
+<div style="display: flex; flex-direction: column; padding: 50px">
     <div style="display: flex; flex-direction: row; align-items: center">
         <img
                 src="${pageContext.request.contextPath}/assets/img/logo.png"
@@ -25,20 +25,20 @@
         <h1>Estatisticas</h1>
     </div>
 
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Interacoes</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>INTERAÇÕES</h1>
     </div>
 
-    <canvas id="graficoInteracoes"></canvas>
+    <div style="align-self: center; height: 10%; width: 80%">
+        <canvas id="graficoInteracoes"></canvas>
+    </div>
 
     <div style="display: flex; justify-content: center">
         <h2>Total de Interacoes: ${numeroInteracoes}</h2>
     </div>
 
-    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
-
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Posts Em Alta</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>POSTS EM ALTA</h1>
     </div>
 
     <div style="display: flex; flex-direction: row;">
@@ -199,10 +199,8 @@
         </div>
     </div>
 
-    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
-
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Instrumentos Mais Tocados</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>INSTRUMENTOS MAIS TOCADOS</h1>
     </div>
 
     <div style="display: flex; flex-direction: row; justify-content: space-evenly">
@@ -217,10 +215,8 @@
         </div>
     </div>
 
-    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
-
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Generos Mais Curtidos</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>GENEROS MAIS CURTIDOS</h1>
     </div>
 
     <div style="display: flex; flex-direction: row; justify-content: space-evenly">
@@ -234,15 +230,14 @@
             <canvas id="graficoGeneroHomens"></canvas>
         </div>
     </div>
-</div>
 
-<hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>GERAÇÕES MAIS FREQUENTES</h1>
+    </div>
 
-<div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-    <h1>Idades mais frequentes</h1>
-</div>
-<div style="display: flex; justify-content: center; height: 10%; width: 30%;">
-    <canvas id="graficoIdadesFrequentes"></canvas>
+    <div style="align-self: center; height: 10%; width: 30%">
+        <canvas id="graficoIdadesFrequentes"></canvas>
+    </div>
 </div>
 
 
