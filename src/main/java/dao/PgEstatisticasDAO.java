@@ -94,6 +94,72 @@ public class PgEstatisticasDAO implements EstatisticasDAO {
         "GROUP BY sexo, genero_favorito " +
         "ORDER BY frequencia DESC;";
 
+    private static final String FREQUENCIA_GERACOES_QUERY =
+            "SELECT * " +
+            "FROM ( " +
+            "SELECT COUNT(*) AS geracao_boomer_count " +
+            "FROM rede_musical.usuario u " +
+            "GROUP BY DATE_PART('year', AGE(dt_nascimento)) >= 60 " +
+            "HAVING DATE_PART('year', AGE(dt_nascimento)) >= 60 " +
+            ") geracao_boomer, " +
+            "(" +
+            "SELECT COUNT(*) AS geracao_x_count " +
+            "FROM rede_musical.usuario u "+
+            "GROUP BY DATE_PART('year', AGE(dt_nascimento)) >= 40 AND DATE_PART('year', AGE(dt_nascimento)) < 60 "+
+            "HAVING DATE_PART('year', AGE(dt_nascimento)) >= 40 AND DATE_PART('year', AGE(dt_nascimento)) < 60 "+
+            ") geracao_x, "+
+            "("+
+            "SELECT COUNT(*) AS geracao_millennials_count "+
+            "FROM rede_musical.usuario u "+
+            "GROUP BY DATE_PART('year', AGE(dt_nascimento)) >= 25 AND DATE_PART('year', AGE(dt_nascimento)) < 40 "+
+            "HAVING DATE_PART('year', AGE(dt_nascimento)) >= 25 AND DATE_PART('year', AGE(dt_nascimento)) < 40 "+
+            ") geracao_millennials, "+
+            "("+
+            "SELECT COUNT(*) AS geracao_z_count "+
+            "FROM rede_musical.usuario u "+
+            "GROUP BY DATE_PART('year', AGE(dt_nascimento)) >= 10 AND DATE_PART('year', AGE(dt_nascimento)) < 25 "+
+            "HAVING DATE_PART('year', AGE(dt_nascimento)) >= 10 AND DATE_PART('year', AGE(dt_nascimento)) < 25 "+
+            ") geracao_z; ";
+
+    private static final String GERACOES_MAIS_ATIVAS_QUERY =
+        "SELECT frequencia_posts + frequencia_likes + frequencia_comentarios + frequencia_compartilhamentos AS frequencia_total_geracao " +
+            "FROM ( " +
+            "SELECT SUM(frequencia) AS frequencia_posts " +
+            "FROM ( " +
+            "SELECT usuario_id, COUNT(*) AS frequencia " +
+            "FROM rede_musical.post p " +
+            "GROUP BY usuario_id " +
+            ") posts JOIN rede_musical.usuario u ON u.id = posts.usuario_id " +
+            "WHERE DATE_PART('year', AGE(dt_nascimento)) >= ? AND DATE_PART('year', AGE(dt_nascimento)) <= ? " +
+            ") posts, " +
+            "( " +
+            "SELECT SUM(frequencia) AS frequencia_likes " +
+            "FROM ( " +
+            "SELECT usuario_id, COUNT(*) AS frequencia " +
+            "FROM rede_musical.usuario_da_like_em_post udlep " +
+            "GROUP BY usuario_id " +
+            ") posts JOIN rede_musical.usuario u ON u.id = posts.usuario_id " +
+            "WHERE DATE_PART('year', AGE(dt_nascimento)) >= ? AND DATE_PART('year', AGE(dt_nascimento)) <= ? " +
+            ") likes, " +
+            "( " +
+            "SELECT SUM(frequencia) AS frequencia_comentarios " +
+            "FROM ( " +
+            "SELECT usuario_id, COUNT(*) AS frequencia " +
+            "FROM rede_musical.comentario c " +
+            "GROUP BY usuario_id " +
+            ") posts JOIN rede_musical.usuario u ON u.id = posts.usuario_id " +
+            "WHERE DATE_PART('year', AGE(dt_nascimento)) >= ? AND DATE_PART('year', AGE(dt_nascimento)) <= ? " +
+            ") comentarios, " +
+            "( " +
+            "SELECT SUM(frequencia) AS frequencia_compartilhamentos " +
+            "FROM ( " +
+            "SELECT usuario_id, COUNT(*) AS frequencia " +
+            "FROM rede_musical.usuario_compartilha_post ucp " +
+            "GROUP BY usuario_id " +
+            ") posts JOIN rede_musical.usuario u ON u.id = posts.usuario_id " +
+            "WHERE DATE_PART('year', AGE(dt_nascimento)) >= ? AND DATE_PART('year', AGE(dt_nascimento)) <= ? " +
+            ") compartilhamentos;";
+
     public PgEstatisticasDAO(Connection connection) { this.connection = connection; }
 
     @Override
@@ -272,5 +338,53 @@ public class PgEstatisticasDAO implements EstatisticasDAO {
         }
 
         return estatisticasList;
+    }
+
+    public Estatisticas buscarFrequenciaGeracoes() throws  SQLException {
+        Estatisticas estatisticas = new Estatisticas();
+
+        try (PreparedStatement statement = connection.prepareStatement(FREQUENCIA_GERACOES_QUERY)) {
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    estatisticas.setGeracao_boomer_count(result.getInt("geracao_boomer_count"));
+                    estatisticas.setGeracao_x_count(result.getInt("geracao_x_count"));
+                    estatisticas.setGeracao_millennials_count(result.getInt("geracao_millennials_count"));
+                    estatisticas.setGeracao_z_count(result.getInt("geracao_x_count"));
+                }
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+            throw new SQLException("Erro ao vizualisar a frequencia das geracoes.");
+        }
+
+        return estatisticas;
+    }
+
+    public Integer buscarGeracoesMaisAtivas(Integer idadeInicial, Integer idadeFinal) throws  SQLException {
+        int frequenciaTotalGeracao = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(GERACOES_MAIS_ATIVAS_QUERY)) {
+            statement.setInt(1, idadeInicial);
+            statement.setInt(2, idadeFinal);
+            statement.setInt(3, idadeInicial);
+            statement.setInt(4, idadeFinal);
+            statement.setInt(5, idadeInicial);
+            statement.setInt(6, idadeFinal);
+            statement.setInt(7, idadeInicial);
+            statement.setInt(8, idadeFinal);
+
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    frequenciaTotalGeracao = result.getInt("frequencia_total_geracao");
+                }
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(PgUsuarioDAO.class.getName()).log(Level.SEVERE, "DAO", e);
+            throw new SQLException("Erro ao vizualisar ao vizualisar geração mais ativa.");
+        }
+
+        return frequenciaTotalGeracao;
     }
 }

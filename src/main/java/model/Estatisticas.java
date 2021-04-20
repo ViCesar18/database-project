@@ -17,6 +17,46 @@ public class Estatisticas {
 
     private String generoFavorito;
 
+    private int geracao_boomer_count;
+
+    private int geracao_x_count;
+
+    private int geracao_millennials_count;
+
+    private int geracao_z_count;
+
+    public int getGeracao_boomer_count() {
+        return geracao_boomer_count;
+    }
+
+    public void setGeracao_boomer_count(int geracao_boomer_count) {
+        this.geracao_boomer_count = geracao_boomer_count;
+    }
+
+    public int getGeracao_x_count() {
+        return geracao_x_count;
+    }
+
+    public void setGeracao_x_count(int geracao_x_count) {
+        this.geracao_x_count = geracao_x_count;
+    }
+
+    public int getGeracao_millennials_count() {
+        return geracao_millennials_count;
+    }
+
+    public void setGeracao_millennials_count(int geracao_millennials_count) {
+        this.geracao_millennials_count = geracao_millennials_count;
+    }
+
+    public int getGeracao_z_count() {
+        return geracao_z_count;
+    }
+
+    public void setGeracao_z_count(int geracao_z_count) {
+        this.geracao_z_count = geracao_z_count;
+    }
+
     public Integer getId() {
         return id;
     }

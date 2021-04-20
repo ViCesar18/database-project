@@ -20,4 +20,8 @@ public interface EstatisticasDAO {
     List<Estatisticas> buscarGeneroPreferidoMulheres() throws SQLException;
 
     List<Estatisticas> buscarGeneroPreferidoHomens() throws SQLException;
+
+    public Estatisticas buscarFrequenciaGeracoes() throws  SQLException;
+
+    public Integer buscarGeracoesMaisAtivas(Integer idadeInicial, Integer idadeFinal) throws  SQLException;
 }

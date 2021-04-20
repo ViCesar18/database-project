@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <head>
@@ -14,7 +15,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<div style="padding: 50px">
+<div style="display: flex; flex-direction: column; padding: 50px">
     <div style="display: flex; flex-direction: row; align-items: center">
         <img
                 src="${pageContext.request.contextPath}/assets/img/logo.png"
@@ -24,20 +25,20 @@
         <h1>Estatisticas</h1>
     </div>
 
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Interacoes</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>INTERAÇÕES</h1>
     </div>
 
-    <canvas id="graficoInteracoes"></canvas>
+    <div style="align-self: center; height: 10%; width: 80%">
+        <canvas id="graficoInteracoes"></canvas>
+    </div>
 
     <div style="display: flex; justify-content: center">
         <h2>Total de Interacoes: ${numeroInteracoes}</h2>
     </div>
 
-    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
-
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Posts Em Alta</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>POSTS EM ALTA</h1>
     </div>
 
     <div style="display: flex; flex-direction: row;">
@@ -198,10 +199,8 @@
         </div>
     </div>
 
-    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
-
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Instrumentos Mais Tocados</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>INSTRUMENTOS MAIS TOCADOS</h1>
     </div>
 
     <div style="display: flex; flex-direction: row; justify-content: space-evenly">
@@ -216,10 +215,8 @@
         </div>
     </div>
 
-    <hr style="background-color: rgba(0, 0, 0, 0.1); margin-bottom: 20px">
-
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
-        <h1>Generos Mais Curtidos</h1>
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>GENEROS MAIS CURTIDOS</h1>
     </div>
 
     <div style="display: flex; flex-direction: row; justify-content: space-evenly">
@@ -232,6 +229,48 @@
             <h2>Homens</h2>
             <canvas id="graficoGeneroHomens"></canvas>
         </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>GERAÇÕES MAIS FREQUENTES</h1>
+    </div>
+
+    <div style="align-self: center; height: 10%; width: 30%">
+        <canvas id="graficoIdadesFrequentes"></canvas>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 100px; margin-bottom: 20px">
+        <h1>A geração mais ativa na rede é a <b style="color: rgb(255, 99, 132)">${geracaoMaisAtiva == 0 ? 'Geração Boomer' : ''} ${geracaoMaisAtiva == 1 ? 'Geração X' : ''} ${geracaoMaisAtiva == 2 ? 'Geração Millennials' : ''} ${geracaoMaisAtiva == 3 ? 'Geração Z' : ''}</b></h1>
+        <p>Com <b style="color: rgb(255, 99, 132)">${geracaoMaisAtiva == 0 ? geracaoBoomer : ''} ${geracaoMaisAtiva == 1 ? geracaoX : ''} ${geracaoMaisAtiva == 2 ? geracaoMillennials : ''} ${geracaoMaisAtiva == 3 ? geracaoZ : ''} %</b> de atividade na rede</p>
+    </div>
+
+    <div style="display: flex; justify-content: center">
+        <table class="table" style="width: 50%">
+            <thead>
+            <tr>
+                <th scope="col">Geração</th>
+                <th scope="col">%</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Geração Boomer</td>
+                <td>${geracaoBoomer}</td>
+            </tr>
+            <tr>
+                <td>Geração X</td>
+                <td>${geracaoX}</td>
+            </tr>
+            <tr>
+                <td>Geração Millennials</td>
+                <td>${geracaoMillennials}</td>
+            </tr>
+            <tr>
+                <td>Geração Z</td>
+                <td>${geracaoZ}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -463,6 +502,46 @@
       document.getElementById('graficoGeneroHomens'),
       configGeneroHomens
   );
+</script>
+
+<script>
+    const labelsIdadesFrequentes = [
+        'Geracao Boomer (maior que 60)',
+        'Geracao X (40-59 anos)',
+        'Geracao Millennials (25-39 anos)',
+        'Geracao Z (10-24 anos)'
+    ];
+
+    const dataIdadesFrequentes = {
+        labels: labelsIdadesFrequentes,
+        datasets: [{
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54,162,235)',
+                'rgb(111,212,56)',
+                'rgb(235,211,54)',
+            ],
+            data: [
+                ${frequenciaGeracoes.geracao_boomer_count},
+                ${frequenciaGeracoes.geracao_x_count},
+                ${frequenciaGeracoes.geracao_millennials_count},
+                ${frequenciaGeracoes.geracao_z_count},
+            ],
+        }]
+    };
+
+    const configIdadesFrequentes = {
+        type: 'doughnut',
+        data: dataIdadesFrequentes,
+        options: {
+            responsive:true
+        }
+    };
+
+    graficoIdadesFrequentes = new Chart(
+        document.getElementById('graficoIdadesFrequentes'),
+        configIdadesFrequentes
+    );
 </script>
 
 <%@include file="../include/scripts.jsp"%>

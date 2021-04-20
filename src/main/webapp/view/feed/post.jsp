@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <html>
@@ -21,6 +23,13 @@
                 class="rounded-circle"
                 alt="Avatar"
         >
+        <a type="button" class="btn btn-primary" href="${pageContext.servletContext.contextPath}/feed">Voltar</a>
+
+        <a type="button" class="btn btn-success" href="${pageContext.servletContext.contextPath}/banda/create">Criar Banda</a>
+
+        <a type="button" class="btn btn-warning" href="${pageContext.servletContext.contextPath}/evento/create">Criar Evento</a>
+
+        <a type="button" class="btn btn-danger" href="${pageContext.servletContext.contextPath}/logout">Sair</a>
     </div>
 </div>
 
