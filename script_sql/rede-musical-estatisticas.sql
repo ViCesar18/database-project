@@ -67,7 +67,6 @@ FROM (
          FROM rede_musical.usuario_compartilha_post
      ) compartilhamentos;
 
-SELECT * FROM rede_musical.post u
 
 --Instrumento mais tocados por mulheres
 SELECT ui.instrumento, COUNT(*) AS frequencia
