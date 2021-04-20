@@ -241,7 +241,7 @@
 <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px">
     <h1>Idades mais frequentes</h1>
 </div>
-<div style="text-align: center; alignment: center; height: 10%; width: 30%;">
+<div style="display: flex; justify-content: center; height: 10%; width: 30%;">
     <canvas id="graficoIdadesFrequentes"></canvas>
 </div>
 
@@ -479,10 +479,10 @@
 
 <script>
     const labelsIdadesFrequentes = [
-        'Geracao Boomer',
-        'Geracao X',
-        'Geracao Millennials',
-        'Geracao Z'
+        'Geracao Boomer (maior que 60)',
+        'Geracao X (40-59 anos)',
+        'Geracao Millennials (25-39 anos)',
+        'Geracao Z (10-24 anos)'
     ];
 
     const dataIdadesFrequentes = {
