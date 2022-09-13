@@ -1,8 +1,13 @@
-# projeto_bd
-Desenvolvimento do Projeto da disciplina de Banco de Dados, ministrada pelo professor Daniel Kaster.
-Deselvolvido por Vinícius Cesar dos Santos e Claudio Bento Reis Neto.
+# database-projects
 
-## Estrutura do datasource.properties
+#### Português :brazil:
+Projeto da disciplina de Banco de Dados do curso de Ciência da Computação da UEL, ministrada pelo Profº Daniel Kaster em 2020.
+
+#### English :us:
+Project of the Databse discipline of the Computer Science course at UEL, taught by Prof. Daniel Kaster in 2020.
+
+
+## 📋 Estrutura do datasource.properties
     server=postgresql
     host=localhost
     port=5432
