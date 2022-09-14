@@ -4,7 +4,7 @@
 Projeto da disciplina de Banco de Dados do curso de Ciência da Computação da UEL, ministrada pelo Profº Daniel Kaster em 2020.
 
 #### English :us:
-Project of the Databse discipline of the Computer Science course at UEL, taught by Prof. Daniel Kaster in 2020.
+Project of the Databse subject of the Computer Science course at UEL, taught by Prof. Daniel Kaster in 2020.
 
 
 ## 📋 Estrutura do datasource.properties
